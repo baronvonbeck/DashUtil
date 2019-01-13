@@ -3,3 +3,11 @@
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Django stuff:
+*.log
+*.pot
+
+# Byte-compiled / optimized / DLL files
+dashutil/__pycache__/
+*.py[cod]
