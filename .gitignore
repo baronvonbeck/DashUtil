@@ -9,5 +9,5 @@
 *.pot
 
 # Byte-compiled / optimized / DLL files
-dashutil/__pycache__/
+dashutil/dashutil/__pycache__/
 *.py[cod]
