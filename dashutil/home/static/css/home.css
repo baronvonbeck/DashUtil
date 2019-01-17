@@ -56,7 +56,7 @@ body {
   height: 2px;
   background: white;
   transform: rotate(45deg);
-  transition: all 0.25s;
+  transition: all 0.5s;
 }
 .search-box-container .search::after {
   content: "";
@@ -70,7 +70,7 @@ body {
   height: 25px;
   border-radius: 50%;
   border: 2px solid white;
-  transition: all 0.25s;
+  transition: all 0.5s;
 }
 .search-box-container input {
   font-family: 'Fira Sans', sans-serif;
@@ -130,4 +130,48 @@ body {
   color: white;
   opacity: 0.5;
   font-weight: bolder;
+}
+
+
+/* Create and find buttons */
+.create-button {
+  font-family: 'Fira Sans', sans-serif;
+  color: white;
+  position: absolute;
+  margin: auto;
+  top: 150px;
+  left: 130px;
+  right: 0;
+  bottom: 0;
+  width: 100px;
+  height: 40px;
+  background-color: #ff6523;;
+  transition: all 0.75s;
+  display: none;
+  text-decoration: none;
+}
+input:focus ~ .create-button {
+  display: inline-block;
+  width: 100px;
+}
+
+.find-button {
+  font-family: 'Fira Sans', sans-serif;
+  color: white;
+  position: absolute;
+  margin: auto;
+  top: 150px;
+  left: -130px;
+  right: 0;
+  bottom: 0;
+  width: 100px;
+  height: 40px;
+  background-color: #ff6523;;
+  transition: all 0.75s;
+  display: none;
+  text-decoration: none;
+}
+input:focus ~ .find-button {
+  display: inline-block;
+  width: 100px;
 }
