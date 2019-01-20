@@ -152,6 +152,21 @@ body {
   text-decoration: none;
   box-shadow: 0 0 8px 0 #ff6523, 0 20px 25px 0 rgba(0, 0, 0, 0.3);
 }
+
+#old-find {
+  opacity: 0;
+}
+#new-find{
+  opacity: 1;
+}
+#old-create {
+  opacity: 0;
+}
+#new-create {
+  opacity: 1;
+  text-align: center;
+}
+
 input.expanded ~ .find-button.expanded {
   visibility: visible;
   width: 100px;

@@ -23,8 +23,8 @@
             <input id="input-text" type="text" placeholder="Find Room...">
             <div id="search-icon" class="search" onclick="contract()"></div>
 
-            <a id="find-button" href="/storage" class="find-button">Find</a>
-            <a id="create-button" href="/about" class="create-button">Create</a>         
+            <a id="find-button" href="/storage" class="find-button"><span id="old-find">Find</span></a>
+            <a id="create-button" href="/about" class="create-button"><span id="old-create">Create</span></a>         
         </div>  
     </body>
 
@@ -35,6 +35,8 @@
         var inputText = document.getElementById("input-text");
         var createButton = document.getElementById("create-button");
         var findButton = document.getElementById("find-button");
+        var oldFind = document.getElementById("old-find");
+        var oldCreate = document.getElementById("old-create");
 
         if (searchBox.classList.contains("prev")) {
             searchBox.classList.remove("prev");
@@ -51,7 +53,11 @@
             inputText.classList.add("expanded");
             createButton.classList.add("expanded");
             findButton.classList.add("expanded");
+            oldFind.id = "new-find";
+            oldCreate.id = "new-create";
         }
+
+        
     }
 
     function contract() {
@@ -60,6 +66,8 @@
         var inputText = document.getElementById("input-text");
         var createButton = document.getElementById("create-button");
         var findButton = document.getElementById("find-button");
+        var newFind = document.getElementById("new-find");
+        var newCreate = document.getElementById("new-create");
 
         if (searchBox.classList.contains("expanded")) {
             console.log("Contract box");
@@ -75,7 +83,10 @@
             inputText.classList.add("prev");
             createButton.classList.add("prev");
             findButton.classList.add("prev");
-        }        
+            newFind.id = "old-find";
+            newCreate.id = "old-create";    
+        }
+            
     }
     </script>
 </html>
