@@ -136,8 +136,14 @@ body {
 /* Create and find buttons */
 #old-search {
   opacity: 0;
+  visibility: hidden;
+  text-align: center;
 }
 #new-search {
+  transition-delay: 0s;
+  transition-duration: 0.75s;
+  transition-property: opacity;
+  transition-timing-function: ease-in;
   opacity: 1;
   text-align: center;
 }
