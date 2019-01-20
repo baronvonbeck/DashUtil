@@ -18,14 +18,16 @@
         <link rel="stylesheet" href="{% static '/css/home.css' %}">
     </head>
     <body>
-        <div id="search-box" class="search-box-container" onclick="expand()">
+        <div id="search-box" class="search-box-container" onclick="expandSearchBox()">
             <input id="input-text" type="text" placeholder="Find Room...">
-            <div id="search-icon" class="search" onclick="contract()"></div>
+            <div id="search-icon" class="search" onclick="contractSearchBox()"></div>
 
             <a id="search-button" href="/about" class="search-button"><span id="old-search">Search</span></a>       
         </div>
         
         <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
         {% load static %}
         <script src="{% static '/js/search.js' %}" type="text/javascript"></script>
     </body>

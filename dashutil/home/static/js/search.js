@@ -1,4 +1,83 @@
-function expand() {
+// search.js
+
+$( document ).ready(function() {
+
+    // Set up keyboard event handler
+    $(document).keydown(function(e) {
+        handleKeyboardEvents(e);
+    }); 
+}); 
+
+/*****************************************************************************
+ * Search Functions ----- START ------
+ *****************************************************************************/
+
+// Finds or creates a room as appropriate
+function findOrCreateRoom() {
+    var roomToSearchFor = document.getElementById("input-text").value.toString().trim();
+
+    if (roomToSearchFor.length > 0) {
+        console.log("Searching for: " + roomToSearchFor); 
+    }
+    else 
+        createErrorMessage("Room length should be greater than 0");
+}
+
+/*****************************************************************************
+ * Search Functions ----- END ------
+ *****************************************************************************/
+
+
+ /*****************************************************************************
+ * Error Functions ----- START ------
+ *****************************************************************************/
+
+// Creates error messages based on string that is passed in
+function createErrorMessage(errorMessage) {
+    console.log(errorMessage);
+}
+
+/*****************************************************************************
+ * Error Functions ----- END ------
+ *****************************************************************************/
+
+
+/*****************************************************************************
+ * Handler Functions ----- START ------
+ *****************************************************************************/
+
+// Handler for keyboard events
+function handleKeyboardEvents(e) {
+    var keycode = e.key.toLowerCase();
+    var searchBox = document.getElementById("search-box");
+
+    switch (keycode) {
+        case "enter":
+            if (!searchBox.classList.contains("expanded")) { 
+                expandSearchBox(); 
+
+                document.getElementById("input-text").focus();
+            }
+            else if (searchBox.classList.contains("expanded"))
+                findOrCreateRoom();
+            
+            break; 
+
+        case "escape": 
+        case "esc": 
+            if (searchBox.classList.contains("expanded")) { 
+                contractSearchBox(); 
+
+                // no this isnt a mistake
+                expandSearchBox(); 
+            } 
+            break; 
+    }
+}
+
+
+// Handler for expanding the search box
+function expandSearchBox() { 
     var searchBox = document.getElementById("search-box");
     var searchIcon = document.getElementById("search-icon");
     var inputText = document.getElementById("input-text");
@@ -12,8 +91,6 @@ function expand() {
         searchButton.classList.remove("prev");
     }
     else if (!searchBox.classList.contains("expanded")) {
-        console.log("Expand box");
-
         searchBox.classList.add("expanded");
         searchIcon.classList.add("expanded");
         inputText.classList.add("expanded");
@@ -22,7 +99,9 @@ function expand() {
     }
 }
 
-function contract() {
+
+// Handler for contracting the search box
+function contractSearchBox() {
     var searchBox = document.getElementById("search-box");
     var searchIcon = document.getElementById("search-icon");
     var inputText = document.getElementById("input-text");
@@ -30,8 +109,6 @@ function contract() {
     var newSearch = document.getElementById("new-search");
 
     if (searchBox.classList.contains("expanded")) {
-        console.log("Contract box");
-
         searchBox.classList.remove("expanded");
         searchIcon.classList.remove("expanded");
         inputText.classList.remove("expanded");
@@ -42,6 +119,9 @@ function contract() {
         inputText.classList.add("prev");
         searchButton.classList.add("prev"); 
         newSearch.id = "old-search"; 
-    }
-        
+    }      
 }
+
+/*****************************************************************************
+ * Handler Functions ----- END ------
+ *****************************************************************************/
