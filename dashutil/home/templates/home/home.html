@@ -19,31 +19,64 @@
 
     </head>
     <body>
-        <div id="search-box" class="search-box-container">
+        <div id="search-box" class="search-box-container" onclick="expand()">
             <input id="input-text" type="text" placeholder="Find Room...">
-            <div class="search"></div>
-            
-            <a href="/storage" class="create-button">Create</a>
-            <a href="/about" class="find-button">Find</a>
+            <div id="search-icon" class="search" onclick="contract()"></div>
+
+            <a id="create-button" href="/about" class="create-button">Create</a>
+            <a id="find-button" href="/storage" class="find-button">Find</a>
         </div>
         
     </body>
 
     <script>
-    function showButtons() {
-        var homeButtons = document.getElementById("home-buttons");
-        /*
-        setTimeout(function() {
-            var inputTextWidth = document.getElementById("input-text")
-            .getBoundingClientRect().width;
+    function expand() {
+        var searchBox = document.getElementById("search-box");
+        var searchIcon = document.getElementById("search-icon");
+        var inputText = document.getElementById("input-text");
+        var createButton = document.getElementById("create-button");
+        var findButton = document.getElementById("find-button");
 
-            if (inputTextWidth > 101 ) {
-                homeButtons.style.display = "block";
-            } else {
-                homeButtons.style.display = "none";
-            }
-        }, 300);
-        */
+        if (searchBox.classList.contains("prev")) {
+            searchBox.classList.remove("prev");
+            searchIcon.classList.remove("prev");
+            inputText.classList.remove("prev");
+            createButton.classList.remove("prev");
+            findButton.classList.remove("prev");
+        }
+        else if (!searchBox.classList.contains("expanded")) {
+            console.log("Expand box");
+
+            searchBox.classList.add("expanded");
+            searchIcon.classList.add("expanded");
+            inputText.classList.add("expanded");
+            createButton.classList.add("expanded");
+            findButton.classList.add("expanded");
+        }
+    }
+
+    function contract() {
+        var searchBox = document.getElementById("search-box");
+        var searchIcon = document.getElementById("search-icon");
+        var inputText = document.getElementById("input-text");
+        var createButton = document.getElementById("create-button");
+        var findButton = document.getElementById("find-button");
+
+        if (searchBox.classList.contains("expanded")) {
+            console.log("Contract box");
+
+            searchBox.classList.remove("expanded");
+            searchIcon.classList.remove("expanded");
+            inputText.classList.remove("expanded");
+            createButton.classList.remove("expanded");
+            findButton.classList.remove("expanded");
+
+            searchBox.classList.add("prev");
+            searchIcon.classList.add("prev");
+            inputText.classList.add("prev");
+            createButton.classList.add("prev");
+            findButton.classList.add("prev");
+        }        
     }
     </script>
 </html>
