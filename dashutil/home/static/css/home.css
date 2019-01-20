@@ -144,8 +144,9 @@ body {
   right: 0;
   bottom: 0;
   width: 0px;
-  height: 40px;
+  height: 20px;
   background-color: #ff6523;
+  border-radius: 30px;
   transition: all 0.75s;
   visibility: hidden;
   text-decoration: none;
@@ -154,7 +155,7 @@ body {
 input.expanded ~ .find-button.expanded {
   visibility: visible;
   width: 100px;
-  
+  height: 40px;
 }
 
 .create-button {
@@ -167,8 +168,9 @@ input.expanded ~ .find-button.expanded {
   right: 0;
   bottom: 0;
   width: 0px;
-  height: 40px;
-  background-color: #ff6523;;
+  height: 20px;
+  background-color: #ff6523;
+  border-radius: 30px;
   transition: all 0.75s;
   visibility: hidden;
   text-decoration: none;
@@ -177,4 +179,5 @@ input.expanded ~ .find-button.expanded {
 input.expanded ~ .create-button.expanded {
   visibility: visible;
   width: 100px;
+  height: 40px;
 }
