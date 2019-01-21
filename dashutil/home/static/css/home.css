@@ -188,6 +188,11 @@ input.expanded ~ .search-button.expanded {
   background-color: #d1480c;
   transition: 0.25s;
 }
+.search-button.expanded:focus {
+  background-color: #d1480c;
+  transition: 0.25s;
+  outline: 0;
+}
 
 /* Empty class for button clicks */
 .prev { }

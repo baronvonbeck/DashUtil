@@ -50,7 +50,7 @@ function createErrorMessage(errorMessage) {
 function handleKeyboardEvents(e) {
     var keycode = e.key.toLowerCase();
     var searchBox = document.getElementById("search-box");
-    console.log('something');
+
     switch (keycode) {
         case "enter":
             if (!searchBox.classList.contains("expanded")) 
@@ -69,13 +69,40 @@ function handleKeyboardEvents(e) {
                 expandSearchBox(); 
             } 
             break; 
+
+        case "down": 
+        case "arrowdown":
+        case "up": 
+        case "arrowup":
+        case "left": 
+        case "arrowleft":
+        case "right": 
+        case "arrowright":
+        case "tab":
+            var inputText = document.getElementById("input-text");
+            var searchButton = document.getElementById("search-button"); 
+            if (e.key.toLowerCase() == "tab") {
+                e.preventDefault();
+            }
+            if (!searchBox.classList.contains("expanded")) {
+                expandSearchBox(); 
+            }
+            else if (searchBox.classList.contains("expanded")) {
+                if (document.activeElement == inputText) {
+                    searchButton.focus();
+                }
+                else if (document.activeElement == searchButton) {
+                    inputText.focus();
+                    moveCaretToEnd(inputText);
+                }
+            }
+            break;
     }
 }
 
 
 // Handler for expanding the search box
 function expandSearchBox() { 
-    console.log("expand");
     var searchBox = document.getElementById("search-box");
     var searchIcon = document.getElementById("search-icon");
     var inputText = document.getElementById("input-text");
@@ -95,16 +122,13 @@ function expandSearchBox() {
         searchButton.classList.add("expanded"); 
         oldSearch.id = "new-search"; 
 
-        window.setTimeout(function() {
-            moveCaretToEnd(inputText);
-        }, 1);
+        moveCaretToEnd(inputText);
     }
 }
 
 
 // Handler for contracting the search box
 function contractSearchBox() {
-    console.log("contract");
     var searchBox = document.getElementById("search-box");
     var searchIcon = document.getElementById("search-icon");
     var inputText = document.getElementById("input-text");
@@ -134,16 +158,11 @@ function contractSearchBox() {
  * Helper Functions ----- START ------
  *****************************************************************************/
 
-function moveCaretToEnd(el) {
-    if (typeof el.selectionStart == "number") {
-        el.selectionStart = el.selectionEnd = el.value.length;
-    } 
-    else if (typeof el.createTextRange != "undefined") {
-        el.focus();
-        var range = el.createTextRange();
-        range.collapse(false);
-        range.select();
-    }
+function moveCaretToEnd(el) { 
+    var temp = el.value;
+    el.value = '';
+    el.value = temp;
+    el.focus();
 }
 
 /*****************************************************************************
