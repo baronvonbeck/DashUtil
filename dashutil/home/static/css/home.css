@@ -153,6 +153,8 @@ body {
   transition-timing-function: ease-in;
   opacity: 1;
   text-align: center;
+  color: white;
+  text-decoration-color: white;
 }
 
 .search-button {
@@ -173,6 +175,7 @@ body {
   transition: all 0.75s;
   visibility: hidden;
   text-decoration: none;
+  text-decoration-color: white;
   opacity: 0;
   box-shadow: 0 0 2px 0 #ff6523, 0 5px 6px 0 rgba(0, 0, 0, 0.0);
 }
@@ -181,17 +184,61 @@ input.expanded ~ .search-button.expanded {
   opacity: 1;
   width: 100px;
   height: 40px;
-  padding-top: 10px;
+  padding-top: 8px;
   box-shadow: 0 0 8px 0 #ff6523, 0 20px 25px 0 rgba(0, 0, 0, 0.3);
 }
 .search-button.expanded:hover {
   background-color: #d1480c;
   transition: 0.25s;
+  text-decoration: none;
 }
 .search-button.expanded:focus {
   background-color: #d1480c;
   transition: 0.25s;
   outline: 0;
+}
+
+
+/* Navbar */
+.navbar-container {
+  position: relative;
+  margin: auto;
+  top: 0;
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  height: 100px;
+  width: 600px;
+}
+
+/* Logo */
+.navbar-brand img {
+  height: 70px ;
+  width: 70px;
+  left: 0;
+}
+.navbar-brand .logo-text {
+  position: absolute; 
+  margin-left: 5px;
+  margin-top: 5px;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: bolder;
+  font-size: 2em;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+.navbar-brand .logo-text:hover {
+  color: #d6d6d6;
+}
+.navbar-brand .logo-text:focus {
+  color: #d6d6d6;
+}
+
+.navbar-nav .navbar-items {
+  display: inline-block;
+  color: white !important;
 }
 
 /* Empty class for button clicks */

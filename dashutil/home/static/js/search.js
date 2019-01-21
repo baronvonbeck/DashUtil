@@ -70,14 +70,6 @@ function handleKeyboardEvents(e) {
             } 
             break; 
 
-        case "down": 
-        case "arrowdown":
-        case "up": 
-        case "arrowup":
-        case "left": 
-        case "arrowleft":
-        case "right": 
-        case "arrowright":
         case "tab":
             var inputText = document.getElementById("input-text");
             var searchButton = document.getElementById("search-button"); 
@@ -91,7 +83,7 @@ function handleKeyboardEvents(e) {
                 if (document.activeElement == inputText) {
                     searchButton.focus();
                 }
-                else if (document.activeElement == searchButton) {
+                else { // if (document.activeElement == searchButton) {
                     inputText.focus();
                     moveCaretToEnd(inputText);
                 }
@@ -149,6 +141,20 @@ function contractSearchBox() {
     }      
 }
 
+
+// hover function for logo
+function hoverLogo() {
+    document.getElementById("logo-id").setAttribute("src", "/static/img/logo-dark-orange.png");
+    document.getElementById("logo-text-id").style.color = "#d6d6d6";
+}
+
+
+// unhover function for logo
+function unhoverLogo() {
+    document.getElementById("logo-id").setAttribute("src", "/static/img/logo-light-orange.png");
+    document.getElementById("logo-text-id").style.color = "white";
+}
+
 /*****************************************************************************
  * Handler Functions ----- END ------
  *****************************************************************************/
@@ -158,6 +164,7 @@ function contractSearchBox() {
  * Helper Functions ----- START ------
  *****************************************************************************/
 
+// moves the caret to the end of the input line
 function moveCaretToEnd(el) { 
     var temp = el.value;
     el.value = '';
