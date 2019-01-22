@@ -14,7 +14,7 @@ html, body {
 }
 body {
   background: #252525;
-  min-width: 600px;
+  min-width: 580px;
 }
 .search-box-container {
   position: absolute;
@@ -208,7 +208,7 @@ input.expanded ~ .search-button.expanded {
   right: 0; 
   bottom: 0; 
   height: 100px;
-  width: 600px;
+  width: 580px;
 }
 
 /* Logo */
@@ -229,6 +229,12 @@ input.expanded ~ .search-button.expanded {
   text-decoration: none;
   display: inline-block;
 }
+.navbar-brand:focus {
+  outline: none;
+}
+.navbar-brand:focus .logo-text {
+  color: #d6d6d6;
+}
 .navbar-brand .logo-text:hover {
   color: #d6d6d6;
 }
@@ -236,9 +242,26 @@ input.expanded ~ .search-button.expanded {
   color: #d6d6d6;
 }
 
-.navbar-nav .navbar-items {
+.navbar-nav {
+  position: relative;
+  margin-left: auto;
+  margin-right: 0;
+  text-align: right;
+}
+.navbar-nav .nav-item.nav-link {
+  font-family: 'Fira Sans', sans-serif;
   display: inline-block;
-  color: white !important;
+  color: white;
+  text-decoration: none;
+  text-decoration-color: white;
+}
+.navbar-nav .nav-item.nav-link:hover {
+  color: #d6d6d6;
+  outline: 0;
+}
+.navbar-nav .nav-item.nav-link:focus {
+  color: #d6d6d6;
+  outline: 0;
 }
 
 /* Empty class for button clicks */

@@ -57,7 +57,6 @@ function handleKeyboardEvents(e) {
                 expandSearchBox(); 
             else if (searchBox.classList.contains("expanded"))
                 findOrCreateRoom();
-            
             break; 
 
         case "escape": 
@@ -71,22 +70,12 @@ function handleKeyboardEvents(e) {
             break; 
 
         case "tab":
-            var inputText = document.getElementById("input-text");
-            var searchButton = document.getElementById("search-button"); 
-            if (e.key.toLowerCase() == "tab") {
-                e.preventDefault();
-            }
+            var logoId = document.getElementById("logo-id");
+            var searchButton = document.getElementById("search-button");
+
             if (!searchBox.classList.contains("expanded")) {
+                e.preventDefault();
                 expandSearchBox(); 
-            }
-            else if (searchBox.classList.contains("expanded")) {
-                if (document.activeElement == inputText) {
-                    searchButton.focus();
-                }
-                else { // if (document.activeElement == searchButton) {
-                    inputText.focus();
-                    moveCaretToEnd(inputText);
-                }
             }
             break;
     }

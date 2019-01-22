@@ -19,7 +19,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-md navbar-container">
-            <a class="navbar-brand" href="/">
+            <a id="navbar-logo-id" class="navbar-brand" onfocus="hoverLogo()" onblur="unhoverLogo()" href="/">
                 <img id="logo-id" class="light-logo" src="{% static '/img/logo-light-orange.png' %}" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">
                 <p id="logo-text-id" class="logo-text" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">Dashutil</p>
             </a>
@@ -28,12 +28,17 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav navbar-items">
-                    <a class="nav-item nav-link active" href="#">About <span class="sr-only">(current)</span></a>
+                <div class="navbar-nav">
+                    <a id="first-element-after-logo" class="nav-item nav-link active" href="#">About<span class="sr-only">(current)</span></a>
                     <a class="nav-item nav-link" href="#">API</a>
                 </div>
             </div>
         </nav>
+
+
+
+
+
 
         <div id="search-box" class="search-box-container" onclick="expandSearchBox()">
             <input id="input-text" type="text" placeholder="Find Room...">
