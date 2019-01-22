@@ -23,7 +23,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  width: 500px;
+  width: 100px;
   height: 100px;
 }
 .search-box-container .search {
@@ -102,13 +102,14 @@ body {
 .search-box-container input:hover {
   cursor: pointer;
   background-color: #d1480c;
-}
+} 
 .search-box-container input:focus {
   background-color: #d1480c;
 }
 .search-box-container input.expanded {
   width: 500px;
   height: 50px;
+  left: -210px;
   opacity: 1;
   cursor: text;
   box-shadow: 0 0 10px 0 #ff6523, 0 20px 25px 0 rgba(0, 0, 0, 0.3);
@@ -242,26 +243,33 @@ input.expanded ~ .search-button.expanded {
   color: #d6d6d6;
 }
 
+/* Navbar links, not logo */
 .navbar-nav {
   position: relative;
   margin-left: auto;
   margin-right: 0;
   text-align: right;
 }
-.navbar-nav .nav-item.nav-link {
+.navbar-nav .nav-item .nav-link {
   font-family: 'Fira Sans', sans-serif;
   display: inline-block;
   color: white;
   text-decoration: none;
   text-decoration-color: white;
 }
-.navbar-nav .nav-item.nav-link:hover {
+.navbar-nav .nav-item .nav-link:hover {
   color: #d6d6d6;
   outline: 0;
 }
-.navbar-nav .nav-item.nav-link:focus {
+.navbar-nav .nav-item .nav-link:focus {
   color: #d6d6d6;
   outline: 0;
+}
+
+.dropdown-menu.show {
+  width: 200px;
+  margin-left: auto;
+  margin-right: 0;
 }
 
 /* Empty class for button clicks */

@@ -1,11 +1,13 @@
 // search.js
 
-$( document ).ready(function() {
+$(document).ready(function() {
 
     // Set up keyboard event handler
     $(document).keydown(function(e) {
         handleKeyboardEvents(e);
     }); 
+
+    $(".dropdown-toggle").dropdown();
 }); 
 
 /*****************************************************************************
