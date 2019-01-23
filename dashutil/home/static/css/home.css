@@ -3,19 +3,6 @@
 
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-html, body {
-  width: 100%;
-  height: 100%;
-}
-body {
-  background: #252525;
-  min-width: 580px;
-}
 .search-box-container {
   position: absolute;
   margin: auto;
@@ -199,78 +186,6 @@ input.expanded ~ .search-button.expanded {
   outline: 0;
 }
 
-
-/* Navbar */
-.navbar-container {
-  position: relative;
-  margin: auto;
-  top: 0;
-  left: 0; 
-  right: 0; 
-  bottom: 0; 
-  height: 100px;
-  width: 580px;
-}
-
-/* Logo */
-.navbar-brand img {
-  height: 70px ;
-  width: 70px;
-  left: 0;
-}
-.navbar-brand .logo-text {
-  position: absolute; 
-  margin-left: 5px;
-  margin-top: 5px;
-  font-family: 'Fira Sans', sans-serif;
-  font-weight: bolder;
-  font-size: 2em;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-}
-.navbar-brand:focus {
-  outline: none;
-}
-.navbar-brand:focus .logo-text {
-  color: #d6d6d6;
-}
-.navbar-brand .logo-text:hover {
-  color: #d6d6d6;
-}
-.navbar-brand .logo-text:focus {
-  color: #d6d6d6;
-}
-
-/* Navbar links, not logo */
-.navbar-nav {
-  position: relative;
-  margin-left: auto;
-  margin-right: 0;
-  text-align: right;
-}
-.navbar-nav .nav-item .nav-link {
-  font-family: 'Fira Sans', sans-serif;
-  display: inline-block;
-  color: white;
-  text-decoration: none;
-  text-decoration-color: white;
-}
-.navbar-nav .nav-item .nav-link:hover {
-  color: #d6d6d6;
-  outline: 0;
-}
-.navbar-nav .nav-item .nav-link:focus {
-  color: #d6d6d6;
-  outline: 0;
-}
-
-.dropdown-menu.show {
-  width: 200px;
-  margin-left: auto;
-  margin-right: 0;
-}
 
 /* Empty class for button clicks */
 .prev { }

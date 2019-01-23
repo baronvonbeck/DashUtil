@@ -1,4 +1,4 @@
-// search.js
+// home.js
 
 $(document).ready(function() {
 
