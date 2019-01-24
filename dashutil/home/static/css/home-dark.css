@@ -1,0 +1,63 @@
+/* home page specific css stylings goes here */
+/* idea modified from https://codepen.io/AlbertFeynman/pen/BPvzWZ */
+
+.search-box-container.search-dark-theme .search { 
+  background: #ff6523;
+  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.6);
+  /* // box-shadow: 0 0 25px 0 #ff6523; */
+}
+.search-box-container.search-dark-theme .search::before { 
+  background: white;
+}
+.search-box-container.search-dark-theme .search::after { 
+  border: 2px solid white;
+}
+.search-box-container.search-dark-theme input {
+  /* // border-bottom: 1px solid rgba(255, 255, 255, 0.2); */
+  background: #ff6523;
+  color: white;
+  text-shadow: 0 0 10px #ff6523;
+  box-shadow: 0 0 2px 0 #ff6523, 0 5px 6px 0 rgba(0, 0, 0, 0.0);
+  /* // box-shadow: inset 0 0 25px 0 rgba(0, 0, 0, 0.5); */
+}
+.search-box-container.search-dark-theme input:hover {
+  background-color: #d1480c;
+} 
+.search-box-container.search-dark-theme input:focus {
+  background-color: #d1480c;
+}
+.search-box-container.search-dark-theme input.expanded { 
+  box-shadow: 0 0 10px 0 #ff6523, 0 20px 25px 0 rgba(0, 0, 0, 0.3);
+}
+.search-box-container.search-dark-theme input.expanded ~ .search.expanded { 
+  background: #151515;
+}
+.search-box-container.search-dark-theme input.expanded ~ .search::after {
+  background: white;
+}
+.search-box-container.search-dark-theme input::placeholder {
+  color: white;
+}
+
+
+/* Create and find buttons */
+.search-box-container.search-dark-theme #new-search {
+  color: white;
+  text-decoration-color: white;
+}
+
+.search-box-container.search-dark-theme .search-button {
+  color: white;
+  background-color: #ff6523;
+  text-decoration-color: white;
+  box-shadow: 0 0 2px 0 #ff6523, 0 5px 6px 0 rgba(0, 0, 0, 0.0);
+}
+.search-box-container.search-dark-theme input.expanded ~ .search-button.expanded {
+  box-shadow: 0 0 8px 0 #ff6523, 0 20px 25px 0 rgba(0, 0, 0, 0.3);
+}
+.search-box-container.search-dark-theme .search-button.expanded:hover {
+  background-color: #d1480c;
+}
+.search-box-container.search-dark-theme .search-button.expanded:focus {
+  background-color: #d1480c;
+}

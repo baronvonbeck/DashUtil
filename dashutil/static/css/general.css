@@ -12,3 +12,85 @@ html, body {
 body {
   min-width: 580px;
 }
+
+
+/* Navbar */
+.navbar-container {
+  position: relative;
+  margin: auto;
+  top: 0;
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  height: 100px;
+}
+
+
+/* Logo */
+.navbar-container .navbar-brand img {
+  height: 70px ;
+  width: 70px;
+  left: 0;
+}
+.navbar-container .navbar-brand .logo-text {
+  position: absolute; 
+  margin-left: 5px;
+  margin-top: 5px;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: bolder;
+  font-size: 2em;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+.navbar-container .navbar-brand:focus {
+  outline: none;
+}
+
+
+/* Navbar links, not logo */
+.navbar-container .navbar-nav {
+  position: relative;
+  margin-left: auto;
+  margin-right: 0;
+  text-align: right;
+  z-index: 7;
+}
+.navbar-container .navbar-nav .nav-item .nav-link {
+  font-family: 'Fira Sans', sans-serif;
+  display: inline-block;
+  text-decoration: none;
+}
+.navbar-container .navbar-nav .nav-item .nav-link:hover {
+  outline: 0;
+}
+.navbar-container .navbar-nav .nav-item .nav-link:focus {
+  outline: 0;
+}
+
+
+/* Navbar dropdown */ 
+.dropdown-menu {
+  z-index: 7;
+}
+.dropdown-menu.show {
+  width: 200px;
+  margin-left: auto;
+  margin-right: 0;
+  z-index: 8;
+}
+
+
+/* Theme toggler */
+.theme-toggler img {
+  position: relative;
+  margin-left: auto;
+  width: 40px;
+  height: 40px;
+}
+.theme-toggler img:hover {
+  cursor: pointer;
+}
+.theme-toggler img:focus {
+
+}

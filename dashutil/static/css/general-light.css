@@ -1,6 +1,6 @@
 /* Light theme stylings go here */
 
 /* Background dark grey */
-body {
+body.body-light-theme {
   background: #ededed;
 }

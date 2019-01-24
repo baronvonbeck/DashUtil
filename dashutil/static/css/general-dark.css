@@ -2,43 +2,14 @@
 
 
 /* Background dark grey */
-body {
+body.body-dark-theme {
   background: #252525;
 }
 
 
-/* Navbar */
-.navbar-container.navbar-dark-theme {
-  position: relative;
-  margin: auto;
-  top: 0;
-  left: 0; 
-  right: 0; 
-  bottom: 0; 
-  height: 100px;
-}
-
-
 /* Logo */
-.navbar-container.navbar-dark-theme .navbar-brand img {
-  height: 70px ;
-  width: 70px;
-  left: 0;
-}
 .navbar-container.navbar-dark-theme .navbar-brand .logo-text {
-  position: absolute; 
-  margin-left: 5px;
-  margin-top: 5px;
-  font-family: 'Fira Sans', sans-serif;
-  font-weight: bolder;
-  font-size: 2em;
   color: white;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-}
-.navbar-container.navbar-dark-theme .navbar-brand:focus {
-  outline: none;
 }
 .navbar-container.navbar-dark-theme .navbar-brand:focus .logo-text {
   color: #d6d6d6;
@@ -52,46 +23,13 @@ body {
 
 
 /* Navbar links, not logo */
-.navbar-container.navbar-dark-theme .navbar-nav {
-  position: relative;
-  margin-left: auto;
-  margin-right: 0;
-  text-align: right;
-  z-index: 7;
-}
 .navbar-container.navbar-dark-theme .navbar-nav .nav-item .nav-link {
-  font-family: 'Fira Sans', sans-serif;
-  display: inline-block;
   color: white;
-  text-decoration: none;
   text-decoration-color: white;
 }
 .navbar-container.navbar-dark-theme .navbar-nav .nav-item .nav-link:hover {
   color: #d6d6d6;
-  outline: 0;
 }
 .navbar-container.navbar-dark-theme .navbar-nav .nav-item .nav-link:focus {
   color: #d6d6d6;
-  outline: 0;
-}
-
-
-/* Navbar dropdown */ 
-.navbar-container.navbar-dark-theme .dropdown-menu {
-  z-index: 7;
-}
-.navbar-container.navbar-dark-theme .dropdown-menu.show {
-  width: 200px;
-  margin-left: auto;
-  margin-right: 0;
-  z-index: 8;
-}
-
-
-/* Theme toggler */
-.navbar-container.navbar-dark-theme .theme-toggler img {
-  position: relative;
-  margin-left: auto;
-  width: 40px;
-  height: 40px;
 }
