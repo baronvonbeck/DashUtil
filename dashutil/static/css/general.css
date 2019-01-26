@@ -44,7 +44,46 @@ body {
   display: inline-block;
 }
 .navbar-container .navbar-brand:focus {
-  outline: none;
+  outline: 0;
+}
+
+
+/* Navbar collapser */
+.navbar-container .navbar-toggler {
+  outline: 0;
+}
+.navbar-container .navbar-toggler .navbar-toggler-icon {
+  outline: 0;
+}
+.navbar-container .navbar-toggler:hover {
+  outline: 0;
+}
+.navbar-container .navbar-toggler .navbar-toggler-icon:hover {
+  outline: 0;
+}
+.navbar-container .navbar-toggler:focus {
+  outline: 0;
+}
+.navbar-container .navbar-toggler .navbar-toggler-icon:focus {
+  outline: 0;
+}
+.navbar-container .navbar-toggler.collapsed {
+  outline: 0;
+}
+.navbar-container .navbar-toggler.collapsed .navbar-toggler-icon {
+  outline: 0;
+}
+.navbar-container .navbar-toggler.collapsed:hover {
+  outline: 0;
+}
+.navbar-container .navbar-toggler.collapsed .navbar-toggler-icon:hover {
+  outline: 0;
+}
+.navbar-container .navbar-toggler.collapsed:focus {
+  outline: 0;
+}
+.navbar-container .navbar-toggler.collapsed .navbar-toggler-icon:focus {
+  outline: 0;
 }
 
 
@@ -56,10 +95,11 @@ body {
   text-align: right;
   z-index: 7;
 }
-.navbar-container .navbar-nav .nav-item .nav-link {
+.navbar-container .navbar-nav .nav-item {
   font-family: 'Fira Sans', sans-serif;
   display: inline-block;
   text-decoration: none;
+  margin-right: 10px;
 }
 .navbar-container .navbar-nav .nav-item .nav-link:hover {
   outline: 0;
@@ -69,28 +109,42 @@ body {
 }
 
 
+
+
 /* Navbar dropdown */ 
-.dropdown-menu {
+.navbar-container .navbar-nav .dropdown-menu {
   z-index: 7;
 }
-.dropdown-menu.show {
+.navbar-container .navbar-nav .dropdown-menu.show {
   width: 200px;
-  margin-left: auto;
-  margin-right: 0;
   z-index: 8;
+  left: -50px;
+}
+.navbar-container .navbar-nav .nav-item.dropdown.show {
+  margin-left: auto;
+}
+.navbar-container .navbar-nav .nav-item.dropdown.show .dropdown-item:hover {
+  outline: 0;
+}
+.navbar-container .navbar-nav .nav-item.dropdown.show .dropdown-item:focus {
+  outline: 0;
 }
 
 
 /* Theme toggler */
-.theme-toggler img {
+.navbar-container .theme-toggler {
+  margin-left: 20px;
+  margin-right: 10px;
+}
+.navbar-container .theme-toggler img {
   position: relative;
   margin-left: auto;
   width: 40px;
   height: 40px;
 }
-.theme-toggler img:hover {
+.navbar-container img:hover {
   cursor: pointer;
 }
-.theme-toggler img:focus {
+.navbar-container .theme-toggler img:focus {
 
 }

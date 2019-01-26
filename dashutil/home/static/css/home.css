@@ -110,12 +110,12 @@
 
 
 /* Create and find buttons */
-#old-search {
+#old-search-id {
   opacity: 0;
   visibility: hidden;
   text-align: center;
 }
-#new-search {
+#new-search-id {
   transition-delay: 0s;
   transition-duration: 0.75s;
   transition-property: opacity;
@@ -150,6 +150,7 @@
   padding-top: 8px;
 }
 .search-box-container .search-button.expanded:hover { 
+  cursor: pointer;
   transition: 0.25s;
   text-decoration: none;
 }

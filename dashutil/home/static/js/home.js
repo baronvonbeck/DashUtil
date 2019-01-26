@@ -2,26 +2,45 @@
 
 // General constants
 const generalConstants = {
-    inputTextId:        "input-text",
-    searchBoxId:        "search-box", 
-    searchIconId:       "search-icon",
-    searchButtonId:     "search-button",
-    oldSearchId:        "old-search",
-    newSearchId:        "new-search", 
-    prevClass:          "prev",
-    expandedClass:      "expanded", 
+    inputTextId:        "input-text-id",
+    searchBoxId:        "search-box-id", 
+    searchIconId:       "search-icon-id",
+    searchButtonId:     "search-button-id",
+    oldSearchId:        "old-search-id",
+    newSearchId:        "new-search-id",  
     logoImgId:          "logo-img-id",
     logoTextId:         "logo-text-id", 
-    themeImgId:         "theme-img-id"
+    themeImgId:         "theme-img-id",
+    togglerIconId:      "navbar-toggler-icon-id",
+    prevClass:          "prev",
+    expandedClass:      "expanded",
+    collapsedClass:     "collapsed",
+    imgPath:            "/static/img/" 
 };
 
-// light theme variables
-const darkThemeConstants = {
+// dark theme variables
+const themeConstantsDark = {
+    logo: generalConstants.imgPath + "logo.png",
+    logoHover: generalConstants.imgPath + "logo-dark-hover.png",
+    theme: generalConstants.imgPath + "theme-dark.png",
+    themeHover: generalConstants.imgPath + "theme-dark-hover.png",
+    textColor: "white",
+    textColorHover: "#d6d6d6"
+};
+const themeConstantsLight = {
+    logo: generalConstants.imgPath + "logo.png",
+    logoHover: generalConstants.imgPath + "logo-light-hover.png",
+    theme: generalConstants.imgPath + "theme-light.png",
+    themeHover: generalConstants.imgPath + "theme-light-hover.png",
+    textColor: "white",
+    textColorHover: "#d6d6d6"
+};
+var allThemeConstants = {
+    darkTheme:          true,
+    lightTheme:         false
+};
 
-}
-var currentThemeConstants = {
-
-}
+var currentTheme = themeConstantsDark;
 
 $(document).ready(function() {
 
@@ -93,7 +112,7 @@ function handleKeyboardEvents(e) {
             break; 
 
         case "tab":
-            var logoId = document.getElementById("logo-id");
+            var logoId = document.getElementById(generalConstants.logoImgId);
             var searchButton = document.getElementById(generalConstants.searchButtonId);
 
             if (!searchBox.classList.contains(generalConstants.expandedClass)) {
@@ -156,27 +175,35 @@ function contractSearchBox() {
 
 // hover function for logo
 function hoverLogo() {
-    document.getElementById(generalConstants.logoImgId).setAttribute("src", "/static/img/logo-dark-highlight.png");
-    document.getElementById(generalConstants.logoTextId).style.color = "#d6d6d6";
+    document.getElementById(generalConstants.logoImgId).setAttribute("src", currentTheme.logoHover);
+    document.getElementById(generalConstants.logoTextId).style.color = currentTheme.textColorHover;
 }
 
 
 // unhover function for logo
 function unhoverLogo() {
-    document.getElementById(generalConstants.logoImgId).setAttribute("src", "/static/img/logo-dark.png");
-    document.getElementById(generalConstants.logoTextId).style.color = "white";
+    document.getElementById(generalConstants.logoImgId).setAttribute("src", currentTheme.logo);
+    document.getElementById(generalConstants.logoTextId).style.color = currentTheme.textColor;
 }
 
 
-// hover function for logo
+// hover function for theme
 function hoverTheme() {
-    document.getElementById(generalConstants.themeImgId).setAttribute("src", "/static/img/theme-light.png");
+    document.getElementById(generalConstants.themeImgId).setAttribute("src", currentTheme.themeHover);
 }
 
 
-// unhover function for logo
+// unhover function for theme
 function unhoverTheme() {
-    document.getElementById(generalConstants.themeImgId).setAttribute("src", "/static/img/theme-dark.png");
+    document.getElementById(generalConstants.themeImgId).setAttribute("src", currentTheme.theme);
+}
+
+
+function blurTogglerIcon() {
+    var togglerIcon = document.getElementById(generalConstants.togglerIconId);
+    if (!togglerIcon.classList.contains(generalConstants.collapsedClass)) {
+        togglerIcon.blur();
+    }
 }
 
 

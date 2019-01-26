@@ -5,7 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <!-- <link rel="icon" href="public/ico/favicon.ico"> -->
+
+        <!-- icon -->
+        {% load static %}
+        <link rel="icon" href="{% static '/img/ico/logo.ico' %}">
 
         <title>DashUtil</title>
 
@@ -30,17 +33,17 @@
         
 
     </head>
-    <body class="body-dark-theme">
-        <nav id="navbar-container-id" class="navbar navbar-expand-md navbar-container navbar-dark-theme">
+    <body class="dark-theme">
+        <nav id="navbar-container-id" class="navbar navbar-expand-md navbar-container">
             <a id="navbar-logo-id" class="navbar-brand" onfocus="hoverLogo()" onblur="unhoverLogo()" href="/">
-                <img id="logo-img-id" class="light-logo" src="{% static '/img/logo-dark.png' %}" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">
+                <img id="logo-img-id" class="light-logo" src="{% static '/img/logo.png' %}" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">
                 <p id="logo-text-id" class="logo-text" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">Dashutil</p>
             </a>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <button id="navbar-toggler-icon-id" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <div id="navbarNavDropdown" class="collapse navbar-collapse">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
                         <a class="nav-link" href="/">Home</a>
@@ -59,15 +62,16 @@
             </div>
 
             <div class="theme-toggler" onfocus="hoverTheme()" onblur="unhoverTheme()">
-                <img id="theme-img-id" src="{% static '/img/theme-dark.png' %}" alt="Switch to light theme" onmouseover="hoverTheme()" onmouseout="unhoverTheme()" onclick="switchThemes()">
+                <img id="theme-img-id" src="{% static '/img/theme-dark.png' %}" alt="Switch to light theme" onmouseover="hoverTheme()" onmouseout="unhoverTheme()" onclick="switchThemes()" title="Go light!">
+
             </div>
         </nav>
 
-        <div id="search-box" class="search-box-container search-dark-theme" onclick="expandSearchBox()">
-            <input id="input-text" type="text" placeholder="Find Room...">
-            <div id="search-icon" class="search" onclick="contractSearchBox()"></div>
+        <div id="search-box-id" class="search-box-container" onclick="expandSearchBox()">
+            <input id="input-text-id" type="text" placeholder="Find Room...">
+            <div id="search-icon-id" class="search" onclick="contractSearchBox()"></div>
 
-            <a id="search-button" href="#" class="search-button"><span id="old-search">Search</span></a>       
+            <a id="search-button-id" class="search-button" onclick="findOrCreateRoom()"><span id="old-search-id">Search</span></a>       
         </div>
         
         <!-- Scripts -->
