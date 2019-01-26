@@ -40,7 +40,7 @@
                 <p id="logo-text-id" class="logo-text" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">Dashutil</p>
             </a>
 
-            <button id="navbar-toggler-icon-id" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <button id="navbar-toggler-icon-id" class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div id="navbarNavDropdown" class="collapse navbar-collapse">
@@ -58,20 +58,25 @@
                             <a class="dropdown-item" href="#">Site</a>
                         </div>
                     </li>
+                    <li class="nav-item active">
+                        <div class="theme-toggler" onfocus="hoverTheme()" onblur="unhoverTheme()" onclick="switchThemes()" tabindex="0" onkeydown="themeKeydown(event)">
+                            <img id="theme-img-id" src="{% static '/img/theme-dark.png' %}" alt="Switch to light theme" onmouseover="hoverTheme()" onmouseout="unhoverTheme()" onclick="switchThemes()" title="Go light!">
+
+                        </div>
+                    </li>
                 </ul>
             </div>
 
-            <div class="theme-toggler" onfocus="hoverTheme()" onblur="unhoverTheme()">
-                <img id="theme-img-id" src="{% static '/img/theme-dark.png' %}" alt="Switch to light theme" onmouseover="hoverTheme()" onmouseout="unhoverTheme()" onclick="switchThemes()" title="Go light!">
 
-            </div>
+            
+
         </nav>
 
         <div id="search-box-id" class="search-box-container" onclick="expandSearchBox()">
             <input id="input-text-id" type="text" placeholder="Find Room...">
             <div id="search-icon-id" class="search" onclick="contractSearchBox()"></div>
 
-            <a id="search-button-id" class="search-button" onclick="findOrCreateRoom()"><span id="old-search-id">Search</span></a>       
+            <a id="search-button-id" class="search-button" onclick="findOrCreateRoom()" tabindex="0"><span id="old-search-id">Search</span></a>       
         </div>
         
         <!-- Scripts -->

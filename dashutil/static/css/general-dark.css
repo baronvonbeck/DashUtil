@@ -35,7 +35,7 @@ body.dark-theme .navbar-container .navbar-brand .logo-text:focus {
 }
 
 
-/* Navbar collapser - uncollapsed */
+/* Navbar collapser icon - uncollapsed */
 body.dark-theme .navbar-container .navbar-toggler {
   border-color: var(--text-color);
 }
@@ -56,7 +56,7 @@ body.dark-theme .navbar-container .navbar-toggler:focus .navbar-toggler-icon {
 }
 
 
-/* Navbar collapser - collapsed */
+/* Navbar collapser icon - collapsed */
 body.dark-theme .navbar-container .navbar-toggler.collapsed {
   border-color: var(--text-color);
 }

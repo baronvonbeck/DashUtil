@@ -94,12 +94,12 @@ function handleKeyboardEvents(e) {
     var searchBox = document.getElementById(generalConstants.searchBoxId);
 
     switch (keycode) {
-        case "enter":
-            if (!searchBox.classList.contains(generalConstants.expandedClass)) 
-                expandSearchBox(); 
-            else if (searchBox.classList.contains(generalConstants.expandedClass))
-                findOrCreateRoom();
-            break; 
+        // case "enter":
+        //     if (!searchBox.classList.contains(generalConstants.expandedClass)) 
+        //         expandSearchBox(); 
+        //     else if (searchBox.classList.contains(generalConstants.expandedClass))
+        //         findOrCreateRoom();
+        //     break; 
 
         case "escape": 
         case "esc": 
@@ -199,17 +199,27 @@ function unhoverTheme() {
 }
 
 
+// handles keydown for theme switching on enter
+function themeKeydown(e) {
+    var keycode = e.key.toLowerCase();
+
+    if (keycode == "enter") 
+        switchThemes();
+}
+
+
+/*
 function blurTogglerIcon() {
     var togglerIcon = document.getElementById(generalConstants.togglerIconId);
     if (!togglerIcon.classList.contains(generalConstants.collapsedClass)) {
         togglerIcon.blur();
     }
 }
-
+*/
 
 // switch themes
 function switchThemes() {
-    document.getElementById(generalConstants.themeImgId).setAttribute("src", "/static/img/theme-dark.png");
+    console.log("switchingTheme");
 }
 
 
