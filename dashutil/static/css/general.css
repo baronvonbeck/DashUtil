@@ -1,9 +1,16 @@
 /* general.css */
 
+
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  /* outlines are handled with other visual cues */
+  outline: 0;
 }
 html, body {
   width: 100%;
@@ -37,20 +44,19 @@ body {
   height: 70px ;
   width: 70px;
   left: 0;
+  z-index: 8;
 }
 .navbar-container .navbar-brand .logo-text {
-  position: relative; 
+  position: absolute; 
   margin-left: 5px;
   margin-top: 5px;
   font-family: 'Fira Sans', sans-serif;
   font-weight: bolder;
   font-size: 2em;
   text-align: center;
+  z-index: 8;
   text-decoration: none;
   display: inline-block;
-}
-.navbar-container .navbar-brand:focus {
-  outline: 0;
 }
 
 
@@ -58,45 +64,10 @@ body {
 .navbar-container .navbar-toggler { 
   margin-left: auto;
   margin-right: 20px;
-  outline: 0;
-  text-align: center;
-}
-.navbar-container .navbar-toggler .navbar-toggler-icon {
-  outline: 0;
-}
-.navbar-container .navbar-toggler:hover {
-  outline: 0;
-}
-.navbar-container .navbar-toggler .navbar-toggler-icon:hover {
-  outline: 0;
-}
-.navbar-container .navbar-toggler:focus {
-  outline: 0;
-}
-.navbar-container .navbar-toggler .navbar-toggler-icon:focus {
-  outline: 0;
 }
 .navbar-container .navbar-toggler.collapsed {
   margin-left: auto;
   margin-right: 20px;
-  outline: 0;
-  overflow-y:hidden;
-}
-
-.navbar-container .navbar-toggler.collapsed .navbar-toggler-icon {
-  outline: 0;
-}
-.navbar-container .navbar-toggler.collapsed:hover {
-  outline: 0;
-}
-.navbar-container .navbar-toggler.collapsed .navbar-toggler-icon:hover {
-  outline: 0;
-}
-.navbar-container .navbar-toggler.collapsed:focus {
-  outline: 0;
-}
-.navbar-container .navbar-toggler.collapsed .navbar-toggler-icon:focus {
-  outline: 0;
 }
 
 
@@ -124,12 +95,6 @@ body {
   text-decoration: none;
   margin-left: 10px;
 }
-.navbar-container .navbar-nav .nav-item .nav-link:hover {
-  outline: 0;
-}
-.navbar-container .navbar-nav .nav-item .nav-link:focus {
-  outline: 0;
-}
 
 
 /* Navbar dropdown */ 
@@ -138,29 +103,17 @@ body {
 }
 .navbar-container .navbar-nav .dropdown-menu.show {
   width: 200px;
-  z-index: 8;
+  z-index: 9;
   left: -60px;
   margin-right: 0px;
   margin-left: auto;
-}
-.navbar-container .navbar-nav .nav-item.dropdown.show .dropdown-item:hover {
-  outline: 0;
-}
-.navbar-container .navbar-nav .nav-item.dropdown.show .dropdown-item:focus {
-  outline: 0;
+  margin-bottom: 8px;
 }
 
 
 /* Theme toggler */
 .navbar-container .theme-toggler {
   margin-left: auto;
-  outline: 0;
-}
-.navbar-container .navbar-collapse.collapse.show .navbar-nav .theme-toggler {
-  margin-top: 8px;
-}
-.navbar-container .navbar-collapse.collapsing .navbar-nav .theme-toggler {
-  margin-top: 8px;
 }
 .navbar-container .theme-toggler img {
   position: relative;
@@ -169,7 +122,4 @@ body {
 }
 .navbar-container img:hover {
   cursor: pointer;
-}
-.navbar-container .theme-toggler img:focus {
-  outline: 0;
 }

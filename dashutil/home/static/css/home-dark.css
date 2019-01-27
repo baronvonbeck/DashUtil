@@ -1,63 +1,73 @@
 /* home page specific css stylings goes here - dark theme */
 /* idea modified from https://codepen.io/AlbertFeynman/pen/BPvzWZ */
 
+
+/* root for variables */
+:root {
+  --main-theme-color: #ff6523; 
+  --main-theme-color-hover: #d1480c;
+  --text-color: white;
+  --input-text-shadow: 0 0 10px var(--main-theme-color);
+  --large-shadow: 0 0 2px 0 var(--main-theme-color), 0 5px 6px 0 rgba(0, 0, 0, 0.0);
+  --large-shadow-expanded: 0 0 10px 0 var(--main-theme-color), 0 20px 25px 0 rgba(0, 0, 0, 0.3);
+
+  --magnifying-glass-color: white;
+  --magnifying-glass-circle-border: 2px solid var(--magnifying-glass-color);
+  --search-button-expanded-background-color: #151515;
+  --magnifying-glass-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.6);
+}
+
+
 body.dark-theme .search-box-container .search { 
-  background: #ff6523;
-  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.6);
-  /* // box-shadow: 0 0 25px 0 #ff6523; */
+  background: var(--main-theme-color);
+  box-shadow: var(--magnifying-glass-shadow);
 }
 body.dark-theme .search-box-container .search::before { 
-  background: white;
+  background: var(--magnifying-glass-color);
 }
 body.dark-theme .search-box-container .search::after { 
-  border: 2px solid white;
+  border: var(--magnifying-glass-circle-border);
 }
 body.dark-theme .search-box-container input {
-  /* // border-bottom: 1px solid rgba(255, 255, 255, 0.2); */
-  background: #ff6523;
-  color: white;
-  text-shadow: 0 0 10px #ff6523;
-  box-shadow: 0 0 2px 0 #ff6523, 0 5px 6px 0 rgba(0, 0, 0, 0.0);
-  /* // box-shadow: inset 0 0 25px 0 rgba(0, 0, 0, 0.5); */
+  background: var(--main-theme-color);
+  color: var(--text-color);
+  text-shadow: var(--input-text-shadow);
+  box-shadow: var(--large-shadow);
 }
 body.dark-theme .search-box-container input:hover {
-  background-color: #d1480c;
+  background-color: var(--main-theme-color-hover);
 } 
 body.dark-theme .search-box-container input:focus {
-  background-color: #d1480c;
+  background-color: var(--main-theme-color-hover);
 }
 body.dark-theme .search-box-container input.expanded { 
-  box-shadow: 0 0 10px 0 #ff6523, 0 20px 25px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: var(--large-shadow-expanded);
 }
 body.dark-theme .search-box-container input.expanded ~ .search.expanded { 
-  background: #151515;
-}
-body.dark-theme .search-box-container input.expanded ~ .search::after {
-  background: white;
+  background: var(--search-button-expanded-background-color);
 }
 body.dark-theme .search-box-container input::placeholder {
-  color: white;
+  color: var(--text-color);
 }
 
 
-/* Create and find buttons */
+/* Search button */
 body.dark-theme .search-box-container #new-search-id {
-  color: white;
-  text-decoration-color: white;
+  color: var(--text-color);
+  text-decoration-color: var(--text-color);
 }
-
 body.dark-theme .search-box-container .search-button {
-  color: white;
-  background-color: #ff6523;
-  text-decoration-color: white;
-  box-shadow: 0 0 2px 0 #ff6523, 0 5px 6px 0 rgba(0, 0, 0, 0.0);
+  color: var(--text-color);
+  background-color: var(--main-theme-color);
+  text-decoration-color: var(--text-color);
+  box-shadow: var(--large-shadow);
 }
 body.dark-theme .search-box-container input.expanded ~ .search-button.expanded {
-  box-shadow: 0 0 8px 0 #ff6523, 0 20px 25px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: var(--large-shadow-expanded);
 }
 body.dark-theme .search-box-container .search-button.expanded:hover {
-  background-color: #d1480c;
+  background-color: var(--main-theme-color-hover);
 }
 body.dark-theme .search-box-container .search-button.expanded:focus {
-  background-color: #d1480c;
+  background-color: var(--main-theme-color-hover);
 }
