@@ -22,18 +22,24 @@ body {
   left: 0; 
   right: 0; 
   bottom: 0; 
-  height: 100px;
+  height: auto;
 }
 
 
 /* Logo */
+#logo-img-id {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
 .navbar-container .navbar-brand img {
+  position: relative;
   height: 70px ;
   width: 70px;
   left: 0;
 }
 .navbar-container .navbar-brand .logo-text {
-  position: absolute; 
+  position: relative; 
   margin-left: 5px;
   margin-top: 5px;
   font-family: 'Fira Sans', sans-serif;
