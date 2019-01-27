@@ -1,8 +1,8 @@
 /* Dark theme stylings go here */
 
 
-/* root for variables */
-:root {
+/* Establish variables for dark theme, background dark grey */
+body.dark-theme {
   --background-color: #252525;
   --text-color: white;
   --text-hover-color: #d6d6d6;
@@ -11,11 +11,7 @@
   --dropdown-menu-background-color: #161616;
   --dropdown-menu-background-hover-color: #848484;
   --dropdown-menu-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.8);
-}
 
-
-/* Background dark grey */
-body.dark-theme {
   background: var(--background-color);
 }
 

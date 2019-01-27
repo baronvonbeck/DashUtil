@@ -27,15 +27,15 @@ const themeConstantsDark = {
     theme: generalConstants.imgPath + "theme-dark.png",
     themeHover: generalConstants.imgPath + "theme-dark-hover.png",
     textColor: "white",
-    textColorHover: "#d6d6d6"
+    textColorHover: "#bfbfbf"
 };
 const themeConstantsLight = {
     logo: generalConstants.imgPath + "logo.png",
     logoHover: generalConstants.imgPath + "logo-light-hover.png",
     theme: generalConstants.imgPath + "theme-light.png",
     themeHover: generalConstants.imgPath + "theme-light-hover.png",
-    textColor: "white",
-    textColorHover: "#d6d6d6"
+    textColor: "#252525",
+    textColorHover: "#bfbfbf"
 };
 var allThemeConstants = {
     darkTheme:          true,
