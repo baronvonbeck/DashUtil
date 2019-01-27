@@ -15,6 +15,8 @@ const generalConstants = {
     prevClass:          "prev",
     expandedClass:      "expanded",
     collapsedClass:     "collapsed",
+    darkThemeClass:     "dark-theme",
+    lightThemeClass:    "light-theme",  
     imgPath:            "/static/img/" 
 };
 
@@ -94,13 +96,6 @@ function handleKeyboardEvents(e) {
     var searchBox = document.getElementById(generalConstants.searchBoxId);
 
     switch (keycode) {
-        // case "enter":
-        //     if (!searchBox.classList.contains(generalConstants.expandedClass)) 
-        //         expandSearchBox(); 
-        //     else if (searchBox.classList.contains(generalConstants.expandedClass))
-        //         findOrCreateRoom();
-        //     break; 
-
         case "escape": 
         case "esc": 
             if (searchBox.classList.contains(generalConstants.expandedClass)) { 
@@ -112,10 +107,7 @@ function handleKeyboardEvents(e) {
             break; 
 
         case "tab":
-            var logoId = document.getElementById(generalConstants.logoImgId);
-            var searchButton = document.getElementById(generalConstants.searchButtonId);
-
-            if (!searchBox.classList.contains(generalConstants.expandedClass)) {
+          if (!searchBox.classList.contains(generalConstants.expandedClass)) {
                 e.preventDefault();
                 expandSearchBox(); 
             }
@@ -199,13 +191,63 @@ function unhoverTheme() {
 }
 
 
+// switch themes
+function switchThemes() {
+    if (allThemeConstants.darkTheme == true) {
+        allThemeConstants.darkTheme = false;
+        allThemeConstants.lightTheme = true;
+
+        currentTheme = themeConstantsLight;
+        document.body.className = document.body.className.replace(generalConstants.darkThemeClass, generalConstants.lightThemeClass);
+    }
+    else {
+        allThemeConstants.darkTheme = true;
+        allThemeConstants.lightTheme = false;
+
+        currentTheme = themeConstantsDark;
+        document.body.className = document.body.className.replace(generalConstants.lightThemeClass, generalConstants.darkThemeClass);
+    }
+
+    unhoverLogo();
+    unhoverTheme();
+}
+
+
+// handles keydown for theme switching on enter
+function switchThemesHandler(e) {
+    e.stopPropagation();
+    switchThemes();
+}
+
+
 // handles keydown for theme switching on enter
 function themeKeydown(e) {
     var keycode = e.key.toLowerCase();
 
-    if (keycode == "enter") 
+    if (keycode == "enter") {
+        e.preventDefault();
         switchThemes();
+    }
 }
+
+
+// handles keydown for searching from search button
+function searchKeydown(e) {
+    var keycode = e.key.toLowerCase();
+
+    if (keycode == "enter") 
+        findOrCreateRoom();
+}
+
+
+// handles keydown for searching from input text
+function inputTextKeydown(e) {
+    var keycode = e.key.toLowerCase();
+
+    if (keycode == "enter") 
+        findOrCreateRoom();
+}
+
 
 
 /*
@@ -217,10 +259,6 @@ function blurTogglerIcon() {
 }
 */
 
-// switch themes
-function switchThemes() {
-    console.log("switchingTheme");
-}
 
 
 

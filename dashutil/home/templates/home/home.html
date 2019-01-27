@@ -59,24 +59,20 @@
                         </div>
                     </li>
                     <li class="nav-item active">
-                        <div class="theme-toggler" onfocus="hoverTheme()" onblur="unhoverTheme()" onclick="switchThemes()" tabindex="0" onkeydown="themeKeydown(event)">
-                            <img id="theme-img-id" src="{% static '/img/theme-dark.png' %}" alt="Switch to light theme" onmouseover="hoverTheme()" onmouseout="unhoverTheme()" onclick="switchThemes()" title="Go light!">
+                        <div class="theme-toggler" onfocus="hoverTheme()" onblur="unhoverTheme()" onclick="switchThemesHandler(event)" tabindex="0" onkeydown="themeKeydown(event)">
+                            <img id="theme-img-id" src="{% static '/img/theme-dark.png' %}" alt="Switch to light theme" onmouseover="hoverTheme()" onmouseout="unhoverTheme()" onclick="switchThemesHandler(event)" title="Go light!">
 
                         </div>
                     </li>
                 </ul>
             </div>
-
-
-            
-
         </nav>
 
         <div id="search-box-id" class="search-box-container" onclick="expandSearchBox()">
-            <input id="input-text-id" type="text" placeholder="Find Room...">
+            <input id="input-text-id" type="text" placeholder="Find Room..." onkeydown="inputTextKeydown(event)">
             <div id="search-icon-id" class="search" onclick="contractSearchBox()"></div>
 
-            <a id="search-button-id" class="search-button" onclick="findOrCreateRoom()" tabindex="0"><span id="old-search-id">Search</span></a>       
+            <a id="search-button-id" class="search-button" tabindex="0" onclick="findOrCreateRoom()" onkeydown="searchKeydown(event)"><span id="old-search-id">Search</span></a>       
         </div>
         
         <!-- Scripts -->

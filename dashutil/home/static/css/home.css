@@ -141,6 +141,7 @@
   visibility: hidden;
   text-decoration: none;
   opacity: 0;
+  outline: 0;
 }
 .search-box-container input.expanded ~ .search-button.expanded {
   visibility: visible;

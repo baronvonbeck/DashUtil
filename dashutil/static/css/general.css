@@ -53,6 +53,7 @@ body {
   margin-left: auto;
   margin-right: 20px;
   outline: 0;
+  text-align: center;
 }
 .navbar-container .navbar-toggler .navbar-toggler-icon {
   outline: 0;
@@ -73,7 +74,9 @@ body {
   margin-left: auto;
   margin-right: 20px;
   outline: 0;
+  overflow-y:hidden;
 }
+
 .navbar-container .navbar-toggler.collapsed .navbar-toggler-icon {
   outline: 0;
 }
@@ -92,10 +95,20 @@ body {
 
 
 /* Navbar links, not logo */
+.navbar-container .navbar-collapse.collapse {
+	position: relative;
+	margin-left: auto;
+	margin-right: 20px;
+}
+.navbar-container .navbar-collapse.collapsing {
+	position: relative;
+	margin-left: auto;
+	margin-right: 20px;
+}
 .navbar-container .navbar-nav {
   position: relative;
   margin-left: auto;
-  margin-right: 20px;
+  margin-right: 0;
   text-align: right;
   z-index: 7;
 }
@@ -120,7 +133,7 @@ body {
 .navbar-container .navbar-nav .dropdown-menu.show {
   width: 200px;
   z-index: 8;
-  left: -50px;
+  left: -60px;
   margin-right: 0px;
   margin-left: auto;
 }
