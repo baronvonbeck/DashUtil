@@ -16,7 +16,7 @@
         {% load static %}
         <link rel="stylesheet" href="{% static '/css/bootstrap/bootstrap.min.css' %}" >
 
-        <!-- General styles -->
+        <!-- General styles for navbar -->
         {% load static %}
         <link rel="stylesheet" href="{% static '/css/general.css' %}">
         {% load static %}
@@ -29,15 +29,15 @@
         <link rel="stylesheet" href="{% static '/css/home.css' %}">
         {% load static %}
         <link rel="stylesheet" href="{% static '/css/home-dark.css' %}">
-
+        {% load static %}
+        <link rel="stylesheet" href="{% static '/css/home-light.css' %}">
         
-
     </head>
     <body class="dark-theme">
         <nav id="navbar-container-id" class="navbar navbar-expand-md navbar-container">
             <a id="navbar-logo-id" class="navbar-brand" onfocus="hoverLogo()" onblur="unhoverLogo()" href="/">
                 <img id="logo-img-id" src="{% static '/img/logo.png' %}" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">
-                <p id="logo-text-id" class="logo-text" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">Dashutil</p>
+                <p id="logo-text-id" class="logo-text" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">DashUtil</p>
             </a>
 
             <button id="navbar-toggler-icon-id" class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">

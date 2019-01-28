@@ -1,3 +1,72 @@
 /* home page specific css stylings goes here - light theme */
-/* idea modified from https://codepen.io/AlbertFeynman/pen/BPvzWZ */
-/* ff8551 */
+
+
+/* root for variables */
+body.light-theme {
+  --main-theme-color: #ff6523; 
+  --main-theme-color-hover: #ff8551;
+  --text-color: #252525;
+  --input-text-shadow: 0 0 10px var(--main-theme-color);
+  --large-shadow: 0 0 2px 0 var(--main-theme-color), 0 5px 6px 0 rgba(255, 255, 255, 0.0);
+  --large-shadow-expanded: 0 0 10px 0 var(--main-theme-color), 0 20px 25px 0 rgba(255, 255, 255, 0.5);
+
+  --magnifying-glass-color: #252525;
+  --magnifying-glass-circle-border: 2px solid var(--magnifying-glass-color);
+  --search-button-expanded-background-color: white;
+  --magnifying-glass-shadow: 0 0 25px 0 rgba(255, 255, 255, 0.6);
+}
+
+
+body.light-theme .search-box-container .search { 
+  background: var(--main-theme-color);
+  box-shadow: var(--magnifying-glass-shadow);
+}
+body.light-theme .search-box-container .search::before { 
+  background: var(--magnifying-glass-color);
+}
+body.light-theme .search-box-container .search::after { 
+  border: var(--magnifying-glass-circle-border);
+}
+body.light-theme .search-box-container input {
+  background: var(--main-theme-color);
+  color: var(--text-color);
+  text-shadow: var(--input-text-shadow);
+  box-shadow: var(--large-shadow);
+}
+body.light-theme .search-box-container input:hover {
+  background-color: var(--main-theme-color-hover);
+} 
+body.light-theme .search-box-container input:focus {
+  background-color: var(--main-theme-color-hover);
+}
+body.light-theme .search-box-container input.expanded { 
+  box-shadow: var(--large-shadow-expanded);
+}
+body.light-theme .search-box-container input.expanded ~ .search.expanded { 
+  background: var(--search-button-expanded-background-color);
+}
+body.light-theme .search-box-container input::placeholder {
+  color: var(--text-color);
+}
+
+
+/* Search button */
+body.light-theme .search-box-container #new-search-id {
+  color: var(--text-color);
+  text-decoration-color: var(--text-color);
+}
+body.light-theme .search-box-container .search-button {
+  color: var(--text-color);
+  background-color: var(--main-theme-color);
+  text-decoration-color: var(--text-color);
+  box-shadow: var(--large-shadow);
+}
+body.light-theme .search-box-container input.expanded ~ .search-button.expanded {
+  box-shadow: var(--large-shadow-expanded);
+}
+body.light-theme .search-box-container .search-button.expanded:hover {
+  background-color: var(--main-theme-color-hover);
+}
+body.light-theme .search-box-container .search-button.expanded:focus {
+  background-color: var(--main-theme-color-hover);
+}

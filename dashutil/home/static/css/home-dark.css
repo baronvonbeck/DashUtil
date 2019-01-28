@@ -1,9 +1,8 @@
 /* home page specific css stylings goes here - dark theme */
-/* idea modified from https://codepen.io/AlbertFeynman/pen/BPvzWZ */
 
 
 /* root for variables */
-:root {
+body.dark-theme {
   --main-theme-color: #ff6523; 
   --main-theme-color-hover: #d1480c;
   --text-color: white;
