@@ -2,7 +2,7 @@
 
 
 /* root for variables */
-body.dark-theme {
+body.dark-theme .search-box-container {
   --main-theme-color: #ff6523; 
   --main-theme-color-hover: #d1480c;
   --text-color: white;

@@ -1,7 +1,7 @@
-/* Dark theme stylings go here */
+/* Light theme stylings go here */
 
 
-/* Establish variables for light theme, background dark grey */
+/* Establish variables for light theme, background light grey */
 body.light-theme {
   --background-color: #d3d3d3;
   --text-color: #252525;

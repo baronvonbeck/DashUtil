@@ -50,6 +50,9 @@ $(document).ready(function() {
     $(document).keydown(function(e) {
         handleKeyboardEvents(e);
     }); 
+
+    // TODO: handle onclicks and onkeydowns here instead of html. just call existing methods
+    // https://stackoverflow.com/questions/7034342/jquery-onclick-on-div
 }); 
 
 /*****************************************************************************
@@ -72,7 +75,7 @@ function findOrCreateRoom() {
  *****************************************************************************/
 
 
- /*****************************************************************************
+ /****************************************************************************
  * Error Functions ----- START ------
  *****************************************************************************/
 
@@ -247,19 +250,6 @@ function inputTextKeydown(e) {
     if (keycode == "enter") 
         findOrCreateRoom();
 }
-
-
-
-/*
-function blurTogglerIcon() {
-    var togglerIcon = document.getElementById(generalConstants.togglerIconId);
-    if (!togglerIcon.classList.contains(generalConstants.collapsedClass)) {
-        togglerIcon.blur();
-    }
-}
-*/
-
-
 
 
 /*****************************************************************************
