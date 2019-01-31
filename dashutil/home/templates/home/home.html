@@ -35,9 +35,9 @@
     </head>
     <body class="dark-theme">
         <nav id="navbar-container-id" class="navbar navbar-expand-md navbar-container">
-            <a id="navbar-logo-id" class="navbar-brand" onfocus="hoverLogo()" onblur="unhoverLogo()" href="/">
-                <img id="logo-img-id" src="{% static '/img/logo.png' %}" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">
-                <p id="logo-text-id" class="logo-text" onmouseover="hoverLogo()" onmouseout="unhoverLogo()">DashUtil</p>
+            <a id="navbar-logo-id" class="navbar-brand" href="/" tabindex="0">
+                <img id="logo-img-id" src="{% static '/img/logo.png' %}">
+                <p id="logo-text-id" class="logo-text" tabindex="-1">DashUtil</p>
             </a>
 
             <button id="navbar-toggler-icon-id" class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,20 +59,19 @@
                         </div>
                     </li>
                     <li class="nav-item active">
-                        <div class="theme-toggler" onfocus="hoverTheme()" onblur="unhoverTheme()" onclick="switchThemesHandler(event)" tabindex="0" onkeydown="themeKeydown(event)">
-                            <img id="theme-img-id" src="{% static '/img/theme-dark.png' %}" alt="Switch to light theme" onmouseover="hoverTheme()" onmouseout="unhoverTheme()" onclick="switchThemesHandler(event)" title="Go light!">
-
+                        <div id="theme-toggler-id" class="theme-toggler" tabindex="0">
+                            <img id="theme-img-id" src="{% static '/img/theme-dark.png' %}" alt="Switch to light theme" title="Go light!">
                         </div>
                     </li>
                 </ul>
             </div>
         </nav>
 
-        <div id="search-box-id" class="search-box-container" onclick="expandSearchBox()">
-            <input id="input-text-id" type="text" placeholder="Find Room..." onkeydown="inputTextKeydown(event)">
-            <div id="search-icon-id" class="search" onclick="contractSearchBox()"></div>
+        <div id="search-box-id" class="search-box-container">
+            <input id="input-text-id" type="text" placeholder="Find Room...">
+            <div id="search-icon-id" class="search"></div>
 
-            <a id="search-button-id" class="search-button" tabindex="0" onclick="findOrCreateRoom()" onkeydown="searchKeydown(event)"><span id="old-search-id">Search</span></a>       
+            <a id="search-button-id" class="search-button" tabindex="0"><span id="old-search-id">Search</span></a>       
         </div>
         
         <!-- Scripts -->

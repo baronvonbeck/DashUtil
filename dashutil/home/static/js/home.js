@@ -7,9 +7,11 @@ const generalConstants = {
     searchIconId:       "search-icon-id",
     searchButtonId:     "search-button-id",
     oldSearchId:        "old-search-id",
-    newSearchId:        "new-search-id",  
+    newSearchId:        "new-search-id", 
+    navbarLogoId:       "navbar-logo-id", 
     logoImgId:          "logo-img-id",
     logoTextId:         "logo-text-id", 
+    themeTogglerId:     "theme-toggler-id",
     themeImgId:         "theme-img-id",
     togglerIconId:      "navbar-toggler-icon-id",
     prevClass:          "prev",
@@ -22,20 +24,22 @@ const generalConstants = {
 
 // dark theme variables
 const themeConstantsDark = {
-    logo: generalConstants.imgPath + "logo.png",
-    logoHover: generalConstants.imgPath + "logo-dark-hover.png",
-    theme: generalConstants.imgPath + "theme-dark.png",
-    themeHover: generalConstants.imgPath + "theme-dark-hover.png",
-    textColor: "white",
-    textColorHover: "#bfbfbf"
+    logo:               generalConstants.imgPath + "logo.png",
+    logoHover:          generalConstants.imgPath + "logo-dark-hover.png",
+    theme:              generalConstants.imgPath + "theme-dark.png",
+    themeHover:         generalConstants.imgPath + "theme-dark-hover.png",
+    themeSwitchText:    "Go light!",
+    textColor:          "white",
+    textColorHover:     "#d6d6d6"
 };
 const themeConstantsLight = {
-    logo: generalConstants.imgPath + "logo.png",
-    logoHover: generalConstants.imgPath + "logo-light-hover.png",
-    theme: generalConstants.imgPath + "theme-light.png",
-    themeHover: generalConstants.imgPath + "theme-light-hover.png",
-    textColor: "#252525",
-    textColorHover: "#bfbfbf"
+    logo:               generalConstants.imgPath + "logo.png",
+    logoHover:          generalConstants.imgPath + "logo-light-hover.png",
+    theme:              generalConstants.imgPath + "theme-light.png",
+    themeHover:         generalConstants.imgPath + "theme-light-hover.png",
+    themeSwitchText:    "Go dark!",
+    textColor:          "#252525",
+    textColorHover:     "#a0a0a0"
 };
 var allThemeConstants = {
     darkTheme:          true,
@@ -46,13 +50,12 @@ var currentTheme = themeConstantsDark;
 
 $(document).ready(function() {
 
-    // Set up keyboard event handler
-    $(document).keydown(function(e) {
+    // Set up keyboard event handlers
+    document.addEventListener("keydown", function(e) {
         handleKeyboardEvents(e);
     }); 
 
-    // TODO: handle onclicks and onkeydowns here instead of html. just call existing methods
-    // https://stackoverflow.com/questions/7034342/jquery-onclick-on-div
+    addAllEventListeners();
 }); 
 
 /*****************************************************************************
@@ -119,6 +122,44 @@ function handleKeyboardEvents(e) {
 }
 
 
+// Handler to set up event listeners
+function addAllEventListeners() {
+    var navbarLogo = document.getElementById(generalConstants.navbarLogoId);
+    var themeToggler = document.getElementById(generalConstants.themeTogglerId);
+    var searchBox = document.getElementById(generalConstants.searchBoxId);
+    var inputText = document.getElementById(generalConstants.inputTextId);
+    var searchButton = document.getElementById(generalConstants.searchButtonId);
+    var searchIcon = document.getElementById(generalConstants.searchIconId);
+    
+    // navbar logo image and text (dashutil) 
+    navbarLogo.addEventListener("mouseover", hoverLogo, false);
+    navbarLogo.addEventListener("mouseout", unhoverLogo, false);
+    navbarLogo.addEventListener("focus", hoverLogo, false);
+    navbarLogo.addEventListener("blur", unhoverLogo, false);
+
+    // theme toggler image
+    themeToggler.addEventListener("click", function(e) { switchThemesHandler(e); }, false);
+    themeToggler.addEventListener("keydown", function(e) { themeKeydown(e); }, false);
+    themeToggler.addEventListener("focus", hoverTheme, false);
+    themeToggler.addEventListener("blur", unhoverTheme, false);
+    themeToggler.addEventListener("mouseover", hoverTheme, false);
+    themeToggler.addEventListener("mouseout", unhoverTheme, false);
+    
+    // search box magnifying glass expand
+    searchBox.addEventListener("click", expandSearchBox, false);
+
+    // search box close contract
+    searchIcon.addEventListener("click", contractSearchBox, false);
+
+    // input text search on enter
+    inputText.addEventListener("keydown", function(e) { inputTextKeydown(e); }, false);
+
+    // search button click
+    searchButton.addEventListener("click", findOrCreateRoom, false);
+    searchButton.addEventListener("keydown", function(e) { searchKeydown(e); }, false);
+}
+
+
 // Handler for expanding the search box
 function expandSearchBox() { 
     var searchBox = document.getElementById(generalConstants.searchBoxId);
@@ -170,6 +211,7 @@ function contractSearchBox() {
 
 // hover function for logo
 function hoverLogo() {
+    console.log("hover");
     document.getElementById(generalConstants.logoImgId).setAttribute("src", currentTheme.logoHover);
     document.getElementById(generalConstants.logoTextId).style.color = currentTheme.textColorHover;
 }
@@ -211,6 +253,7 @@ function switchThemes() {
         document.body.className = document.body.className.replace(generalConstants.lightThemeClass, generalConstants.darkThemeClass);
     }
 
+    document.getElementById(generalConstants.themeImgId).title = currentTheme.themeSwitchText;
     unhoverLogo();
     unhoverTheme();
 }
