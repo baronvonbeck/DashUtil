@@ -40,7 +40,7 @@
                 <p id="logo-text-id" class="logo-text" tabindex="-1">DashUtil</p>
             </a>
 
-            <button id="navbar-toggler-icon-id" class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div id="navbarNavDropdown" class="collapse navbar-collapse">
@@ -83,6 +83,12 @@
 
         {% load static %}
         <script src="{% static '/js/bootstrap/bootstrap.min.js' %}" type="text/javascript"></script>
+
+        {% load static %}
+        <script src="{% static '/js/home_constants.js' %}" type="text/javascript"></script>
+
+        {% load static %}
+        <script src="{% static '/js/home_handlers.js' %}" type="text/javascript"></script>
 
         {% load static %}
         <script src="{% static '/js/home.js' %}" type="text/javascript"></script>
