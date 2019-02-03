@@ -247,10 +247,10 @@ var HOME_EVENT_HANDLERS = new function() {
 				GENERAL_CONSTANTS.inputTextEl.value.toString().trim();
 
 			if (roomToSearchFor.length > 0) {
-				this.findOrCreateRoomCallback(roomToSearchFor);
+				HOME_EVENT_HANDLERS.findOrCreateRoomCallback(roomToSearchFor);
 		    }
 		    else 
-		        this.createErrorMessageCallback(
+		        HOME_EVENT_HANDLERS.createErrorMessageCallback(
 		        	MESSAGE_CONSTANTS.errorRoomLength0);
 		}
 	};
