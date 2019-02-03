@@ -1,11 +1,12 @@
-// home.js
+// home.js -- handles page direction and adding messages for users to see
 'use strict';
 
 
 $(document).ready(function() {
 
     // Set up event handlers
-    HOME_EVENT_HANDLERS.addAllEventListeners();
+    HOME_EVENT_HANDLERS.addAllEventListeners(
+        findOrCreateRoomCallback, createErrorMessageCallback);
 
 }); 
 
@@ -13,13 +14,10 @@ $(document).ready(function() {
  * Search Functions ----- START ------
  *****************************************************************************/
 
-// Finds or creates a room as appropriate
-function findOrCreateRoom(roomToSearchFor) {
-    if (roomToSearchFor.length > 0) {
-        console.log("Searching for: " + roomToSearchFor); 
-    }
-    else 
-        createErrorMessage(MESSAGE_CONSTANTS.errorRoomLength0);
+// Finds or creates a room as appropriate. This method is called back from
+// HOME_EVENT_HANDLERS
+function findOrCreateRoomCallback(roomToSearchFor) {
+    console.log("searching for: " + roomToSearchFor);
 }
 
 /*****************************************************************************
@@ -32,8 +30,8 @@ function findOrCreateRoom(roomToSearchFor) {
  *****************************************************************************/
 
 // Creates error messages based on string that is passed in
-function createErrorMessage(errorMessage) {
-    console.log(errorMessage);
+function createErrorMessageCallback(errorMessage) {
+    console.log("Error: " + errorMessage);
 }
 
 /*****************************************************************************

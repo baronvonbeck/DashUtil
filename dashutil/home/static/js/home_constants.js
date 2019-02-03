@@ -1,4 +1,4 @@
-// home_constants.js
+// home_constants.js - holds constants that will not change
 'use strict';
 
 

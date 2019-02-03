@@ -1,12 +1,25 @@
-// home_handlers.js
+// home_handlers.js - handles input events and calls home.js methods 
+// to deal with page direction and displaying messages to users
 'use strict';
 
 
 // keyboard, click, hover, focus, etc event handlers
 var HOME_EVENT_HANDLERS = new function() {
+
+	// Method to call back to find or create a room, from home.js
+	// Takes one String as parameter (the room name to find/create)
+	this.findOrCreateRoomCallback = null;
+
+	// Method to display an error message, from home.js
+	// Takes one String as parameter (the error message to display)
+	this.createErrorMessageCallback = null;
 	
-	// Handler to set up event listeners
-	this.addAllEventListeners = function() {
+	// Handler to set up event listeners. 2 callbacks passed in from home.js
+	this.addAllEventListeners = function(
+		newFindOrCreateRoomCallback, newCreateErrorMessageCallback) {
+
+		this.findOrCreateRoomCallback = newFindOrCreateRoomCallback;
+		this.createErrorMessageCallback = newCreateErrorMessageCallback;
 
 	    // general keyboard event handlers
 	    document.addEventListener("keydown", 
@@ -29,7 +42,7 @@ var HOME_EVENT_HANDLERS = new function() {
 	    	function(e) { HOME_EVENT_HANDLERS.themeSwitchOnClick(e); }, 
 	    	false);
 	    GENERAL_CONSTANTS.themeTogglerEl.addEventListener("keydown", 
-	    	function(e) { HOME_EVENT_HANDLERS.themeKeydownEnter(e); }, 
+	    	function(e) { HOME_EVENT_HANDLERS.themeSwitchKeydownEnter(e); }, 
 	    	false);
 	    GENERAL_CONSTANTS.themeTogglerEl.addEventListener(
 	    	"focus", this.hoverTheme, false);
@@ -96,19 +109,27 @@ var HOME_EVENT_HANDLERS = new function() {
 	    if (GENERAL_CONSTANTS.searchBoxEl.classList.contains(
 	    	GENERAL_CONSTANTS.prevClass)) {
 
-	        GENERAL_CONSTANTS.searchBoxEl.classList.remove(GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.searchIconEl.classList.remove(GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.inputTextEl.classList.remove(GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.searchButtonEl.classList.remove(GENERAL_CONSTANTS.prevClass);
+	        GENERAL_CONSTANTS.searchBoxEl.classList.remove(
+	        	GENERAL_CONSTANTS.prevClass);
+	        GENERAL_CONSTANTS.searchIconEl.classList.remove(
+	        	GENERAL_CONSTANTS.prevClass);
+	        GENERAL_CONSTANTS.inputTextEl.classList.remove(
+	        	GENERAL_CONSTANTS.prevClass);
+	        GENERAL_CONSTANTS.searchButtonEl.classList.remove(
+	        	GENERAL_CONSTANTS.prevClass);
 	    }
 	    else if (!GENERAL_CONSTANTS.searchBoxEl.classList.contains(
 	    	GENERAL_CONSTANTS.expandedClass)) {
 
-	        GENERAL_CONSTANTS.searchBoxEl.classList.add(GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.searchIconEl.classList.add(GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.inputTextEl.classList.add(GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.searchButtonEl.classList.add(GENERAL_CONSTANTS.expandedClass); 
-	        GENERAL_CONSTANTS.oldSearchEl.id = GENERAL_CONSTANTS.newSearchId; 
+	        GENERAL_CONSTANTS.searchBoxEl.classList.add(
+	        	GENERAL_CONSTANTS.expandedClass);
+	        GENERAL_CONSTANTS.searchIconEl.classList.add(
+	        	GENERAL_CONSTANTS.expandedClass);
+	        GENERAL_CONSTANTS.inputTextEl.classList.add(
+	        	GENERAL_CONSTANTS.expandedClass);
+	        GENERAL_CONSTANTS.searchButtonEl.classList.add(
+	        	GENERAL_CONSTANTS.expandedClass); 
+	        GENERAL_CONSTANTS.oldSearchEl.id = GENERAL_CONSTANTS.newSearchId;
 
 	        HOME_EVENT_HANDLERS.moveCaretToEnd(GENERAL_CONSTANTS.inputTextEl);
 	    }
@@ -120,16 +141,25 @@ var HOME_EVENT_HANDLERS = new function() {
 	    if (GENERAL_CONSTANTS.searchBoxEl.classList.contains(
 	    	GENERAL_CONSTANTS.expandedClass)) {
 
-	        GENERAL_CONSTANTS.searchBoxEl.classList.remove(GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.searchIconEl.classList.remove(GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.inputTextEl.classList.remove(GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.searchButtonEl.classList.remove(GENERAL_CONSTANTS.expandedClass); 
+	        GENERAL_CONSTANTS.searchBoxEl.classList.remove(
+	        	GENERAL_CONSTANTS.expandedClass);
+	        GENERAL_CONSTANTS.searchIconEl.classList.remove(
+	        	GENERAL_CONSTANTS.expandedClass);
+	        GENERAL_CONSTANTS.inputTextEl.classList.remove(
+	        	GENERAL_CONSTANTS.expandedClass);
+	        GENERAL_CONSTANTS.searchButtonEl.classList.remove(
+	        	GENERAL_CONSTANTS.expandedClass); 
 
-	        GENERAL_CONSTANTS.searchBoxEl.classList.add(GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.searchIconEl.classList.add(GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.inputTextEl.classList.add(GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.searchButtonEl.classList.add(GENERAL_CONSTANTS.prevClass); 
-	        document.getElementById(GENERAL_CONSTANTS.newSearchId).id = GENERAL_CONSTANTS.oldSearchId; 
+	        GENERAL_CONSTANTS.searchBoxEl.classList.add(
+	        	GENERAL_CONSTANTS.prevClass);
+	        GENERAL_CONSTANTS.searchIconEl.classList.add(
+	        	GENERAL_CONSTANTS.prevClass);
+	        GENERAL_CONSTANTS.inputTextEl.classList.add(
+	        	GENERAL_CONSTANTS.prevClass);
+	        GENERAL_CONSTANTS.searchButtonEl.classList.add(
+	        	GENERAL_CONSTANTS.prevClass); 
+	        document.getElementById(GENERAL_CONSTANTS.newSearchId).id = 
+	        	GENERAL_CONSTANTS.oldSearchId; 
 	    }      
 	};
 
@@ -180,7 +210,7 @@ var HOME_EVENT_HANDLERS = new function() {
 
 
 	// handles keydown for theme switching on enter
-	this.themeKeydownEnter = function(e) {
+	this.themeSwitchKeydownEnter = function(e) {
 	    var keycode = e.key.toLowerCase();
 
 	    if (keycode == "enter") {
@@ -208,12 +238,20 @@ var HOME_EVENT_HANDLERS = new function() {
 	};
 
 
-	// handles finding or creation of new room
+	// handles finding or creation of new room using callback provided,
+	// including checking if string is valid or not
 	this.findOrCreateRoomHandler = function() {
 		if (GENERAL_CONSTANTS.searchBoxEl.classList.contains(
 	    	GENERAL_CONSTANTS.expandedClass)) {
-			findOrCreateRoom(
-				GENERAL_CONSTANTS.inputTextEl.value.toString().trim());
+			var roomToSearchFor = 
+				GENERAL_CONSTANTS.inputTextEl.value.toString().trim();
+
+			if (roomToSearchFor.length > 0) {
+				this.findOrCreateRoomCallback(roomToSearchFor);
+		    }
+		    else 
+		        this.createErrorMessageCallback(
+		        	MESSAGE_CONSTANTS.errorRoomLength0);
 		}
 	};
 
