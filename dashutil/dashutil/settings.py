@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'home',
+    'storage',
+    'about',
 ]
 
 MIDDLEWARE = [
@@ -92,11 +95,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'dashutil_db',
+            'NAME': 'dashutil_postgres_db',
             'USER': 'dashutil_db',
             'PASSWORD': 'dashutil_db',
             'HOST': 'localhost',
-            'PORT': '5432',
+            'PORT': '5434',
         }
     }
 

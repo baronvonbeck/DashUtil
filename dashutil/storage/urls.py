@@ -4,5 +4,12 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.storage, name='storage'),
+	# ex: /storage
+	path('', views.storage_home, name='storage_home'),
+
+	# ex: /storage/allmyfiles
+    path('<str:storage_page_name>', views.storage_page, name='storage_page'),
+
+    # ex: /storage/allmyfiles/
+    path('<str:storage_page_name>/', views.storage_page, name='storage_page'),
 ]
