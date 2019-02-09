@@ -14,11 +14,10 @@ $(document).ready(function() {
  * Search Functions ----- START ------
  *****************************************************************************/
 
-// Finds or creates a room as appropriate. This method is called back from
-// HOME_EVENT_HANDLERS
+// Goes to the storage page for input string 
+// This method is called back from HOME_EVENT_HANDLERS
 function findOrCreateRoom(roomToSearchFor) {
-    console.log("find or create room: " + roomToSearchFor);
-    searchForRoom(roomToSearchFor);
+    window.location.href = ALL_CONSTANTS.storagePath + roomToSearchFor;
 }
 
 /*****************************************************************************

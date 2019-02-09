@@ -4,7 +4,7 @@
  */
 
 
-const POST_STORAGE= '/storage/';
+const POST_STORAGE = '/storage/';
 
 
 $.ajaxSetup({ 
