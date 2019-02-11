@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'home',
     'storage',
     'about',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'dashutil.wsgi.application'
 
 
-# Database
+# Database and S3
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 if 'RDS_DB_NAME' in os.environ:
@@ -91,7 +92,17 @@ if 'RDS_DB_NAME' in os.environ:
             'PORT': os.environ['RDS_PORT'],
         }
     }
+
+    AWS_ACCESS_KEY_ID = os.environ['AWS_S3_ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_S3_SECRET_ACCESS_KEY']
+    AWS_STORAGE_BUCKET_NAME = os.environ['AWS_S3_STORAGE_BUCKET_NAME']
+
+    AWS_PUBLIC_MEDIA_LOCATION = os.environ['AWS_S3_PUBLIC_MEDIA_LOCATION']
+    DEFAULT_FILE_STORAGE = os.environ['AWS_S3_DEFAULT_FILE_STORAGE']
+
 else:
+    from .env_ignore import *
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -102,6 +113,22 @@ else:
             'PORT': '5434',
         }
     }
+
+    AWS_ACCESS_KEY_ID = AWS_S3_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = AWS_S3_SECRET_ACCESS_KEY
+    AWS_STORAGE_BUCKET_NAME = AWS_S3_STORAGE_BUCKET_NAME
+
+    AWS_PUBLIC_MEDIA_LOCATION = AWS_S3_PUBLIC_MEDIA_LOCATION
+    DEFAULT_FILE_STORAGE = AWS_S3_DEFAULT_FILE_STORAGE
+
+    # AWS_PRIVATE_MEDIA_LOCATION = AWS_S3_PRIVATE_MEDIA_LOCATION
+    # PRIVATE_FILE_STORAGE = AWS_S3_PRIVATE_FILE_STORAGE
+
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
 
 
 # Password validation

@@ -4,9 +4,6 @@
  */
 
 
-const POST_STORAGE = '/storage/';
-
-
 $.ajaxSetup({ 
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
@@ -33,9 +30,15 @@ $.ajaxSetup({
 
 
 // Searches for a storage; if none is found, creates one
-function searchForRoom(roomToSearchFor) {
+function searchOrCreateAndGoToStorage(storageName, successCallback, errorCallback) {
     $.ajax({
-        url: POST_STORAGE + roomToSearchFor,
-        async: true
+        url: ALL_CONSTANTS.createStoragePath + storageName,
+        async: true,
+        success: function(data) {
+            successCallback(storageName);
+        }
+        error: function(data) {
+            errorCallback(storageName, data);
+        }
     });
 }

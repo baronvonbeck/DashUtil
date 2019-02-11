@@ -5,4 +5,5 @@
 // General constants
 const ALL_CONSTANTS = new function() {  
     this.storagePath =             	"/storage/"; 
+    this.createStoragePath =        "/create/"
 };

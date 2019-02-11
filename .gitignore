@@ -11,3 +11,7 @@
 # Byte-compiled / optimized / DLL files
 dashutil/dashutil/__pycache__/
 *.py[cod]
+
+# Environment files
+*.env
+env_ignore.py
