@@ -36,7 +36,7 @@ function searchOrCreateAndGoToStorage(storageName, successCallback, errorCallbac
         async: true,
         success: function(data) {
             successCallback(storageName);
-        }
+        },
         error: function(data) {
             errorCallback(storageName, data);
         }
