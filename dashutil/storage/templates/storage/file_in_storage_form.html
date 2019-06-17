@@ -4,12 +4,19 @@
   <h2>Public Uploads</h2>
   <h3>Upload to Amazon S3</h3>
 
-  <form method="post" enctype="multipart/form-data" action='/upload'>
+  {% comment %} <form method="post" id="submit-file-id" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form }}
     <input type="file">
-    <button type="submit">Submit</button>
-  </form>
+    <button type="submit" id="submit-file-id">Submit</button>
+  </form> {% endcomment %}
+
+  <div>
+    {% csrf_token %}
+    {{ form }}
+    <input type="file" id="submit-file-id">
+    <button type="submit" id="submit-button-id">Submit</button>
+  </div>
 
   <table>
     <thead>
@@ -23,10 +30,10 @@
     <tbody>
       {% for file in storage_files %}
         <tr>
-          <td><a href="{{ file.upload.url }}" target="_blank">{{ file.upload.name }}</a></td>
+          <td><a href="{{ file.upload.url }}" target="_blank">{{ file.filename }}</a></td>
           <td>{{ file.create_timestamp }}</td>
           <td>{{ file.modify_timestamp }}</td>
-          <td>{{ file.upload.size|filesizeformat }}</td>
+          <td>{{ file.size|filesizeformat }}</td>
         </tr>
       {% empty %}
         <tr>

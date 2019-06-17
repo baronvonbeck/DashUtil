@@ -5,8 +5,7 @@
 $(document).ready(function() {
 
     // Set up event handlers
-    HOME_EVENT_HANDLERS.addAllEventListeners(
-        findOrCreateRoom, createErrorMessage);
+    HOME_EVENT_HANDLERS.addAllEventListeners(createErrorMessage);
 
 }); 
 
@@ -17,7 +16,7 @@ $(document).ready(function() {
 // Goes to the storage page for input string 
 // This method is called back from HOME_EVENT_HANDLERS
 function findOrCreateRoom(roomToSearchFor) {
-    window.location.href = ALL_CONSTANTS.storagePath + roomToSearchFor;
+    searchOrCreateAndGoToStorage(roomToSearchFor, getRequestError);
 }
 
 /*****************************************************************************
@@ -30,8 +29,17 @@ function findOrCreateRoom(roomToSearchFor) {
  *****************************************************************************/
 
 // Creates error messages based on string that is passed in
+// This method is called back from HOME_EVENT_HANDLERS
 function createErrorMessage(errorMessage) {
     console.log("Error: " + errorMessage);
+}
+
+
+// Handles error messages from GET request of storage page
+// This method is called back from database_wrapper
+function getRequestError(storageName, data) {
+    console.log("Storage name get request error: " + storageName);
+    console.log(data);
 }
 
 /*****************************************************************************

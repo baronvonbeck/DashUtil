@@ -30,15 +30,33 @@ $.ajaxSetup({
 
 
 // Searches for a storage; if none is found, creates one
-function searchOrCreateAndGoToStorage(storageName, successCallback, errorCallback) {
+function searchOrCreateAndGoToStorage(storageName, errorCallback) {
     $.ajax({
-        url: ALL_CONSTANTS.createStoragePath + storageName,
+        url: ALL_CONSTANTS.storagePath + storageName,
         async: true,
-        success: function(data) {
-            successCallback(storageName);
-        },
+        method: 'GET',
         error: function(data) {
             errorCallback(storageName, data);
+        }
+    });
+}
+
+
+// uploads a file to the database
+function uploadFile(storageName, fileToUpload) {
+    $.ajax({
+        url: ALL_CONSTANTS.storagePath + storageName,
+        async: true,
+        method: 'POST',
+        data: {
+            "new_filename":    fileToUpload.name,
+            "new_size":        fileToUpload.size
+        },
+        success: function(data) {
+            //successCallback(storageName);
+        },
+        error: function(data) {
+            //errorCallback(storageName, data);
         }
     });
 }

@@ -5,14 +5,18 @@ import uuid
 # Managers #
 
 class File_DataManager(models.Manager):
+    # creates the file_data for any new file
+    def create_file_data(self, new_filename, new_upload_path, new_size, new_parent_directory):
+        new_file_data = self.create(filename=new_filename, 
+                                    upload_path=new_upload_path, 
+                                    size=new_size, 
+                                    parent_directory=new_parent_directory
+                                )
+        return new_file_data
+
     # create the related file_data for a new storage page
     def create_storage_data(self, storage_page_name):
-        storage_file_data = self.create(
-                            filename=storage_page_name,
-                            upload_path=None,
-                            size=0.0,
-                            parent_directory=None
-                        )
+        storage_file_data = self.create_file_data(storage_page_name, None, 0.0, None)
 
         return storage_file_data
     
@@ -20,7 +24,22 @@ class File_DataManager(models.Manager):
     def get_children_of_storage(self, storage_object):
         storage_file_data = Storage.storage_manager.get_related_file_data(storage_object)
 
+        #TODO: default filter for return (directories first, first created, last updated, first updated, etc)
         return self.filter(parent_directory=storage_file_data)
+
+    def get_parent_file_data():
+        print("do later")
+
+    #
+    def upload_new_file(self, new_filename, new_size, storage_object):
+        new_file_data = self.create_file_data(new_filename, "test", new_size, Storage.storage_manager.get_related_file_data(storage_object))
+
+        return new_file_data
+
+    def update_parent_directory_sizes(self, parent_directory_to_update):
+        print("do later")
+
+    
 
 
 class StorageManager(models.Manager):
