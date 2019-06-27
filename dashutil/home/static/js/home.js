@@ -5,7 +5,8 @@
 $(document).ready(function() {
 
     // Set up event handlers
-    HOME_EVENT_HANDLERS.addAllEventListeners(createErrorMessage);
+    HOME_EVENT_HANDLERS.addAllEventListeners(
+        findOrCreateRoom, createErrorMessage);
 
 }); 
 

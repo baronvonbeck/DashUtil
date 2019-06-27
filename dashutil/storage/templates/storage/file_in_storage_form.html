@@ -30,10 +30,10 @@
     <tbody>
       {% for file in storage_files %}
         <tr>
-          <td><a href="{{ file.upload.url }}" target="_blank">{{ file.filename }}</a></td>
-          <td>{{ file.create_timestamp }}</td>
-          <td>{{ file.modify_timestamp }}</td>
-          <td>{{ file.size|filesizeformat }}</td>
+          <td><a href="{{ file.fields.upload_path }}" target="_blank">{{ file.fields.filename }}</a></td>
+          <td>{{ file.fields.create_timestamp }}</td>
+          <td>{{ file.fields.modify_timestamp }}</td>
+          <td>{{ file.fields.size|filesizeformat }}</td>
         </tr>
       {% empty %}
         <tr>

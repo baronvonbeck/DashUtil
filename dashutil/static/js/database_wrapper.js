@@ -31,26 +31,32 @@ $.ajaxSetup({
 
 // Searches for a storage; if none is found, creates one
 function searchOrCreateAndGoToStorage(storageName, errorCallback) {
-    $.ajax({
-        url: ALL_CONSTANTS.storagePath + storageName,
-        async: true,
-        method: 'GET',
-        error: function(data) {
-            errorCallback(storageName, data);
-        }
-    });
+    window.location.href = ALL_CONSTANTS.storagePath + storageName;
+    // $.ajax({
+    //     url: ALL_CONSTANTS.storagePath + storageName,
+    //     async: true,
+    //     method: 'GET',
+    //     data: { },
+    //     success: function(data) {
+    //         window.location.href = ALL_CONSTANTS.storagePath + storageName;
+    //     },
+    //     error: function(data) {
+    //         errorCallback(storageName, data);
+    //     }
+    // });
 }
 
 
 // uploads a file to the database
-function uploadFile(storageName, fileToUpload) {
+function uploadFile(storageName, fileToUpload, parentDirectoryId) {
     $.ajax({
         url: ALL_CONSTANTS.storagePath + storageName,
         async: true,
         method: 'POST',
         data: {
-            "new_filename":    fileToUpload.name,
-            "new_size":        fileToUpload.size
+            "new_filename":     fileToUpload.name,
+            "new_size":         fileToUpload.size,
+            "new_parent_id":    parentDirectoryId
         },
         success: function(data) {
             //successCallback(storageName);

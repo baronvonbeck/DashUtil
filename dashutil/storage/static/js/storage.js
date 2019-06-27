@@ -17,9 +17,9 @@ $(document).ready(function() {
 
 // Uploads a new file
 // This method is called back from STORAGE_EVENT_HANDLERS
-function uploadNewFileToFolder(storageName, fileToUpload) {
+function uploadNewFileToFolder(storageName, fileToUpload, parentDirectoryId) {
     console.log(fileToUpload);
-    uploadFile(storageName, fileToUpload);
+    uploadFile(storageName, fileToUpload, parentDirectoryId);
 }
 
 /*****************************************************************************

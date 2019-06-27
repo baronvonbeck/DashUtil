@@ -19,14 +19,55 @@ var STORAGE_EVENT_HANDLERS = new function() {
 	    STORAGE_CONSTANTS.uploadButton.addEventListener(
 	    	"click", this.uploadNewFileToFolderHandler, false);
     };
+
+    // returns the name of the parent di
+    this.getStorageName = function() {
+        return this.formatString(storagePage.textContent);
+    };
+
     
-    // handles finding or creation of new room using callback provided,
-	// including checking if string is valid or not
-	this.uploadNewFileToFolderHandler = function() {
+
+    this.formatString = function(stringToFormat) {
+        return stringToFormat.replace(/['"]+/g, "");
+    };
+
+    //
+    this.getStorageId = function() {
+        return this.formatString(storagePageId.textContent);
+    };
+    
+    // handles uploading of the file to the storage room or a subdirectory
+    // using the callback provided
+	this.uploadNewFileToFolderHandler = () => {
+
+        var storagePageName = this.getStorageName();
+        var fileToUpload = STORAGE_CONSTANTS.uploadField.files[0];
+        var parentDirectoryId = this.getParentDirectoryForFileUpload();
         
-        STORAGE_EVENT_HANDLERS.uploadNewFileToFolderCallback(storageName.textContent.replace(/['"]+/g, ""),
-            STORAGE_CONSTANTS.uploadField.files[0]);
+        STORAGE_EVENT_HANDLERS.uploadNewFileToFolderCallback(storagePageName,
+            fileToUpload, parentDirectoryId);
         
         STORAGE_CONSTANTS.uploadField.value = '';
-    }
+    };
+
+    // returns the parent directory a file was uploaded to
+    this.getParentDirectoryForFileUpload = function() {
+        var parentDirectoryId = this.getStorageId();
+
+        /* Psuedocode, fill in later when implementation catches up 
+        if (context of the file is the storage page itself, base directory)
+            parentDirectoryId = this.getStorageId();
+        else {
+            if uploadPath of clicked directory == null
+                parentDirectoryId = the clicked directory
+            else
+                // element clicked wasn't a directory, it was a regular file
+                parentDirectoryId = parent directory of the clicked file
+        }
+        */
+
+        return parentDirectoryId;
+    };
+
+    
 };
