@@ -31,7 +31,8 @@ $.ajaxSetup({
 
 // Searches for a storage; if none is found, creates one
 function searchOrCreateAndGoToStorage(storageName, errorCallback) {
-    window.location.href = ALL_CONSTANTS.storagePath + storageName;
+    window.location.href = ALL_CONSTANTS.storagePath + 
+        encodeURIComponent( storageName ).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
     // $.ajax({
     //     url: ALL_CONSTANTS.storagePath + storageName,
     //     async: true,
@@ -50,7 +51,8 @@ function searchOrCreateAndGoToStorage(storageName, errorCallback) {
 // uploads a file to the database
 function uploadFile(storageName, fileToUpload, parentDirectoryId) {
     $.ajax({
-        url: ALL_CONSTANTS.storagePath + storageName,
+        url: ALL_CONSTANTS.storagePath + 
+            encodeURIComponent( storageName ).replace(/[!'()]/g, escape).replace(/\*/g, "%2A"),
         async: true,
         method: 'POST',
         data: {

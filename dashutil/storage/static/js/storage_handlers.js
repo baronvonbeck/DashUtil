@@ -20,9 +20,15 @@ var STORAGE_EVENT_HANDLERS = new function() {
 	    	"click", this.uploadNewFileToFolderHandler, false);
     };
 
-    // returns the name of the parent di
+    this.unicodeToChar = function(text) {
+        return text.replace(/\\u[\dA-F]{4}/gi, function (match) {
+            return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+        });
+     }
+
+    // returns the name of the storage
     this.getStorageName = function() {
-        return this.formatString(storagePage.textContent);
+        return this.unicodeToChar(this.formatString(storagePage.textContent));
     };
 
     
@@ -44,8 +50,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
         var fileToUpload = STORAGE_CONSTANTS.uploadField.files[0];
         var parentDirectoryId = this.getParentDirectoryForFileUpload();
         
-        STORAGE_EVENT_HANDLERS.uploadNewFileToFolderCallback(storagePageName,
-            fileToUpload, parentDirectoryId);
+        STORAGE_EVENT_HANDLERS.uploadNewFileToFolderCallback(
+            storagePageName, fileToUpload, parentDirectoryId);
         
         STORAGE_CONSTANTS.uploadField.value = '';
     };

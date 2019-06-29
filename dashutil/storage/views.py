@@ -14,7 +14,8 @@ def storage_home(request):
 @ensure_csrf_cookie
 def storage_page(request, storage_page_name):
     if request.method == "GET":
-        storage, created = Storage.storage_manager.get_or_create_storage(storage_page_name)
+        storage, created = Storage.storage_manager.get_or_create_storage(
+            _convert_string(storage_page_name))
 
         context = {}
         child_files = []
@@ -28,6 +29,7 @@ def storage_page(request, storage_page_name):
 
         context['storage_page_name'] = storage.storage_name
         context['storage_page_id'] = storage.id.id
+        print(storage.id.id)
         return render(request, 'storage/file_in_storage_form.html', context)
     
     elif request.method == "POST":
@@ -38,7 +40,8 @@ def storage_page(request, storage_page_name):
         
         File_Data.file_datamanager.update_parent_directory_sizes_iteratively(new_file_data)
 
-        storage, created = Storage.storage_manager.get_or_create_storage(storage_page_name)
+        storage, created = Storage.storage_manager.get_or_create_storage(
+            _convert_string(storage_page_name))
         child_files = File_Data.file_datamanager.get_children_of_storage(storage)
 
         context = {}
@@ -48,9 +51,14 @@ def storage_page(request, storage_page_name):
 
         context['storage_page_name'] = storage.storage_name
         context['storage_page_id'] = storage.id.id
+        print(storage.id.id)
         return render(request, 'storage/file_in_storage_form.html', context)
 
+def _convert_string(s):
+    return s.replace('\\','').replace('\/', '')
+    
 
+    
 # class File_DataCreateView(CreateView):
 # 	model = File_Data
 # 	fields = ['upload', ]
