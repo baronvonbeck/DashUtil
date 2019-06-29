@@ -29,10 +29,9 @@ $.ajaxSetup({
 });
 
 
-// Searches for a storage; if none is found, creates one
+// searches for a storage; if none is found, creates one
 function searchOrCreateAndGoToStorage(storageName, errorCallback) {
-    window.location.href = ALL_CONSTANTS.storagePath + 
-        encodeURIComponent( storageName ).replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
+    window.location.href = ALL_CONSTANTS.storagePath + encodeURIComponent( storageName );
     // $.ajax({
     //     url: ALL_CONSTANTS.storagePath + storageName,
     //     async: true,
@@ -49,10 +48,10 @@ function searchOrCreateAndGoToStorage(storageName, errorCallback) {
 
 
 // uploads a file to the database
-function uploadFile(storageName, fileToUpload, parentDirectoryId) {
+function uploadFile(successCallback, errorCallback, storageName,
+    fileToUpload, parentDirectoryId) {
     $.ajax({
-        url: ALL_CONSTANTS.storagePath + 
-            encodeURIComponent( storageName ).replace(/[!'()]/g, escape).replace(/\*/g, "%2A"),
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent( storageName ),
         async: true,
         method: 'POST',
         data: {
@@ -61,10 +60,10 @@ function uploadFile(storageName, fileToUpload, parentDirectoryId) {
             "new_parent_id":    parentDirectoryId
         },
         success: function(data) {
-            //successCallback(storageName);
+            successCallback(JSON.parse(data.replace(/[']+/g, '"')));
         },
         error: function(data) {
-            //errorCallback(storageName, data);
+            errorCallback(JSON.parse(data.replace(/[']+/g, '"')));
         }
     });
 }

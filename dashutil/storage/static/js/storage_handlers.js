@@ -3,11 +3,11 @@
 'use strict';
 
 
-// keyboard, click, hover, focus, etc event handlers
+// keyboard, click, hover, focus, etc event handlers for the storage page
 var STORAGE_EVENT_HANDLERS = new function() {
 
-	// Method to call back to upload a new file
-	// Takes ______ as parameters
+	// Method to call back to upload a new file. Takes storage page name, 
+	// file uploaded, and parent directory id as parameters
 	this.uploadNewFileToFolderCallback = null;
 	
 	// Handler to set up event listeners. 1 callback passed in from storage.js
@@ -15,40 +15,20 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 		this.uploadNewFileToFolderCallback = newUploadNewFileToFolderCallback;
 
-	    // search button click
+	    // submit file button click
 	    STORAGE_CONSTANTS.uploadButton.addEventListener(
 	    	"click", this.uploadNewFileToFolderHandler, false);
     };
-
-    this.unicodeToChar = function(text) {
-        return text.replace(/\\u[\dA-F]{4}/gi, function (match) {
-            return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
-        });
-     }
-
-    // returns the name of the storage
-    this.getStorageName = function() {
-        return this.unicodeToChar(this.formatString(storagePage.textContent));
-    };
-
     
-
-    this.formatString = function(stringToFormat) {
-        return stringToFormat.replace(/['"]+/g, "");
-    };
-
-    //
-    this.getStorageId = function() {
-        return this.formatString(storagePageId.textContent);
-    };
     
     // handles uploading of the file to the storage room or a subdirectory
     // using the callback provided
-	this.uploadNewFileToFolderHandler = () => {
+	this.uploadNewFileToFolderHandler = function() {
 
-        var storagePageName = this.getStorageName();
+        var storagePageName = STORAGE_EVENT_HANDLERS.getStorageName();
         var fileToUpload = STORAGE_CONSTANTS.uploadField.files[0];
-        var parentDirectoryId = this.getParentDirectoryForFileUpload();
+        var parentDirectoryId = 
+            STORAGE_EVENT_HANDLERS.getParentDirectoryForFileUpload();
         
         STORAGE_EVENT_HANDLERS.uploadNewFileToFolderCallback(
             storagePageName, fileToUpload, parentDirectoryId);
@@ -56,9 +36,10 @@ var STORAGE_EVENT_HANDLERS = new function() {
         STORAGE_CONSTANTS.uploadField.value = '';
     };
 
+
     // returns the parent directory a file was uploaded to
     this.getParentDirectoryForFileUpload = function() {
-        var parentDirectoryId = this.getStorageId();
+        var parentDirectoryId = STORAGE_EVENT_HANDLERS.getStorageId();
 
         /* Psuedocode, fill in later when implementation catches up 
         if (context of the file is the storage page itself, base directory)
@@ -75,5 +56,32 @@ var STORAGE_EVENT_HANDLERS = new function() {
         return parentDirectoryId;
     };
 
+
+    // returns the storage page id, formatted to remove all single and 
+    // double quotes ['"]
+    this.getStorageId = function() {
+        return STORAGE_EVENT_HANDLERS.formatString(storagePageId.textContent);
+    };
+
+
+    // returns the name of the storage, with unicode converted to characters
+    // and formatted to remove all single and double quotes ['"]
+    this.getStorageName = function() {
+        return STORAGE_EVENT_HANDLERS.unicodeToChar(
+            STORAGE_EVENT_HANDLERS.formatString(storagePage.textContent));
+    };
+
     
+    // formats a string to remove all single and double quotes ['"]
+    this.formatString = function(text) {
+        return text.replace(/['"]+/g, '');
+    };
+
+
+    // converts unicode to characters
+    this.unicodeToChar = function(text) {
+        return text.replace(/\\u[\dA-F]{4}/gi, function (match) {
+            return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+        });
+     }
 };

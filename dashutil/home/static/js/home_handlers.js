@@ -3,7 +3,7 @@
 'use strict';
 
 
-// keyboard, click, hover, focus, etc event handlers
+// keyboard, click, hover, focus, etc event handlers for the home page
 var HOME_EVENT_HANDLERS = new function() {
 
 	// Method to call back to find or create a room, from home.js
@@ -86,10 +86,10 @@ var HOME_EVENT_HANDLERS = new function() {
 	        case "esc": 
 	            if (GENERAL_CONSTANTS.searchBoxEl.classList.contains(
 	            	GENERAL_CONSTANTS.expandedClass)) { 
-	                this.contractSearchBox(); 
+                    HOME_EVENT_HANDLERS.contractSearchBox(); 
 
 	                // no this isnt a mistake
-	                this.expandSearchBox(); 
+	                HOME_EVENT_HANDLERS.expandSearchBox(); 
 	            } 
 	            break; 
 
@@ -97,7 +97,7 @@ var HOME_EVENT_HANDLERS = new function() {
 	          	if (!GENERAL_CONSTANTS.searchBoxEl.classList.contains(
 	          		GENERAL_CONSTANTS.expandedClass)) {
 	                e.preventDefault();
-	                this.expandSearchBox(); 
+	                HOME_EVENT_HANDLERS.expandSearchBox(); 
 	            }
 	            break;
 	    }
@@ -215,7 +215,7 @@ var HOME_EVENT_HANDLERS = new function() {
 
 	    if (keycode == "enter") {
 	        e.preventDefault();
-	        this.switchThemes();
+	        HOME_EVENT_HANDLERS.switchThemes();
 	    }
 	};
 
@@ -225,7 +225,7 @@ var HOME_EVENT_HANDLERS = new function() {
 	    var keycode = e.key.toLowerCase();
 
 	    if (keycode == "enter") 
-	        this.findOrCreateRoomHandler();
+        HOME_EVENT_HANDLERS.findOrCreateRoomHandler();
 	};
 
 
@@ -234,7 +234,7 @@ var HOME_EVENT_HANDLERS = new function() {
 	    var keycode = e.key.toLowerCase();
 
 	    if (keycode == "enter") 
-	        this.findOrCreateRoomHandler();
+        HOME_EVENT_HANDLERS.findOrCreateRoomHandler();
 	};
 
 
@@ -243,8 +243,7 @@ var HOME_EVENT_HANDLERS = new function() {
 	this.findOrCreateRoomHandler = function() {
 		if (GENERAL_CONSTANTS.searchBoxEl.classList.contains(
 	    	GENERAL_CONSTANTS.expandedClass)) {
-			var roomToSearchFor = 
-				GENERAL_CONSTANTS.inputTextEl.value.toString().trim();
+			var roomToSearchFor = HOME_EVENT_HANDLERS.getStorageToSearchFor();
 
 			if (roomToSearchFor.length > 0) {
 				HOME_EVENT_HANDLERS.findOrCreateRoomCallback(roomToSearchFor);
@@ -253,7 +252,15 @@ var HOME_EVENT_HANDLERS = new function() {
 		        HOME_EVENT_HANDLERS.createErrorMessageCallback(
 		        	MESSAGE_CONSTANTS.errorRoomLength0);
 		}
-	};
+    };
+    
+    
+    // trims spaces, removes single and double quotes, and returns storage name
+    this.getStorageToSearchFor = function() {
+        return GENERAL_CONSTANTS.inputTextEl.value.toString().trim()
+            .replace(/['"]+/g, '');
+    }
+
 
 	// moves the caret to the end of the input line
 	this.moveCaretToEnd = function(el) { 

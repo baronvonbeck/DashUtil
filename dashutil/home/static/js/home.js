@@ -1,4 +1,4 @@
-// home.js -- handles page direction and adding messages for users to see
+// home.js -- handles page direction, displaying errors, calling API, etc
 'use strict';
 
 
@@ -17,7 +17,7 @@ $(document).ready(function() {
 // Goes to the storage page for input string 
 // This method is called back from HOME_EVENT_HANDLERS
 function findOrCreateRoom(roomToSearchFor) {
-    searchOrCreateAndGoToStorage(roomToSearchFor, getRequestError);
+    searchOrCreateAndGoToStorage(roomToSearchFor);
 }
 
 /*****************************************************************************

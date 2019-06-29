@@ -6,6 +6,8 @@
 const STORAGE_CONSTANTS = new function() {
     this.uploadField =          document.getElementById("submit-file-id");
     this.uploadButton =         document.getElementById("submit-button-id");
+    this.tableId   =            document.getElementById("table-id");
+    this.tableBody =            this.tableId.getElementsByTagName('tbody')[0];
     this.prevClass =           	"prev";
     this.expandedClass =       	"expanded";
     this.collapsedClass =      	"collapsed";

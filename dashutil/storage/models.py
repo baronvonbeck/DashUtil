@@ -4,6 +4,7 @@ import uuid
 
 # Managers #
 
+# File_Data manager class
 class File_DataManager(models.Manager):
     # creates the file_data for any new file
     def create_file_data(self, new_filename, new_upload_path, new_size, new_parent_directory):
@@ -24,7 +25,8 @@ class File_DataManager(models.Manager):
     def get_children_of_storage(self, storage_object):
         storage_file_data = Storage.storage_manager.get_related_file_data(storage_object)
 
-        #TODO: default filter for return (directories first, first created, last updated, first updated, etc)
+        # TODO: default filter for return (directories first, 
+        # first created, last updated, first updated, etc)
         return self.filter(parent_directory=storage_file_data)
 
     # gets a file data object by primary key
@@ -32,12 +34,14 @@ class File_DataManager(models.Manager):
         return self.get(id=file_data_id)
 
     # uploads a new file, returns the data
+    # TODO: set up path to amazon s3
     def upload_new_file(self, new_filename, new_size, new_parent_id):
         parent_file_data = self.get_file_data(new_parent_id)
         new_file_data = self.create_file_data(new_filename, "test", new_size, parent_file_data)
 
         return new_file_data
 
+    # iteratively updates the parent directory sizes in bulk
     def update_parent_directory_sizes_iteratively(self, file_uploaded):
         bulk_size_update_list = []
         next_parent = file_uploaded.parent_directory
@@ -50,13 +54,14 @@ class File_DataManager(models.Manager):
         
         self.bulk_update(bulk_size_update_list, ['size'])
 
+    # calls method to recursively update parent directory sizes in bulk
     def update_parent_directory_sizes_recursively_entry(self, file_uploaded):
-        
         self.update_parent_directory_sizes_recursively(
             file_uploaded.size, file_uploaded.parent_directory, [])
 
-    def update_parent_directory_sizes_recursively(self, new_size, next_parent, bulk_size_update_list):
-
+    # recursively updates the parent directory sizes in bulk
+    def update_parent_directory_sizes_recursively(self, new_size, next_parent, 
+        bulk_size_update_list):
         if (next_parent is None):
             self.bulk_update(bulk_size_update_list, ['size'])
         else:
@@ -66,12 +71,11 @@ class File_DataManager(models.Manager):
                 new_size, next_parent.parent_directory, bulk_size_update_list)
 
 
-
+# Storage manager class #
 class StorageManager(models.Manager):
     # get or create the storage. returns storage, and boolean value 
     # created (true if created, false if already exists)
     def get_or_create_storage(self, storage_page_name):
-
         try:
             storage = self.get(storage_name=storage_page_name)
 
@@ -93,7 +97,7 @@ class StorageManager(models.Manager):
 
             return storage, True
     
-    # return the related file data for a storage room object
+    # return the related file_data for a storage room object
     def get_related_file_data(self, storage_object):
         return storage_object.id
     
