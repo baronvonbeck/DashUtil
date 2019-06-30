@@ -24,15 +24,14 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // handles uploading of the file to the storage room or a subdirectory
     // using the callback provided
 	this.uploadNewFileToFolderHandler = function() {
-
         var storagePageName = STORAGE_EVENT_HANDLERS.getStorageName();
-        var fileToUpload = STORAGE_CONSTANTS.uploadField.files[0];
+        var filesToUpload = STORAGE_CONSTANTS.uploadField.files;
         var parentDirectoryId = 
             STORAGE_EVENT_HANDLERS.getParentDirectoryForFileUpload();
-        
+
         STORAGE_EVENT_HANDLERS.uploadNewFileToFolderCallback(
-            storagePageName, fileToUpload, parentDirectoryId);
-        
+            storagePageName, filesToUpload, parentDirectoryId);
+
         STORAGE_CONSTANTS.uploadField.value = '';
     };
 

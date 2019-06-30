@@ -26,14 +26,22 @@ def storage_page(request, storage_page_name):
 
     
     elif request.method == "POST":
-        file_to_post = request.POST.dict()
-        
-        new_file_data = File_Data.file_datamanager.upload_new_file(
-            file_to_post['new_filename'], float(file_to_post['new_size']), file_to_post['new_parent_id'])
-        
-        File_Data.file_datamanager.update_parent_directory_sizes_iteratively(new_file_data)
+        # files_to_post = request.POST.dict()
 
-        return HttpResponse(_serialize_files_as_json([new_file_data]))
+        parent_directory = File_Data.file_datamanager.get_file_data(
+            request.POST.dict()['parent_directory_id'])
+        files_to_post = request.FILES.getlist('file')
+        
+        size_increase, new_file_data = File_Data.file_datamanager.upload_new_files(
+            parent_directory, files_to_post)
+        
+        File_Data.file_datamanager.update_parent_directory_sizes_iteratively(
+            size_increase, parent_directory)
+
+        # return HttpResponse(_serialize_files_as_json(new_file_data))
+
+
+        return HttpResponse([])
 
 
 # Returns the appropriate context for a storage page
@@ -51,7 +59,7 @@ def _get_context_for_storage(storage_page_name):
     context['storage_files'] = _serialize_files_as_json(child_files)
     context['storage_page_name'] = storage.storage_name
     context['storage_page_id'] = storage.id.id
-    
+
     return context
 
 

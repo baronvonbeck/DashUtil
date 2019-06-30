@@ -17,10 +17,10 @@ $(document).ready(function() {
 
 // Uploads a new file
 // This method is called back from STORAGE_EVENT_HANDLERS
-function uploadNewFileToFolder(storageName, fileToUpload, parentDirectoryId) {
+function uploadNewFileToFolder(storageName, filesToUpload, parentDirectoryId) {
 
     uploadFile(addUploadedFileToPage, fileUploadFailedError,
-        storageName, fileToUpload, parentDirectoryId);
+        storageName, filesToUpload, parentDirectoryId);
 }
 
 

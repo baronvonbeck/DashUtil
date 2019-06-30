@@ -49,18 +49,22 @@ function searchOrCreateAndGoToStorage(storageName, errorCallback) {
 
 // uploads a file to the database
 function uploadFile(successCallback, errorCallback, storageName,
-    fileToUpload, parentDirectoryId) {
+    filesToUpload, parentDirectoryId) {
+
+    var fileData = new FormData();
+    fileData.append("parent_directory_id", parentDirectoryId);
+    for (var i = 0; i < filesToUpload.length; i ++) {
+        fileData.append("file", filesToUpload[i]);
+    }
     $.ajax({
         url: ALL_CONSTANTS.storagePath + encodeURIComponent( storageName ),
-        async: true,
         method: 'POST',
-        data: {
-            "new_filename":     fileToUpload.name,
-            "new_size":         fileToUpload.size,
-            "new_parent_id":    parentDirectoryId
-        },
+        data: fileData,
+        cache: false,   
+        processData: false,
+        contentType: false,
         success: function(data) {
-            successCallback(JSON.parse(data.replace(/[']+/g, '"')));
+            //successCallback(JSON.parse(data.replace(/[']+/g, '"')));
         },
         error: function(data) {
             errorCallback(JSON.parse(data.replace(/[']+/g, '"')));

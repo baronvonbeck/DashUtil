@@ -6,18 +6,18 @@ import uuid
 
 # File_Data manager class
 class File_DataManager(models.Manager):
-    # creates the file_data for any new file
-    def create_file_data(self, new_filename, new_upload_path, new_size, new_parent_directory):
-        new_file_data = self.create(filename=new_filename, 
-                                    upload_path=new_upload_path, 
-                                    size=new_size, 
-                                    parent_directory=new_parent_directory
-                                )
+    # creates the file_data for any new files
+    def create_file_data(self, list_of_files):
+        new_file_data = self.bulk_create(list_of_files)
         return new_file_data
 
     # create the related file_data for a new storage page
     def create_storage_data(self, storage_page_name):
-        storage_file_data = self.create_file_data(storage_page_name, None, 0.0, None)
+        storage_file_data = self.create(filename=storage_page_name, 
+                                    upload_path=None, 
+                                    size=0.0, 
+                                    parent_directory=None
+                                )
 
         return storage_file_data
     
@@ -35,17 +35,24 @@ class File_DataManager(models.Manager):
 
     # uploads a new file, returns the data
     # TODO: set up path to amazon s3
-    def upload_new_file(self, new_filename, new_size, new_parent_id):
-        parent_file_data = self.get_file_data(new_parent_id)
-        new_file_data = self.create_file_data(new_filename, "test", new_size, parent_file_data)
+    def upload_new_files(self, parent_directory, files_to_post):
+        new_files = []
+        size_increase = 0
+        for f in files_to_post:
+            new_files.append(File_Data(filename=f.name, 
+                upload_path="test", 
+                size=f.size, 
+                parent_directory=parent_directory)
+            )
+            size_increase += f.size
+        new_file_data = File_Data.file_datamanager.create_file_data(new_files)
 
-        return new_file_data
+        return size_increase, new_file_data
 
     # iteratively updates the parent directory sizes in bulk
-    def update_parent_directory_sizes_iteratively(self, file_uploaded):
+    def update_parent_directory_sizes_iteratively(self, new_size, 
+        next_parent):
         bulk_size_update_list = []
-        next_parent = file_uploaded.parent_directory
-        new_size = file_uploaded.size
 
         while (next_parent is not None):
             next_parent.size += new_size
@@ -55,9 +62,10 @@ class File_DataManager(models.Manager):
         self.bulk_update(bulk_size_update_list, ['size'])
 
     # calls method to recursively update parent directory sizes in bulk
-    def update_parent_directory_sizes_recursively_entry(self, file_uploaded):
-        self.update_parent_directory_sizes_recursively(
-            file_uploaded.size, file_uploaded.parent_directory, [])
+    def update_parent_directory_sizes_recursively_entry(self, new_size, 
+        next_parent):
+        File_Data.file_datamanager.update_parent_directory_sizes_recursively(
+            new_size, next_parent, [])
 
     # recursively updates the parent directory sizes in bulk
     def update_parent_directory_sizes_recursively(self, new_size, next_parent, 
@@ -67,7 +75,7 @@ class File_DataManager(models.Manager):
         else:
             next_parent.size += new_size
             bulk_size_update_list.append(next_parent)
-            self.update_parent_directory_sizes_recursively(
+            File_Data.file_datamanager.update_parent_directory_sizes_recursively(
                 new_size, next_parent.parent_directory, bulk_size_update_list)
 
 
