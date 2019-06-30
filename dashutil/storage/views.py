@@ -14,9 +14,8 @@ def storage_home(request):
 
 # /storage/storage_page_name
 # request data for POSTing new file will have 
-#       new_filename    - name of the new file
-#       new_size        - size of the new file
-#       new_parent_id   - id of the new file's parent directory
+#       request.FILES           - FormData with all of the uploaded files
+#       parent_directory_id     - id of the new file's parent directory
 @ensure_csrf_cookie
 def storage_page(request, storage_page_name):
     if request.method == "GET":
@@ -38,10 +37,7 @@ def storage_page(request, storage_page_name):
         File_Data.file_datamanager.update_parent_directory_sizes_iteratively(
             size_increase, parent_directory)
 
-        # return HttpResponse(_serialize_files_as_json(new_file_data))
-
-
-        return HttpResponse([])
+        return HttpResponse([_serialize_files_as_json(new_file_data)])
 
 
 # Returns the appropriate context for a storage page

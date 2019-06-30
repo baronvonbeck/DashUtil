@@ -64,7 +64,7 @@ function uploadFile(successCallback, errorCallback, storageName,
         processData: false,
         contentType: false,
         success: function(data) {
-            //successCallback(JSON.parse(data.replace(/[']+/g, '"')));
+            successCallback(JSON.parse(data.replace(/[']+/g, '"')));
         },
         error: function(data) {
             errorCallback(JSON.parse(data.replace(/[']+/g, '"')));

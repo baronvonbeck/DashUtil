@@ -26,13 +26,15 @@ function uploadNewFileToFolder(storageName, filesToUpload, parentDirectoryId) {
 
 // Adds the newly uploaded file to the storage page
 // This method is called back after a file was successfully uploaded
-function addUploadedFileToPage(fileUploaded) {
-    var newRow = STORAGE_CONSTANTS.tableBody.insertRow();
-    newRow.insertCell(0).innerHTML = "<a href=" + fileUploaded.fields.upload_path + 
-        " target=\"_blank\">" + fileUploaded.fields.filename + "</a>";
-    newRow.insertCell(1).innerHTML = fileUploaded.fields.create_timestamp;
-    newRow.insertCell(2).innerHTML = fileUploaded.fields.modify_timestamp;
-    newRow.insertCell(3).innerHTML = formatFileSizeToString(fileUploaded.fields.size, false);
+function addUploadedFileToPage(filesUploaded) {
+    for (var i = 0; i < filesUploaded.length; i ++) {
+        var newRow = STORAGE_CONSTANTS.tableBody.insertRow();
+        newRow.insertCell(0).innerHTML = "<a href=" + filesUploaded[i].fields.upload_path + 
+            " target=\"_blank\">" + filesUploaded[i].fields.filename + "</a>";
+        newRow.insertCell(1).innerHTML = filesUploaded[i].fields.create_timestamp;
+        newRow.insertCell(2).innerHTML = filesUploaded[i].fields.modify_timestamp;
+        newRow.insertCell(3).innerHTML = formatFileSizeToString(filesUploaded[i].fields.size, false);
+    }
 }
 
 
