@@ -25,14 +25,12 @@ def storage_page(request, storage_page_name):
 
     
     elif request.method == "POST":
-        # files_to_post = request.POST.dict()
-
         parent_directory = File_Data.file_datamanager.get_file_data(
             request.POST.dict()['parent_directory_id'])
         files_to_post = request.FILES.getlist('file')
         
         size_increase, new_file_data = File_Data.file_datamanager.upload_new_files(
-            parent_directory, files_to_post)
+            parent_directory, storage_page_name, files_to_post)
         
         File_Data.file_datamanager.update_parent_directory_sizes_iteratively(
             size_increase, parent_directory)

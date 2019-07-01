@@ -35,10 +35,6 @@
           <td>{{ file.fields.modify_timestamp }}</td>
           <td>{{ file.fields.size|filesizeformat }}</td>
         </tr>
-      {% empty %}
-        <tr>
-          <td colspan="4">No data.</td>
-        </tr>
       {% endfor %}
     </tbody>
   </table>

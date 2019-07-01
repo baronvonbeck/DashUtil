@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 import uuid
+from storage.S3Boto3Handler import s3_multi_part_upload
 
 # Managers #
 
@@ -34,13 +35,14 @@ class File_DataManager(models.Manager):
         return self.get(id=file_data_id)
 
     # uploads a new file, returns the data
-    # TODO: set up path to amazon s3
-    def upload_new_files(self, parent_directory, files_to_post):
+    def upload_new_files(self, parent_directory, storage_name, files_to_post):
         new_files = []
         size_increase = 0
         for f in files_to_post:
+            # upload file to s3
+            uploaded_file_url = s3_multi_part_upload(f, storage_name)
             new_files.append(File_Data(filename=f.name, 
-                upload_path="test", 
+                upload_path=uploaded_file_url, 
                 size=f.size, 
                 parent_directory=parent_directory)
             )
