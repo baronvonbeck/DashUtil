@@ -1,5 +1,5 @@
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.edit import CreateView
 from django.core import serializers
@@ -8,8 +8,10 @@ from django.core.serializers.json import DjangoJSONEncoder
 from .models import Storage, File_Data
 import json
 
+
+
 def storage_home(request):
-    return JsonResponse({'mystring': "figure out what to do with this page"})
+    return redirect('/')
 
 
 # /storage/storage_page_name

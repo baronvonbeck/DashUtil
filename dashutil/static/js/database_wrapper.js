@@ -3,14 +3,18 @@
  * Wrapper class for getting data from and posting data to the database
  */
 
+/*****************************************************************************
+ * Setup Functions ----- START ------
+ *****************************************************************************/
 
+ // setup csrf tokens
 $.ajaxSetup({ 
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
              var cookieValue = null;
              if (document.cookie && document.cookie != '') {
                  var cookies = document.cookie.split(';');
-                 for (var i = 0; i < cookies.length; i++) {
+                 for (var i = 0; i < cookies.length; i ++) {
                      var cookie = jQuery.trim(cookies[i]);
                      // Does this cookie string begin with the name we want?
                      if (cookie.substring(0, name.length + 1) == (name + '=')) {
@@ -28,6 +32,15 @@ $.ajaxSetup({
      } 
 });
 
+/*****************************************************************************
+ * Setup Functions ----- END ------
+ *****************************************************************************/
+
+
+
+ /*****************************************************************************
+ * Storage Functions ----- START ------
+ *****************************************************************************/
 
 // searches for a storage; if none is found, creates one
 function searchOrCreateAndGoToStorage(storageName, errorCallback) {
@@ -47,8 +60,8 @@ function searchOrCreateAndGoToStorage(storageName, errorCallback) {
 }
 
 
-// uploads a file to the database
-function uploadFile(successCallback, errorCallback, storageName,
+// uploads a file to the database for a storage page
+function uploadFileToStorage(successCallback, errorCallback, storageName,
     filesToUpload, parentDirectoryId) {
 
     var fileData = new FormData();
@@ -71,3 +84,58 @@ function uploadFile(successCallback, errorCallback, storageName,
         }
     });
 }
+
+/*****************************************************************************
+ * Storage Functions ----- END ------
+ *****************************************************************************/
+
+
+
+/*****************************************************************************
+ * Single Functions ----- START ------
+ *****************************************************************************/
+
+ // goes to a single file page. if one does not exist, go back to home page
+function searchForAndGoToSingleFile(singlePageId) {
+    window.location.href = ALL_CONSTANTS.singlePath + encodeURIComponent( singlePageId );
+    // $.ajax({
+    //     url: ALL_CONSTANTS.storagePath + storageName,
+    //     async: true,
+    //     method: 'GET',
+    //     data: { },
+    //     success: function(data) {
+    //         window.location.href = ALL_CONSTANTS.storagePath + storageName;
+    //     },
+    //     error: function(data) {
+    //         errorCallback(storageName, data);
+    //     }
+    // });
+}
+
+
+// uploads a file to the database for a single page
+function uploadFileToSingle(successCallback, errorCallback, singlePageId,
+    fileToUpload) {
+
+    var fileData = new FormData();
+    fileData.append("file", fileToUpload);
+
+    $.ajax({
+        url: ALL_CONSTANTS.singlePath + encodeURIComponent( singlePageId ),
+        method: 'POST',
+        data: fileData,
+        cache: false,   
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            searchForAndGoToSingleFile(data.new_file_id)
+        },
+        error: function(data) {
+            errorCallback(JSON.parse(data.replace(/[']+/g, '"')));
+        }
+    });
+}
+
+/*****************************************************************************
+ * Single Functions ----- END ------
+ *****************************************************************************/

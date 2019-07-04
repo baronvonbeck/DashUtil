@@ -1,41 +1,34 @@
 {% extends 'storage/base.html' %}
 
 {% block content %}
-  <h2>Public Uploads</h2>
-  <h3>Upload to Amazon S3</h3>
+    <h2>Public Uploads</h2>
+    <h3>Upload to Amazon S3</h3>
 
-  {% comment %} <form method="post" id="submit-file-id" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form }}
-    <input type="file">
-    <button type="submit" id="submit-file-id">Submit</button>
-  </form> {% endcomment %}
+    <div>
+        {% csrf_token %}
+        {{ form }}
+        <input type="file" id="submit-file-id" multiple>
+        <button type="submit" id="submit-button-id">Submit</button>
+    </div>
 
-  <div>
-    {% csrf_token %}
-    {{ form }}
-    <input type="file" id="submit-file-id" multiple>
-    <button type="submit" id="submit-button-id">Submit</button>
-  </div>
-
-  <table id="table-id">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Created</th>
-        <th>Modified</th>
-        <th>Size</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for file in storage_files %}
-        <tr>
-          <td><a href="{{ file.fields.upload_path }}" target="_blank">{{ file.fields.filename }}</a></td>
-          <td>{{ file.fields.create_timestamp }}</td>
-          <td>{{ file.fields.modify_timestamp }}</td>
-          <td>{{ file.fields.size|filesizeformat }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <table id="table-id">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Created</th>
+                <th>Modified</th>
+                <th>Size</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in storage_files %}
+                <tr>
+                    <td><a href="{{ file.fields.upload_path }}" target="_blank">{{ file.fields.filename }}</a></td>
+                    <td>{{ file.fields.create_timestamp }}</td>
+                    <td>{{ file.fields.modify_timestamp }}</td>
+                    <td>{{ file.fields.size|filesizeformat }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
-    'storage',
     'about',
+    'storage',
+    'single'
 ]
 
 MIDDLEWARE = [
@@ -60,7 +61,8 @@ TEMPLATES = [
         'DIRS': [
                     os.path.join(BASE_DIR, './home/templates/'),
                     os.path.join(BASE_DIR, './about/templates/'),
-                    os.path.join(BASE_DIR, './storage/templates/')
+                    os.path.join(BASE_DIR, './storage/templates/'),
+                    os.path.join(BASE_DIR, './single/templates/')
                 ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -165,5 +167,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, './static/'),
     os.path.join(BASE_DIR, './home/static/'),
     os.path.join(BASE_DIR, './about/static/'),
-    os.path.join(BASE_DIR, './storage/static/')
+    os.path.join(BASE_DIR, './storage/static/'),
+    os.path.join(BASE_DIR, './single/static/')
 ]

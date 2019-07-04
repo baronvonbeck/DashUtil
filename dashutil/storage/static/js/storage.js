@@ -1,4 +1,4 @@
-// storage.js -- handles storage page functionality, API calls, 
+// storage.js -- handles storage page functionality, API calls, page UI
 'use strict';
 
 
@@ -12,19 +12,19 @@ $(document).ready(function() {
 
 
 /*****************************************************************************
- * File Functions ----- START ------
+ * Storage Functions ----- START ------
  *****************************************************************************/
 
-// Uploads a new file
+// Uploads a new file to a given directory within a storage
 // This method is called back from STORAGE_EVENT_HANDLERS
 function uploadNewFileToFolder(storageName, filesToUpload, parentDirectoryId) {
 
-    uploadFile(addUploadedFileToPage, fileUploadFailedError,
+    uploadFileToStorage(addUploadedFileToPage, fileUploadFailedError,
         storageName, filesToUpload, parentDirectoryId);
 }
 
 
-// Adds the newly uploaded file to the storage page
+// Adds the newly uploaded file to the storage page immediately after upload
 // This method is called back after a file was successfully uploaded
 function addUploadedFileToPage(filesUploaded) {
     for (var i = 0; i < filesUploaded.length; i ++) {
@@ -44,6 +44,15 @@ function fileUploadFailedError(errorMessage) {
     // TODO: handle this
 }
 
+/*****************************************************************************
+ * Storage Functions ----- END ------
+ *****************************************************************************/
+
+
+
+/*****************************************************************************
+ * Helper Functions ----- START ------
+ *****************************************************************************/
 
 // converts file size to a human readable format, copying django filesizeformat
 // functionality. si determines whether or not to use si standard
@@ -65,5 +74,5 @@ function formatFileSizeToString(bytes, si) {
 }
 
 /*****************************************************************************
- * File Functions ----- END ------
+ * Helper Functions ----- END ------
  *****************************************************************************/

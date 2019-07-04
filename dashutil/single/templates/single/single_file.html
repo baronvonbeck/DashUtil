@@ -1,0 +1,34 @@
+{% extends 'single/base.html' %}
+
+{% block content %}
+    <h2>Single Uploads</h2>
+    <h3>Upload to Amazon S3</h3>
+
+    <div>
+        {% csrf_token %}
+        {{ form }}
+        <input type="file" id="submit-single-file-id">
+        <button type="submit" id="submit-single-button-id">Submit</button>
+    </div>
+
+    <table id="table-single-id">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Created</th>
+                <th>Modified</th>
+                <th>Size</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in single_file %}
+            <tr>
+                <td><a href="{{ file.fields.upload_path }}" target="_blank">{{ file.fields.filename }}</a></td>
+                <td>{{ file.fields.create_timestamp }}</td>
+                <td>{{ file.fields.modify_timestamp }}</td>
+                <td>{{ file.fields.size|filesizeformat }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

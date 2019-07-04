@@ -1,12 +1,12 @@
-// storage_constants.js - holds constants that will not change
+// single_constants.js - holds constants that will not change
 'use strict';
 
 
-// Storage constants
-const STORAGE_CONSTANTS = new function() {
-    this.uploadField =          document.getElementById("submit-file-id");
-    this.uploadButton =         document.getElementById("submit-button-id");
-    this.tableId   =            document.getElementById("table-id");
+// Single constants
+const SINGLE_CONSTANTS = new function() {
+    this.uploadField =          document.getElementById("submit-single-file-id");
+    this.uploadButton =         document.getElementById("submit-single-button-id");
+    this.tableId   =            document.getElementById("table-single-id");
     this.tableBody =            this.tableId.getElementsByTagName("tbody")[0];
     this.prevClass =           	"prev";
     this.expandedClass =       	"expanded";

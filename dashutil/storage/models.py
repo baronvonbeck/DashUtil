@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 import uuid
-from storage.S3Boto3Handler import s3_multi_part_upload
+from dashutil.S3Boto3Handler import s3_multi_part_upload
 
 # Managers #
 
@@ -143,6 +143,7 @@ class File_Data(models.Model):
                         )
     
     file_datamanager    = File_DataManager()
+    
     class Meta():
         db_table = 'File_Data'
 

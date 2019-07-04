@@ -1,0 +1,24 @@
+{% extends 'single/base.html' %}
+
+{% block content %}
+    <h2>Single Uploads</h2>
+    <h3>Upload to Amazon S3</h3>
+
+    <div>
+        {% csrf_token %}
+        {{ form }}
+        <input type="file" id="submit-single-file-id">
+        <button type="submit" id="submit-single-button-id">Submit</button>
+    </div>
+
+    <div>
+        <h1> Error: page <i>{{ single_file_id }}</i> does not exist! 
+             Please upload a new file above, or search for a new single page.
+        </h1>
+    </div>
+    
+    <table id="table-single-id">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+{% endblock %}

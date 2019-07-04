@@ -15,13 +15,17 @@ session = boto3.Session(
 s3_resource = session.resource('s3')
 
 
-def s3_multi_part_upload(file_to_upload, storage_name):
+# uploads a file to s3
+# links will be in the form:
+#       https://dashutil-files.s3-us-west-2.amazonaws.com/dashutil/asdf/c05e5998-a99f-4831-8207-d501fea388f1__filename.png
+def s3_multi_part_upload(file_to_upload, s_name):
     config = TransferConfig(multipart_threshold=1024 * 25, max_concurrency=10,
                             multipart_chunksize=1024 * 25, use_threads=True)
-            
+
     random_uuid = str(uuid.uuid4())
-    filename = str(file_to_upload.name).replace(" ", "_")
-    key_path = AWS_SUBFOLDER_NAME + '/' + storage_name + '/' + random_uuid + '__' + filename
+    filename = str(file_to_upload.name).replace(' ', '_')
+    key_path = AWS_SUBFOLDER_NAME + '/' + s_name + '/' + random_uuid + '__' + filename
+
     s3_resource.meta.client.upload_fileobj(
                             file_to_upload, AWS_STORAGE_BUCKET_NAME, key_path,
                             ExtraArgs={'ACL': 'public-read', 
@@ -30,7 +34,7 @@ def s3_multi_part_upload(file_to_upload, storage_name):
                             Callback=ProgressPercentage(file_to_upload)
                         )
     
-    return "https://" + AWS_STORAGE_BUCKET_NAME + ".s3-" + AWS_REGION + ".amazonaws.com/" + key_path
+    return 'https://' + AWS_STORAGE_BUCKET_NAME + '.s3-' + AWS_REGION + '.amazonaws.com/' + key_path
 
 
 class ProgressPercentage(object):

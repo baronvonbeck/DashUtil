@@ -29,10 +29,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
         var parentDirectoryId = 
             STORAGE_EVENT_HANDLERS.getParentDirectoryForFileUpload();
 
-        STORAGE_EVENT_HANDLERS.uploadNewFileToFolderCallback(
-            storagePageName, filesToUpload, parentDirectoryId);
+        if (filesToUpload.length > 0) {
+            STORAGE_EVENT_HANDLERS.uploadNewFileToFolderCallback(
+                storagePageName, filesToUpload, parentDirectoryId);
 
-        STORAGE_CONSTANTS.uploadField.value = '';
+            STORAGE_CONSTANTS.uploadField.value = '';
+        }
     };
 
 
