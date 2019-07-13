@@ -77,10 +77,10 @@ function uploadFileToStorageDB(successCallback, errorCallback, storageName,
         processData: false,
         contentType: false,
         success: function(data) {
-            successCallback(getJsonFromDataString(data));
+            successCallback(getJsonFromDataString(data), parentDirectoryId);
         },
         error: function(data) {
-            errorCallback(getJsonFromDataString(data));
+            errorCallback(getJsonFromDataString(data), parentDirectoryId);
         }
     });
 }
@@ -102,10 +102,10 @@ function createNewDirectoryDB(successCallback, errorCallback, storageName,
         processData: false,
         contentType: false,
         success: function(data) {
-            successCallback(getJsonFromDataString(data));
+            successCallback(getJsonFromDataString(data), parentDirectoryId);
         },
         error: function(data) {
-            errorCallback(getJsonFromDataString(data));
+            errorCallback(getJsonFromDataString(data), parentDirectoryId);
         }
     });
 }

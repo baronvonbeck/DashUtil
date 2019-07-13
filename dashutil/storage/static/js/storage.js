@@ -26,14 +26,14 @@ function uploadNewFileToDirectory(storageName, filesToUpload, parentDirectoryId)
 
 // Adds the newly uploaded file to the storage page immediately after upload
 // This method is called back after a file was successfully uploaded
-function addUploadedFileToPage(filesUploaded) {
+function addUploadedFileToPage(filesUploaded, parentDirectoryId) {
     for (var i = 0; i < filesUploaded.length; i ++) {
-        var newRow = STORAGE_CONSTANTS.tableBodyEl.insertRow();
-        newRow.insertCell(0).innerHTML = "<a href=" + filesUploaded[i].fields.upload_path + 
-            " target=\"_blank\">" + filesUploaded[i].fields.filename + "</a>";
-        newRow.insertCell(1).innerHTML = filesUploaded[i].fields.create_timestamp;
-        newRow.insertCell(2).innerHTML = filesUploaded[i].fields.modify_timestamp;
-        newRow.insertCell(3).innerHTML = formatFileSizeToString(filesUploaded[i].fields.size, false);
+
+        var newRow = new FileObject(filesUploaded[i].fields.filename, filesUploaded[i].fields.upload_path, 
+            filesUploaded[i].fields.create_timestamp, filesUploaded[i].fields.modify_timestamp,
+            filesUploaded[i].fields.size, parentDirectoryId);
+
+        STORAGE_CONSTANTS.tableBodyEl.innerHTML += newRow.htmlRepresentation;
     }
 }
 
@@ -49,14 +49,14 @@ function createNewDirectory(storageName, newDirectoryName, parentDirectoryId) {
 
 // Displays error after a file failed to upload
 // This method is called back after a file failed to upload
-function fileUploadFailedError(errorMessage) {
+function fileUploadFailedError(errorMessage, parentDirectoryId) {
     // TODO: handle this
 }
 
 
 // Displays error after a file failed to upload
 // This method is called back after a file failed to upload
-function directoryCreationFailedError(errorMessage) {
+function directoryCreationFailedError(errorMessage, parentDirectoryId) {
     // TODO: handle this
 }
 
