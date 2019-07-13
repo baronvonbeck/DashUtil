@@ -61,7 +61,7 @@ function searchOrCreateAndGoToStorage(storageName, errorCallback) {
 
 
 // uploads a file to the database for a storage page
-function uploadFileToStorage(successCallback, errorCallback, storageName,
+function uploadFileToStorageDB(successCallback, errorCallback, storageName,
     filesToUpload, parentDirectoryId) {
 
     var fileData = new FormData();
@@ -77,12 +77,44 @@ function uploadFileToStorage(successCallback, errorCallback, storageName,
         processData: false,
         contentType: false,
         success: function(data) {
-            successCallback(JSON.parse(data.replace(/[']+/g, '"')));
+            successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
-            errorCallback(JSON.parse(data.replace(/[']+/g, '"')));
+            errorCallback(getJsonFromDataString(data));
         }
     });
+}
+
+
+// creates a new directory representation within database for a storage page
+function createNewDirectoryDB(successCallback, errorCallback, storageName,
+    newDirectoryName, parentDirectoryId) {
+
+    var directoryData = new FormData();
+    directoryData.append("parent_directory_id", parentDirectoryId);
+    directoryData.append("new_directory_name", newDirectoryName);
+    
+    $.ajax({
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent( storageName ),
+        method: 'POST',
+        data: directoryData,
+        cache: false,   
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            successCallback(getJsonFromDataString(data));
+        },
+        error: function(data) {
+            errorCallback(getJsonFromDataString(data));
+        }
+    });
+}
+
+
+function getJsonFromDataString(dataString) {
+    return JSON.parse(dataString.replace('\'upload_path\': None', 
+                '\'upload_path\': null').replace(/[']+/g, '"')
+            );
 }
 
 /*****************************************************************************
@@ -131,7 +163,7 @@ function uploadFileToSingle(successCallback, errorCallback, singlePageId,
             searchForAndGoToSingleFile(data.new_file_id)
         },
         error: function(data) {
-            errorCallback(JSON.parse(data.replace(/[']+/g, '"')));
+            errorCallback(getJsonFromDataString(data));
         }
     });
 }

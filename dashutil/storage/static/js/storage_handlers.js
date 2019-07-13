@@ -8,38 +8,94 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 	// Method to call back to upload a new file. Takes storage page name, 
 	// file uploaded, and parent directory id as parameters
-	this.uploadNewFileToFolderCallback = null;
+    this.uploadNewFileToDirectoryCallback = null;
+    
+    // Method to call back to upload a new file. Takes storage page name, 
+	// file uploaded, and parent directory id as parameters
+	this.createNewDirectoryCallback = null;
 	
 	// Handler to set up event listeners. 1 callback passed in from storage.js
-	this.addAllEventListeners = function(newUploadNewFileToFolderCallback) {
+    this.addAllEventListeners = function(newUploadNewFileToDirectoryCallback, 
+        newCreateNewDirectoryCallback) {
 
-		this.uploadNewFileToFolderCallback = newUploadNewFileToFolderCallback;
+		this.uploadNewFileToDirectoryCallback = newUploadNewFileToDirectoryCallback;
+        this.createNewDirectoryCallback = newCreateNewDirectoryCallback;
+
 
 	    // submit file button click
-	    STORAGE_CONSTANTS.uploadButton.addEventListener(
-	    	"click", this.uploadNewFileToFolderHandler, false);
+	    STORAGE_CONSTANTS.uploadButtonEl.addEventListener(
+            "click", this.uploadNewFileToDirectoryHandler, false);
+            
+        // create new directory modal button
+        STORAGE_CONSTANTS.openModalButtonEl.addEventListener(
+            "click", this.openDirectoryModal, false);
+
+        // close new directory modal by clicking cancel
+        STORAGE_CONSTANTS.directoryCloseButtonEl.addEventListener(
+            "click", this.closeDirectoryModal, false);
+        
+        // click off of the directory modal to close
+        window.addEventListener(
+            "click", function(event) {
+                if (event.target == STORAGE_CONSTANTS.directoryModalEl)
+                    STORAGE_EVENT_HANDLERS.closeDirectoryModal();
+            }, false);
+
+        // click ok to create a new directory
+        STORAGE_CONSTANTS.directoryOkButtonEl.addEventListener(
+            "click", this.createNewDirectory, false);
+    };
+
+
+    // creates a new directory
+    this.createNewDirectory = function() {
+        var storagePageName = STORAGE_EVENT_HANDLERS.getStorageName();
+        var newDirectoryName = STORAGE_EVENT_HANDLERS.unicodeToChar(
+            STORAGE_EVENT_HANDLERS.formatString(
+                STORAGE_CONSTANTS.directoryTextEl.value));
+        var parentDirectoryId = 
+            STORAGE_EVENT_HANDLERS.getParentDirectoryForAction();
+
+        console.log(newDirectoryName);
+
+        if (newDirectoryName.length > 0) {
+            STORAGE_EVENT_HANDLERS.createNewDirectoryCallback(
+                storagePageName, newDirectoryName, parentDirectoryId);
+        }
+    };
+
+
+    // closes the new directory modal
+    this.closeDirectoryModal = function() {
+        STORAGE_CONSTANTS.directoryModalEl.style.display = "none";
+    };
+
+
+    // opens the new directory modal
+    this.openDirectoryModal = function() {
+        STORAGE_CONSTANTS.directoryModalEl.style.display = "block";
     };
     
     
     // handles uploading of the file to the storage room or a subdirectory
     // using the callback provided
-	this.uploadNewFileToFolderHandler = function() {
+	this.uploadNewFileToDirectoryHandler = function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStorageName();
-        var filesToUpload = STORAGE_CONSTANTS.uploadField.files;
+        var filesToUpload = STORAGE_CONSTANTS.uploadFieldEl.files;
         var parentDirectoryId = 
-            STORAGE_EVENT_HANDLERS.getParentDirectoryForFileUpload();
+            STORAGE_EVENT_HANDLERS.getParentDirectoryForAction();
 
         if (filesToUpload.length > 0) {
-            STORAGE_EVENT_HANDLERS.uploadNewFileToFolderCallback(
+            STORAGE_EVENT_HANDLERS.uploadNewFileToDirectoryCallback(
                 storagePageName, filesToUpload, parentDirectoryId);
 
-            STORAGE_CONSTANTS.uploadField.value = '';
+            STORAGE_CONSTANTS.uploadFieldEl.value = '';
         }
     };
 
 
-    // returns the parent directory a file was uploaded to
-    this.getParentDirectoryForFileUpload = function() {
+    // returns the parent directory an action corresponds too
+    this.getParentDirectoryForAction = function() {
         var parentDirectoryId = STORAGE_EVENT_HANDLERS.getStorageId();
 
         /* Psuedocode, fill in later when implementation catches up 
@@ -84,5 +140,5 @@ var STORAGE_EVENT_HANDLERS = new function() {
         return text.replace(/\\u[\dA-F]{4}/gi, function (match) {
             return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
         });
-     }
+    };
 };

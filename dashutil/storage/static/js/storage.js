@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     // Set up event handlers
     STORAGE_EVENT_HANDLERS.addAllEventListeners(
-        uploadNewFileToFolder);
+        uploadNewFileToDirectory, createNewDirectory);
 
 }); 
 
@@ -17,9 +17,9 @@ $(document).ready(function() {
 
 // Uploads a new file to a given directory within a storage
 // This method is called back from STORAGE_EVENT_HANDLERS
-function uploadNewFileToFolder(storageName, filesToUpload, parentDirectoryId) {
+function uploadNewFileToDirectory(storageName, filesToUpload, parentDirectoryId) {
 
-    uploadFileToStorage(addUploadedFileToPage, fileUploadFailedError,
+    uploadFileToStorageDB(addUploadedFileToPage, fileUploadFailedError,
         storageName, filesToUpload, parentDirectoryId);
 }
 
@@ -28,7 +28,7 @@ function uploadNewFileToFolder(storageName, filesToUpload, parentDirectoryId) {
 // This method is called back after a file was successfully uploaded
 function addUploadedFileToPage(filesUploaded) {
     for (var i = 0; i < filesUploaded.length; i ++) {
-        var newRow = STORAGE_CONSTANTS.tableBody.insertRow();
+        var newRow = STORAGE_CONSTANTS.tableBodyEl.insertRow();
         newRow.insertCell(0).innerHTML = "<a href=" + filesUploaded[i].fields.upload_path + 
             " target=\"_blank\">" + filesUploaded[i].fields.filename + "</a>";
         newRow.insertCell(1).innerHTML = filesUploaded[i].fields.create_timestamp;
@@ -38,9 +38,25 @@ function addUploadedFileToPage(filesUploaded) {
 }
 
 
+// Creates a new directory under a given directory within a storage
+// This method is called back from STORAGE_EVENT_HANDLERS
+function createNewDirectory(storageName, newDirectoryName, parentDirectoryId) {
+
+    createNewDirectoryDB(addUploadedFileToPage, directoryCreationFailedError,
+        storageName, newDirectoryName, parentDirectoryId);
+}
+
+
 // Displays error after a file failed to upload
 // This method is called back after a file failed to upload
 function fileUploadFailedError(errorMessage) {
+    // TODO: handle this
+}
+
+
+// Displays error after a file failed to upload
+// This method is called back after a file failed to upload
+function directoryCreationFailedError(errorMessage) {
     // TODO: handle this
 }
 

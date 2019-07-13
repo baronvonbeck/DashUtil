@@ -50,6 +50,19 @@ class File_DataManager(models.Manager):
         new_file_data = File_Data.file_datamanager.create_file_data(new_files)
 
         return size_increase, new_file_data
+    
+    # creates a new directory, returns the data
+    def create_new_directory(self, parent_directory, new_directory_name):
+        new_directory = []
+        new_directory.append(File_Data(filename=new_directory_name, 
+            upload_path=None, 
+            size=0, 
+            parent_directory=parent_directory)
+        )
+
+        new_directory_data = File_Data.file_datamanager.create_file_data(new_directory)
+
+        return new_directory_data
 
     # iteratively updates the parent directory sizes in bulk
     def update_parent_directory_sizes_iteratively(self, new_size, 

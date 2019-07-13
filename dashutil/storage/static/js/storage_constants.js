@@ -4,14 +4,17 @@
 
 // Storage constants
 const STORAGE_CONSTANTS = new function() {
-    this.uploadField =          document.getElementById("submit-file-id");
-    this.uploadButton =         document.getElementById("submit-button-id");
-    this.tableId   =            document.getElementById("table-id");
-    this.tableBody =            this.tableId.getElementsByTagName("tbody")[0];
-    this.prevClass =           	"prev";
-    this.expandedClass =       	"expanded";
-    this.collapsedClass =      	"collapsed";
-    this.darkThemeClass =      	"dark-theme";
-    this.lightThemeClass =     	"light-theme";  
-    this.imgPath =             	"/static/img/"; 
+    this.uploadFieldEl =            document.getElementById("submit-file-id");
+    this.uploadButtonEl =           document.getElementById("submit-button-id");
+    this.tableIdEl   =              document.getElementById("table-id");
+    this.tableBodyEl =              this.tableIdEl.getElementsByTagName("tbody")[0];
+    this.openModalButtonEl =        document.getElementById("directory-modal-button-id");
+    this.directoryModalEl =         document.getElementById("new-directory-modal-id");
+    this.directoryTextEl =          document.getElementById("new-directory-text-id");
+    this.directoryOkButtonEl =      document.getElementById("new-directory-ok-id");
+    this.directoryCloseButtonEl =   document.getElementById("new-directory-cancel-id");
+    this.modalContentEl =           document.getElementById("modal-content-id");
+    this.closeModalEl =             document.getElementById("close-modal-id");
+    this.darkThemeClass =      	    "dark-theme";
+    this.lightThemeClass =     	    "light-theme";
 };
