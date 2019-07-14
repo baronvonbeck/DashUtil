@@ -96,11 +96,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
     // returns the parent directory an action corresponds too
     this.getParentDirectoryForAction = function() {
-        var parentDirectoryId = STORAGE_EVENT_HANDLERS.getStorageId();
+        var parentDirectoryId = STORAGE_EVENT_HANDLERS.getStoragePageId();
 
         /* Psuedocode, fill in later when implementation catches up 
         if (context of the file is the storage page itself, base directory)
-            parentDirectoryId = this.getStorageId();
+            parentDirectoryId = this.getStoragePageId();
         else {
             if uploadPath of clicked directory == null
                 parentDirectoryId = the clicked directory
@@ -116,7 +116,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
     // returns the storage page id, formatted to remove all single and 
     // double quotes ['"]
-    this.getStorageId = function() {
+    this.getStoragePageId = function() {
         return STORAGE_EVENT_HANDLERS.formatString(storagePageId.textContent);
     };
 

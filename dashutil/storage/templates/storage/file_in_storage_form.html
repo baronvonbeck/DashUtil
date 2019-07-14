@@ -32,15 +32,6 @@
                 <th>Size</th>
             </tr>
         </thead>
-        <tbody>
-            {% for file in storage_files %}
-                <tr>
-                    <td><a href="{{ file.fields.upload_path }}" target="_blank">{{ file.fields.filename }}</a></td>
-                    <td>{{ file.fields.create_timestamp }}</td>
-                    <td>{{ file.fields.modify_timestamp }}</td>
-                    <td>{{ file.fields.size|filesizeformat }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
+        <tbody></tbody>
     </table>
 {% endblock %}
