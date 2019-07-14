@@ -6,9 +6,9 @@ $(document).ready(function() {
 
     // Set up event handlers
     STORAGE_EVENT_HANDLERS.addAllEventListeners(
-        uploadNewFileToDirectory, createNewDirectory);
+        uploadNewFilesToDirectory, createNewDirectory);
 
-    addFilesToPage(JSON.parse(storageFiles.textContent), STORAGE_EVENT_HANDLERS.getStoragePageId());     
+    addFilesToPage(JSON.parse(storageFiles.textContent));     
 }); 
 
 
@@ -18,23 +18,10 @@ $(document).ready(function() {
 
 // Uploads a new file to a given directory within a storage
 // This method is called back from STORAGE_EVENT_HANDLERS
-function uploadNewFileToDirectory(storageName, filesToUpload, parentDirectoryId) {
+function uploadNewFilesToDirectory(storageName, filesToUpload, parentDirectoryId) {
 
     uploadFileToStorageDB(addFilesToPage, fileUploadFailedError,
         storageName, filesToUpload, parentDirectoryId);
-}
-
-
-// Adds files/directories to the storage page
-function addFilesToPage(filesUploaded, parentDirectoryId) {
-    for (var i = 0; i < filesUploaded.length; i ++) {
-        
-        var newRow = new FileObject(filesUploaded[i].fields.filename, filesUploaded[i].fields.upload_path, 
-            filesUploaded[i].fields.create_timestamp, filesUploaded[i].fields.modify_timestamp,
-            filesUploaded[i].fields.size, parentDirectoryId);
-
-        STORAGE_CONSTANTS.tableBodyEl.innerHTML += newRow.htmlRepresentation;
-    }
 }
 
 
@@ -44,6 +31,13 @@ function createNewDirectory(storageName, newDirectoryName, parentDirectoryId) {
 
     createNewDirectoryDB(addFilesToPage, directoryCreationFailedError,
         storageName, newDirectoryName, parentDirectoryId);
+}
+
+
+// Adds files/directories to the storage page
+function addFilesToPage(files) {
+
+    FILE_MANAGER.addFileListToPage(files);
 }
 
 

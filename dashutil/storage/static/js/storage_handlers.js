@@ -62,6 +62,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_EVENT_HANDLERS.createNewDirectoryCallback(
                 storagePageName, newDirectoryName, parentDirectoryId);
         }
+
+        STORAGE_EVENT_HANDLERS.closeDirectoryModal();
     };
 
 
