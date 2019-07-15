@@ -8,7 +8,8 @@ $(document).ready(function() {
     STORAGE_EVENT_HANDLERS.addAllEventListeners(
         uploadNewFilesToDirectory, createNewDirectory);
 
-    addFilesToPage(JSON.parse(storageFiles.textContent));     
+    FILE_MANAGER.addExistingFileListToPage(
+        JSON.parse(storageFiles.textContent));
 }); 
 
 
@@ -20,7 +21,7 @@ $(document).ready(function() {
 // This method is called back from STORAGE_EVENT_HANDLERS
 function uploadNewFilesToDirectory(storageName, filesToUpload, parentDirectoryId) {
 
-    uploadFileToStorageDB(addFilesToPage, fileUploadFailedError,
+    uploadFileToStorageDB(addNewFilesToPage, fileUploadFailedError,
         storageName, filesToUpload, parentDirectoryId);
 }
 
@@ -29,15 +30,15 @@ function uploadNewFilesToDirectory(storageName, filesToUpload, parentDirectoryId
 // This method is called back from STORAGE_EVENT_HANDLERS
 function createNewDirectory(storageName, newDirectoryName, parentDirectoryId) {
 
-    createNewDirectoryDB(addFilesToPage, directoryCreationFailedError,
+    createNewDirectoryDB(addNewFilesToPage, directoryCreationFailedError,
         storageName, newDirectoryName, parentDirectoryId);
 }
 
 
 // Adds files/directories to the storage page
-function addFilesToPage(files) {
+function addNewFilesToPage(files) {
 
-    FILE_MANAGER.addFileListToPage(files);
+    FILE_MANAGER.addNewFileListToPage(files);
 }
 
 

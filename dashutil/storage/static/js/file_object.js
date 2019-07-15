@@ -2,7 +2,8 @@
 // a storage page
 'use strict';
 
-// Representation of a file object within the 
+// Representation of a file object within the storage page and
+// directory structure
 class FileObject {
     constructor(newId, newFilename, newUploadPath, newCreateTimestamp, 
         newModifyTimestamp, newSize, newParentDirectoryId) {
@@ -29,6 +30,26 @@ class FileObject {
         return this.parentDirectoryId;
     }
 
+    get getSize() {
+        return this.size;
+    }
+
+
+    // updates the size of the object. size will be negative or positive
+    updateSize(sizeChange) {
+        this.size += sizeChange;
+        this.updateHTMLRepresentation();
+    }
+
+
+    // maintains track of level of directory so that tabbing is correct. 
+    // TODO: implement this
+    updateLevel(newLevel) {
+        return;
+    }
+
+
+    // updates the HTML Representation of the object
     updateHTMLRepresentation() {
         var fullHTMLStringRepresentation = ""
         var column1_filename_path = "";
@@ -48,7 +69,8 @@ class FileObject {
             this.formatDateToString(this.createTimestamp) + "</td>";
         column3_modifyTimestamp = "<td>" + 
             this.formatDateToString(this.modifyTimestamp) + "</td>";
-        column4_size = "<td>" + this.formatFileSizeToString(this.size) + "</td>";
+        column4_size = "<td>" + 
+            this.formatFileSizeToString(this.size) + "</td>";
 
         fullHTMLStringRepresentation = "<tr id=\"" + this.id + "\">" +
             column1_filename_path + column2_createTimestamp + 
@@ -71,12 +93,13 @@ class FileObject {
                 date.getMilliseconds() + " AM";
         }
 
-        return date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear() + " " + time;
+        return date.getMonth() + "/" + date.getDate() + "/" + 
+            date.getFullYear() + " " + time;
     }
 
 
-    // converts file size to a human readable format, copying django filesizeformat
-    // functionality. si determines whether or not to use si standard
+    // converts file size to a human readable format. si determines 
+    // whether or not to use si standard, default false
     formatFileSizeToString(bytes, si=false) {
         var thresh = si ? 1000 : 1024;
         if (Math.abs(bytes) < thresh) {

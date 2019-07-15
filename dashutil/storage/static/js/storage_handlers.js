@@ -56,8 +56,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
         var parentDirectoryId = 
             STORAGE_EVENT_HANDLERS.getParentDirectoryForAction();
 
-        console.log(newDirectoryName);
-
         if (newDirectoryName.length > 0) {
             STORAGE_EVENT_HANDLERS.createNewDirectoryCallback(
                 storagePageName, newDirectoryName, parentDirectoryId);
