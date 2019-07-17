@@ -23,8 +23,7 @@
     </body>
 
     {{ storage_files|json_script:"storageFiles" }}
-    {{ storage_page_name|json_script:"storagePage"}}
-    {{ storage_page_id|json_script:"storagePageId"}}
+    {{ storage_page|json_script:"storagePage"}}
 
     {% load static %}
     <script src="{% static '/js/jquery-3.3.1.min.js' %}" type="text/javascript"></script>

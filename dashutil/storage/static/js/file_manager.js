@@ -135,7 +135,9 @@ var FILE_MANAGER = new function() {
         var newFile = new FileObject(fileId, fileJSONObject.filename, 
             fileJSONObject.upload_path, fileJSONObject.create_timestamp, 
             fileJSONObject.modify_timestamp, fileJSONObject.size, 
-            fileJSONObject.parent_directory);
+            fileJSONObject.parent_directory,
+            FILE_MANAGER.idToFileMap.get(fileJSONObject.parent_directory).level + 1
+        );
 
         FILE_MANAGER.createIdToFileMapEntry(fileId, newFile);
         FILE_MANAGER.createParentToChildMapEntry(
@@ -149,9 +151,24 @@ var FILE_MANAGER = new function() {
     }
 
 
+    // creates the initial Storage file representation at level 0. All other 
+    // files will be within this "directory"
+    this.createStorageFileRecord = function(fileId, fileJSONObject) {
+        var newFile = new FileObject(fileId, fileJSONObject.filename, 
+            null, fileJSONObject.create_timestamp, 
+            fileJSONObject.modify_timestamp, fileJSONObject.size, 
+            null, 0
+        );
+
+        FILE_MANAGER.createIdToFileMapEntry(fileId, newFile);
+
+        STORAGE_CONSTANTS.storagePageInfoEl.innerHTML += newFile.getHTMLRepresentation;
+    }
+
+
     // recursibely update directory sizes upwards along a chain
     this.recursivelyUpdateDirectorySizes = function(directory, sizeChange) {
-        if (directory != undefined) {
+        if (directory != undefined && directory != null) {
             directory.updateSize(sizeChange);
             document.getElementById(directory.getId).innerHTML = 
                 directory.getHTMLRepresentation;
@@ -164,7 +181,7 @@ var FILE_MANAGER = new function() {
 
     // iteratively update directory sizes upwards along a chain
     this.iterativelyUpdateDirectorySizes = function(directory, sizeChange) {
-        while (directory != undefined) {
+        while (directory != undefined && directory != null) {
             directory.updateSize(sizeChange);
             document.getElementById(directory.getId).innerHTML = 
                 directory.getHTMLRepresentation;

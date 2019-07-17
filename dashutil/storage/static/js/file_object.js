@@ -6,7 +6,7 @@
 // directory structure
 class FileObject {
     constructor(newId, newFilename, newUploadPath, newCreateTimestamp, 
-        newModifyTimestamp, newSize, newParentDirectoryId) {
+        newModifyTimestamp, newSize, newParentDirectoryId, newLevel) {
 
         this.id = newId;
         this.filename = newFilename;
@@ -15,6 +15,7 @@ class FileObject {
         this.modifyTimestamp = new Date(newModifyTimestamp);
         this.size = newSize;
         this.parentDirectoryId = newParentDirectoryId;
+        this.level = newLevel;
         this.htmlRepresentation = this.updateHTMLRepresentation();
     }
 
@@ -38,20 +39,21 @@ class FileObject {
     // updates the size of the object. size will be negative or positive
     updateSize(sizeChange) {
         this.size += sizeChange;
-        this.updateHTMLRepresentation();
+        this.htmlRepresentation = this.updateHTMLRepresentation();
     }
 
 
-    // maintains track of level of directory so that tabbing is correct. 
-    // TODO: implement this
+    // updates the directory level of the object, or how many subdirectories
+    // down the file is within the context of the storage page
     updateLevel(newLevel) {
-        return;
+        this.level = newLevel;
+        this.htmlRepresentation = this.updateHTMLRepresentation();
     }
 
 
     // updates the HTML Representation of the object
     updateHTMLRepresentation() {
-        var fullHTMLStringRepresentation = ""
+        var fullHTMLStringRepresentation = "";
         var column1_filename_path = "";
         var column2_createTimestamp = "";
         var column3_modifyTimestamp = "";
@@ -89,8 +91,8 @@ class FileObject {
                 date.getMilliseconds() + " PM";
         }
         else {
-            time = date.getHours() + ":" + date.getMinutes() + "." + 
-                date.getMilliseconds() + " AM";
+            time = (date.getHours() == 0 ? "12" : date.getHours()) + 
+                ":" + date.getMinutes() + "." + date.getMilliseconds() + " AM";
         }
 
         return date.getMonth() + "/" + date.getDate() + "/" + 
@@ -114,6 +116,6 @@ class FileObject {
             bytes /= thresh;
             ++u;
         } while (Math.abs(bytes) >= thresh && u < units.length - 1);
-        return bytes.toFixed(1) + ' ' + units[u];
+        return bytes.toFixed(2) + ' ' + units[u];
     }
 }

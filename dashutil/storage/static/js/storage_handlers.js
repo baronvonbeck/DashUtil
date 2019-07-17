@@ -12,7 +12,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
     
     // Method to call back to upload a new file. Takes storage page name, 
 	// file uploaded, and parent directory id as parameters
-	this.createNewDirectoryCallback = null;
+    this.createNewDirectoryCallback = null;
+    
+    // storage variables
+    this.storagePageId = null;
+    this.storagePageName = null;
+    this.storagePageFields = null;
 	
 	// Handler to set up event listeners. 1 callback passed in from storage.js
     this.addAllEventListeners = function(newUploadNewFileToDirectoryCallback, 
@@ -49,7 +54,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
     // creates a new directory
     this.createNewDirectory = function() {
-        var storagePageName = STORAGE_EVENT_HANDLERS.getStorageName();
+        var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
         var newDirectoryName = STORAGE_EVENT_HANDLERS.unicodeToChar(
             STORAGE_EVENT_HANDLERS.formatString(
                 STORAGE_CONSTANTS.directoryTextEl.value));
@@ -80,7 +85,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // handles uploading of the file to the storage room or a subdirectory
     // using the callback provided
 	this.uploadNewFileToDirectoryHandler = function() {
-        var storagePageName = STORAGE_EVENT_HANDLERS.getStorageName();
+        var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
         var filesToUpload = STORAGE_CONSTANTS.uploadFieldEl.files;
         var parentDirectoryId = 
             STORAGE_EVENT_HANDLERS.getParentDirectoryForAction();
@@ -117,15 +122,36 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // returns the storage page id, formatted to remove all single and 
     // double quotes ['"]
     this.getStoragePageId = function() {
-        return STORAGE_EVENT_HANDLERS.formatString(storagePageId.textContent);
+        if (this.storagePageId == null) {
+            this.storagePageId = STORAGE_EVENT_HANDLERS.getJsonFromDataString(
+                storagePage.textContent).pk;
+        }
+        
+        return this.storagePageId;
     };
 
 
     // returns the name of the storage, with unicode converted to characters
     // and formatted to remove all single and double quotes ['"]
-    this.getStorageName = function() {
-        return STORAGE_EVENT_HANDLERS.unicodeToChar(
-            STORAGE_EVENT_HANDLERS.formatString(storagePage.textContent));
+    this.getStoragePageName = function() {
+        if (this.storagePageName == null) {
+            this.storagePageName = 
+                STORAGE_EVENT_HANDLERS.getStoragePageFields().filename;
+        }
+        
+        return this.storagePageName;
+    };
+
+
+    // returns all of the fields of the storage, with unicode converted to
+    // characters and formatted to remove all single and double quotes ['"]
+    this.getStoragePageFields = function() {
+        if (this.storagePageFields == null) {
+            this.storagePageFields = STORAGE_EVENT_HANDLERS.getJsonFromDataString(
+                storagePage.textContent).fields;
+        }
+        
+        return this.storagePageFields;
     };
 
     
@@ -140,5 +166,14 @@ var STORAGE_EVENT_HANDLERS = new function() {
         return text.replace(/\\u[\dA-F]{4}/gi, function (match) {
             return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
         });
+    };
+
+
+    // parses string into json data
+    this.getJsonFromDataString = function(dataString) {
+        return JSON.parse(STORAGE_EVENT_HANDLERS.unicodeToChar(
+            dataString.replace('\'upload_path\': None', 
+                    '\'upload_path\': null').replace(/[']+/g, '"')
+                ));
     };
 };

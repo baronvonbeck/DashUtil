@@ -62,10 +62,10 @@ def _get_context_for_storage(storage_page_name):
     if not created:
         # storage_page already existed, so pull all of the child files
         child_files = File_Data.file_datamanager.get_children_of_storage(storage)
-    
+
     context['storage_files'] = _serialize_data_as_json(child_files)
-    context['storage_page_name'] = storage.storage_name
-    context['storage_page_id'] = storage.id.id
+    context['storage_page'] = _serialize_data_as_json(
+        [Storage.storage_manager.get_related_file_data(storage)])[0]
 
     return context
 

@@ -8,6 +8,7 @@ const STORAGE_CONSTANTS = new function() {
     this.uploadButtonEl =           document.getElementById("submit-button-id");
     this.tableIdEl   =              document.getElementById("table-id");
     this.tableBodyEl =              this.tableIdEl.getElementsByTagName("tbody")[0];
+    this.storagePageInfoEl =        document.getElementById("storage-page-info-id");
     this.openModalButtonEl =        document.getElementById("directory-modal-button-id");
     this.directoryModalEl =         document.getElementById("new-directory-modal-id");
     this.directoryTextEl =          document.getElementById("new-directory-text-id");

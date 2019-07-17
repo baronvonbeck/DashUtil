@@ -8,8 +8,13 @@ $(document).ready(function() {
     STORAGE_EVENT_HANDLERS.addAllEventListeners(
         uploadNewFilesToDirectory, createNewDirectory);
 
+    FILE_MANAGER.createStorageFileRecord(
+        STORAGE_EVENT_HANDLERS.getStoragePageId(), 
+        STORAGE_EVENT_HANDLERS.getStoragePageFields());
+
     FILE_MANAGER.addExistingFileListToPage(
-        JSON.parse(storageFiles.textContent));
+        STORAGE_EVENT_HANDLERS.getJsonFromDataString(
+            storageFiles.textContent));
 }); 
 
 
