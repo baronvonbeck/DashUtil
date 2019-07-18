@@ -30,12 +30,20 @@ class File_DataManager(models.Manager):
         # first created, last updated, first updated, etc)
         return self.filter(parent_directory=storage_file_data)
 
+    # return the child files of the storage
+    def get_children_of_directory(self, directory):
+        
+
+        # TODO: default filter for return (directories first, 
+        # first created, last updated, first updated, etc)
+        return self.filter(parent_directory=directory)
+
     # gets a file data object by primary key
     def get_file_data(self, file_data_id):
         return self.get(id=file_data_id)
 
     # uploads a new file, returns the data
-    def upload_new_files(self, parent_directory, storage_name, files_to_post):
+    def upload_new_files(self, new_parent_directory, storage_name, files_to_post):
         new_files = []
         size_increase = 0
         for f in files_to_post:
@@ -44,7 +52,7 @@ class File_DataManager(models.Manager):
             new_files.append(File_Data(filename=f.name, 
                 upload_path=uploaded_file_url, 
                 size=f.size, 
-                parent_directory=parent_directory)
+                parent_directory=new_parent_directory)
             )
             size_increase += f.size
         new_file_data = File_Data.file_datamanager.create_file_data(new_files)
@@ -52,46 +60,151 @@ class File_DataManager(models.Manager):
         return size_increase, new_file_data
     
     # creates a new directory, returns the data
-    def create_new_directory(self, parent_directory, new_directory_name):
+    def create_new_directory(self, new_parent_directory, new_directory_name):
         new_directory = []
         new_directory.append(File_Data(filename=new_directory_name, 
             upload_path=None, 
             size=0, 
-            parent_directory=parent_directory)
+            parent_directory=new_parent_directory)
         )
 
         new_directory_data = File_Data.file_datamanager.create_file_data(new_directory)
 
         return new_directory_data
 
+    # moves a list of files to a given directoy
+    def move_files(self, new_parent_directory, file_ids_to_move):
+        bulk_parent_update_list = []
+        bulk_size_update_list = {new_parent_directory, 0}
+
+        for file_id in file_ids_to_move:
+
+            file_to_move = File_Data.file_datamanager.get_file_data(file_id)
+            current_parent = file_to_move.parent_directory
+            file_to_move.parent_directory = new_parent_directory
+
+            bulk_parent_update_list.append(file_to_move)
+
+            if (current_parent.id in bulk_size_update_list):
+                bulk_size_update_list[current_parent] -= file_to_move.size
+            else:
+                bulk_size_update_list[current_parent] = file_to_move.size * -1
+
+            bulk_size_update_list[new_parent_directory] += file_to_move.size
+            
+        self.bulk_update(bulk_parent_update_list, ['parent_directory'])
+
+        File_Data.file_datamanager.update_list_of_file_id_sizes(
+            bulk_size_update_list)
+
+        return bulk_parent_update_list
+
+    # deletes a list of files/directories
+    def delete_files(self, file_ids_to_delete):
+        bulk_delete_list = []
+        bulk_url_delete_list = set()
+        bulk_size_update_list = {}
+
+        size_increase = 0
+
+        for file_id in file_ids_to_delete:
+
+            file_to_delete = File_Data.file_datamanager.get_file_data(file_id)
+            current_parent = file_to_delete.parent_directory
+            size_increase += file_to_delete.size
+
+            bulk_delete_list.append(file_to_delete)
+
+            if (current_parent.id in bulk_size_update_list):
+                bulk_size_update_list[current_parent] -= file_to_delete.size
+            else:
+                bulk_size_update_list[current_parent] = file_to_delete.size * -1
+            
+            if (file_to_delete.upload_path is not None):
+                bulk_url_delete_list.add(file_to_delete.upload_path)
+            else: 
+                bulk_url_delete_list = File_Data.file_datamanager._get_urls_of_all_subchildren(
+                    bulk_url_delete_list,
+                    File_Data.file_datamanager.get_children_of_directory(file_to_delete))
+
+        self.bulk_update(bulk_delete_list, ['parent_directory'])
+
+        File_Data.file_datamanager.update_list_of_file_id_sizes(
+            bulk_size_update_list)
+        
+        s3_delete_url_list(list(bulk_url_delete_list))
+
+        return bulk_delete_list
+    
+    # returns a list of all of the urls of all subchildren for a directory
+    def _get_urls_of_all_subchildren(bulk_url_delete_list, child_list):
+        for child in child_list:
+            if (child.upload_path is not None):
+                bulk_url_delete_list.add(child.upload_path)
+            else: 
+                bulk_url_delete_list = File_Data.file_datamanager._get_urls_of_all_subchildren(
+                    bulk_url_delete_list,
+                    File_Data.file_datamanager.get_children_of_directory(child))
+        
+        return bulk_url_delete_list
+            
+
+    # renames a file to the given filename
+    def rename_file(self, renamed_file_name, file_to_rename):
+        file_to_rename.update(filename = renamed_file_name)
+
+    # compiles a list of files to update by a given size, and performs
+    # a bulk update on that list
+    def update_list_of_file_id_sizes(self, files_to_update):
+        bulk_size_update_list = []
+
+        for next_parent, size_change in files_to_update:
+            File_Data.file_datamanager.update_parent_directory_sizes_iteratively(
+                next_parent, size_change)
+
+            # bulk_update_size_list = File_Data.file_datamanager._merge_file_size_update_lists(
+            #     bulk_size_update_list, 
+            #     File_Data.file_datamanager.update_parent_directory_sizes_iteratively(
+            #           next_parent, size_change))
+
+
     # iteratively updates the parent directory sizes in bulk
-    def update_parent_directory_sizes_iteratively(self, new_size, 
+    def update_parent_directory_sizes_iteratively(self, size_change, 
         next_parent):
         bulk_size_update_list = []
 
         while (next_parent is not None):
-            next_parent.size += new_size
+            next_parent.size += size_change
             bulk_size_update_list.append(next_parent)
             next_parent = next_parent.parent_directory
         
         self.bulk_update(bulk_size_update_list, ['size'])
 
     # calls method to recursively update parent directory sizes in bulk
-    def update_parent_directory_sizes_recursively_entry(self, new_size, 
+    def update_parent_directory_sizes_recursively_entry(self, size_change, 
         next_parent):
         File_Data.file_datamanager.update_parent_directory_sizes_recursively(
-            new_size, next_parent, [])
+            size_change, next_parent, [])
 
     # recursively updates the parent directory sizes in bulk
-    def update_parent_directory_sizes_recursively(self, new_size, next_parent, 
+    def update_parent_directory_sizes_recursively(self, size_change, next_parent, 
         bulk_size_update_list):
         if (next_parent is None):
             self.bulk_update(bulk_size_update_list, ['size'])
         else:
-            next_parent.size += new_size
+            next_parent.size += size_change
             bulk_size_update_list.append(next_parent)
             File_Data.file_datamanager.update_parent_directory_sizes_recursively(
-                new_size, next_parent.parent_directory, bulk_size_update_list)
+                size_change, next_parent.parent_directory, bulk_size_update_list)
+
+    # merges sizes on 2 lists into 1 list
+    # def _merge_file_size_update_lists(file_list, merge_list): 
+    #     for f in file_list:
+    #         found = False
+    #         for m in merge_list:
+    #             if (f.id == m.id):
+    #                 f.size
+
 
 
 # Storage manager class #

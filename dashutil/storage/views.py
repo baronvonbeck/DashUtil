@@ -26,29 +26,50 @@ def storage_page(request, storage_page_name):
         return render(request, 'storage/file_in_storage_form.html', context)
   
     elif request.method == "POST":
-        parent_directory = File_Data.file_datamanager.get_file_data(
-            request.POST.dict()['parent_directory_id'])
         
-        new_data = []
+        return_data = []
         
-        # if new_directory_name is set, create a new directory. otherwise,
-        # upload the new files
         if ('new_directory_name' in request.POST.dict()):
+            parent_directory = File_Data.file_datamanager.get_file_data(
+                request.POST.dict()['parent_directory_id'])
             new_directory_name = request.POST.dict()['new_directory_name']
 
-            new_data = File_Data.file_datamanager.create_new_directory(
-                parent_directory, new_directory_name)  
+            return_data = File_Data.file_datamanager.create_new_directory(
+                parent_directory, new_directory_name) 
+
+        elif ('file_ids_to_move' in request.POST.dict()):
+            parent_directory = File_Data.file_datamanager.get_file_data(
+                request.POST.dict()['parent_directory_id'])
+            file_ids_to_move = request.POST.dict()['file_ids_to_move']
+
+            return_data = File_Data.file_datamanager.move_files(
+                parent_directory, file_ids_to_move) 
+        
+        elif ('file_ids_to_delete' in request.POST.dict()):
+            file_ids_to_delete = request.POST.dict()['file_ids_to_delete']
+
+            return_data = File_Data.file_datamanager.delete_files(
+                file_ids_to_delete) 
+
+        elif ('renamed_file_name' in request.POST.dict()):
+            renamed_file_name = request.POST.dict()['renamed_file_name']
+            
+            file_to_rename = File_Data.file_datamanager.get_file_data(
+                request.POST.dict()['renamed_file_id'])
+
+            return_data = File_Data.file_datamanager.rename_file(
+                renamed_file_name, file_to_rename) 
 
         else:
             files_to_post = request.FILES.getlist('file')
             
-            size_increase, new_data = File_Data.file_datamanager.upload_new_files(
+            size_increase, return_data = File_Data.file_datamanager.upload_new_files(
                 parent_directory, storage_page_name, files_to_post)
             
             File_Data.file_datamanager.update_parent_directory_sizes_iteratively(
                 size_increase, parent_directory)
 
-        return HttpResponse([_serialize_data_as_json(new_data)])
+        return HttpResponse([_serialize_data_as_json(return_data)])
 
 
 # Returns the appropriate context for a storage page
@@ -78,5 +99,5 @@ def _serialize_data_as_json(data_list):
 
 
 def _convert_string(s):
-    return s.replace('\\','').replace('\/', '')
+    return s.replace('\\','').replace('\/', '').replace('\'', '').replace('\"', '')
     

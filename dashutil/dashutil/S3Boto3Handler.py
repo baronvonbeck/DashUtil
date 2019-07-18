@@ -37,6 +37,22 @@ def s3_multi_part_upload(file_to_upload, s_name):
     return 'https://' + AWS_STORAGE_BUCKET_NAME + '.s3-' + AWS_REGION + '.amazonaws.com/' + key_path
 
 
+# deletes files for a given upload path from s3, in batch sizes of 1000
+def s3_delete_url_list(urls_to_delete):
+    delete_keys = {'Objects': []}
+    for key in urls_to_delete:
+        delete_keys['Objects'].append({'Key': key})
+
+        if (len(delete_keys['Objects']) >= 1000):
+            s3_resource.delete_objects(Bucket=AWS_STORAGE_BUCKET_NAME, 
+                Delete=delete_keys)
+            delete_keys = {'Objects': []}
+    
+    if (len(delete_keys['Objects'])):
+        s3_resource.delete_objects(Bucket=AWS_STORAGE_BUCKET_NAME, 
+            Delete=delete_keys)
+
+
 class ProgressPercentage(object):
     def __init__(self, file_to_upload):
         self._filename = file_to_upload.name
