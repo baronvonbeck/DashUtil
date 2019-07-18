@@ -127,7 +127,7 @@ class File_DataManager(models.Manager):
                     bulk_url_delete_list,
                     File_Data.file_datamanager.get_children_of_directory(file_to_delete))
 
-        self.bulk_update(bulk_delete_list, ['parent_directory'])
+            file_to_delete.delete()
 
         File_Data.file_datamanager.update_list_of_file_id_sizes(
             bulk_size_update_list)
