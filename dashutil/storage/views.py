@@ -26,39 +26,37 @@ def storage_page(request, storage_page_name):
         return render(request, 'storage/file_in_storage_form.html', context)
   
     elif request.method == "POST":
-        
+        data = request.POST.dict()
         return_data = []
         
-        if ('new_directory_name' in request.POST.dict()):
+        if ('new_directory_name' in data):
             parent_directory = File_Data.file_datamanager.get_file_data(
-                request.POST.dict()['parent_directory_id'])
-            new_directory_name = request.POST.dict()['new_directory_name']
+                data['parent_directory_id'])
+            new_directory_name = data['new_directory_name']
 
             return_data = File_Data.file_datamanager.create_new_directory(
                 parent_directory, new_directory_name) 
 
-        elif ('file_ids_to_move' in request.POST.dict()):
+        elif ('file_ids_to_move' in data):
             parent_directory = File_Data.file_datamanager.get_file_data(
-                request.POST.dict()['parent_directory_id'])
-            file_ids_to_move = request.POST.dict()['file_ids_to_move']
+                data['parent_directory_id'])
+            file_ids_to_move = data['file_ids_to_move']
 
             return_data = File_Data.file_datamanager.move_files(
                 parent_directory, file_ids_to_move) 
         
-        elif ('file_ids_to_delete' in request.POST.dict()):
-            file_ids_to_delete = request.POST.dict()['file_ids_to_delete']
+        elif ('file_ids_to_delete' in data):
+            file_ids_to_delete = data['file_ids_to_delete']
 
             return_data = File_Data.file_datamanager.delete_files(
                 file_ids_to_delete) 
 
-        elif ('renamed_file_name' in request.POST.dict()):
-            renamed_file_name = request.POST.dict()['renamed_file_name']
-            
-            file_to_rename = File_Data.file_datamanager.get_file_data(
-                request.POST.dict()['renamed_file_id'])
+        elif ('file_ids_to_rename' in data):
+            renamed_file_name = data['renamed_file_name']
+            files_to_rename = data['file_ids_to_rename']
 
-            return_data = File_Data.file_datamanager.rename_file(
-                renamed_file_name, file_to_rename) 
+            return_data = File_Data.file_datamanager.rename_files(
+                renamed_file_name, files_to_rename) 
 
         else:
             files_to_post = request.FILES.getlist('file')
@@ -99,5 +97,5 @@ def _serialize_data_as_json(data_list):
 
 
 def _convert_string(s):
-    return s.replace('\\','').replace('\/', '').replace('\'', '').replace('\"', '')
+    return s.replace('\\','').replace('/', '').replace('\'', '').replace('\"', '')
     

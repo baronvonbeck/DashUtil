@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 import uuid
-from dashutil.S3Boto3Handler import s3_multi_part_upload
+from dashutil.S3Boto3Handler import s3_multi_part_upload, s3_delete_url_list
 
 # Managers #
 
@@ -75,7 +75,7 @@ class File_DataManager(models.Manager):
     # moves a list of files to a given directoy
     def move_files(self, new_parent_directory, file_ids_to_move):
         bulk_parent_update_list = []
-        bulk_size_update_list = {new_parent_directory, 0}
+        bulk_size_update_list = {new_parent_directory: 0}
 
         for file_id in file_ids_to_move:
 
@@ -115,10 +115,13 @@ class File_DataManager(models.Manager):
 
             bulk_delete_list.append(file_to_delete)
 
-            if (current_parent.id in bulk_size_update_list):
+            if (current_parent in bulk_size_update_list):
                 bulk_size_update_list[current_parent] -= file_to_delete.size
             else:
                 bulk_size_update_list[current_parent] = file_to_delete.size * -1
+
+            if (file_to_delete in bulk_size_update_list):
+                del bulk_size_update_list[file_to_delete]
             
             if (file_to_delete.upload_path is not None):
                 bulk_url_delete_list.add(file_to_delete.upload_path)
@@ -127,7 +130,7 @@ class File_DataManager(models.Manager):
                     bulk_url_delete_list,
                     File_Data.file_datamanager.get_children_of_directory(file_to_delete))
 
-            file_to_delete.delete()
+        self.filter(id__in=file_ids_to_delete).delete()
 
         File_Data.file_datamanager.update_list_of_file_id_sizes(
             bulk_size_update_list)
@@ -137,7 +140,7 @@ class File_DataManager(models.Manager):
         return bulk_delete_list
     
     # returns a list of all of the urls of all subchildren for a directory
-    def _get_urls_of_all_subchildren(bulk_url_delete_list, child_list):
+    def _get_urls_of_all_subchildren(self, bulk_url_delete_list, child_list):
         for child in child_list:
             if (child.upload_path is not None):
                 bulk_url_delete_list.add(child.upload_path)
@@ -150,14 +153,19 @@ class File_DataManager(models.Manager):
             
 
     # renames a file to the given filename
-    def rename_file(self, renamed_file_name, file_to_rename):
-        file_to_rename.update(filename = renamed_file_name)
+    def rename_files(self, new_name, files_to_rename):
+        bulk_rename_list = []
+        for file_id in files_to_rename:
+            file_to_rename = File_Data.file_datamanager.get_file_data(file_id)
+            file_to_rename.filename = new_name
+            bulk_rename_list.append(file_to_rename)
+
+        self.bulk_update(bulk_rename_list, ['filename'])
+        return files_to_rename
 
     # compiles a list of files to update by a given size, and performs
     # a bulk update on that list
     def update_list_of_file_id_sizes(self, files_to_update):
-        bulk_size_update_list = []
-
         for next_parent, size_change in files_to_update:
             File_Data.file_datamanager.update_parent_directory_sizes_iteratively(
                 next_parent, size_change)
@@ -219,7 +227,7 @@ class StorageManager(models.Manager):
             print("Retrieved storage: " + storage_page_name)
             return storage, False
 
-        except (MultipleObjectsReturned, ObjectDoesNotExist) as e:
+        except (MultipleObjectsReturned, ObjectDoesNotExist):
             # shouldn't be possible, do something
             # print("what")
             # return None

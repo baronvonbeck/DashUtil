@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     // Set up event handlers
     STORAGE_EVENT_HANDLERS.addAllEventListeners(
-        uploadNewFilesToDirectory, createNewDirectory);
+        uploadNewFilesToDirectory, createNewDirectory, renameFiles);
 
     FILE_MANAGER.createStorageFileRecord(
         STORAGE_EVENT_HANDLERS.getStoragePageId(), 
@@ -40,6 +40,15 @@ function createNewDirectory(storageName, newDirectoryName, parentDirectoryId) {
 }
 
 
+// Renames a file or list of files
+// This method is called back from STORAGE_EVENT_HANDLERS
+function renameFiles(storageName, fileIdsToRename, renameName) {
+
+    renameFilesDB(addNewFilesToPage, renameFailedError,
+        storageName, fileIdsToRename, renameName);
+}
+
+
 // Adds files/directories to the storage page
 function addNewFilesToPage(files) {
 
@@ -54,9 +63,16 @@ function fileUploadFailedError(errorMessage, parentDirectoryId) {
 }
 
 
-// Displays error after a file failed to upload
-// This method is called back after a file failed to upload
+// Displays error after a directory failed to be created
+// This method is called back after a directory failed to be created
 function directoryCreationFailedError(errorMessage, parentDirectoryId) {
+    // TODO: handle this
+}
+
+
+// Displays error after file(s) failed to be renamed
+// This method is called back after file(s) failed to be renamed
+function renameFailedError(errorMessage, parentDirectoryId) {
     // TODO: handle this
 }
 
