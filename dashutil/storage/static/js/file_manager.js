@@ -48,6 +48,36 @@ var FILE_MANAGER = new function() {
     }
 
 
+    // removes files, directories, and their contents completely
+    // passes in a list of file ids to remove
+    this.deleteExistingFilesOnPage = function(fileIdList, initial) {
+        for (var i = 0; i < fileIdList.length; i ++) {
+            var fileToRemove = FILE_MANAGER.idToFileMap.get(fileIdList[i].pk);
+            var subIdList = FILE_MANAGER.parentToChildMap.get(fileIdList[i].pk);
+
+            // we assume all file sizes up to this point have been maintained 
+            // correctly, so subtract the initially selected sizes. subfile sizes 
+            // don't matter with this assumption
+            if (initial) {    
+                FILE_MANAGER.iterativelyUpdateDirectorySizes(
+                    FILE_MANAGER.idToFileMap.get(fileToRemove.getParentDirectoryId), 
+                    fileToRemove.getSize * -1);
+            }
+            
+            // if the file to remove is a directory, and it has contents that have
+            // been previously expanded, remove the files. we don't care about
+            // sizes for these, as they are tracked by the parent (current) dir
+            if (subIdList != undefined) {
+                FILE_MANAGER.deleteExistingFilesOnPage(subIdList, false);
+            }
+
+            FILE_MANAGER.deleteFileRecord(
+                fileToRemove.getParentDirectoryId, fileToRemove.getId);
+        }
+    }
+
+
+
     // moves files, directories, and their contents from one 
     // directory to another
     this.moveFilesToDirectory = function(destinatiomId, fileIdList, initial) {
@@ -55,8 +85,8 @@ var FILE_MANAGER = new function() {
         var sizeChange = 0;
 
         for (var i = 0; i < fileIdList.length; i ++) {
-            var fileToMove = FILE_MANAGER.idToFileMap.get(fileIdList[i]);
-            var subIdList = FILE_MANAGER.parentToChildMap.get(fileIdList[i]);
+            var fileToMove = FILE_MANAGER.idToFileMap.get(fileIdList[i].pk);
+            var subIdList = FILE_MANAGER.parentToChildMap.get(fileIdList[i].pk);
             
             // we assume all file sizes up to this point have been maintained 
             // correctly, so subtract the initially selected sizes. subfile sizes 
@@ -75,7 +105,7 @@ var FILE_MANAGER = new function() {
                 this.moveFilesToDirectory(fileToMove.getId, subIdList, false);
             }
 
-            FILE_MANAGER.moveFileRecord(destinationId, fileIdList[i], false);
+            FILE_MANAGER.moveFileRecord(destinationId, fileToMove.getId, false);
         }
 
         if (initial) { 
@@ -84,34 +114,7 @@ var FILE_MANAGER = new function() {
         }
     }
 
-    // removes files, directories, and their contents completely
-    // passes in a list of file ids to remove
-    this.removeFileListFromPage = function(fileIdList, initial) {
-        for (var i = 0; i < fileIdList.length; i ++) {
-            var fileToRemove = FILE_MANAGER.idToFileMap.get(fileIdList[i]);
-            var subIdList = FILE_MANAGER.parentToChildMap.get(fileIdList[i]);
-
-            // we assume all file sizes up to this point have been maintained 
-            // correctly, so subtract the initially selected sizes. subfile sizes 
-            // don't matter with this assumption
-            if (initial) {    
-                FILE_MANAGER.iterativelyUpdateDirectorySizes(
-                    FILE_MANAGER.idToFileMap.get(fileToRemove.getParentDirectoryId), 
-                    fileToRemove.getSize * -1);
-            }
-            
-            // if the file to remove is a directory, and it has contents that have
-            // been previously expanded, remove the files. we don't care about
-            // sizes for these, as they are tracked by the parent (current) dir
-            if (subIdList != undefined) {
-                this.removeFileListFromPage(subIdList, false);
-            }
-
-            FILE_MANAGER.deleteFileRecord(
-                fileToRemove.getParentDirectoryId, fileIdList[i]);
-        }
-    }
-
+    
 
     // moves a single existing file, updates id maps
     // TODO: update innerHTML
@@ -130,13 +133,35 @@ var FILE_MANAGER = new function() {
     }
 
 
+    // Removes any redundant files from the deletion list. For example,
+    // if a parent directory is marked for deletion along with a descandant
+    // child file or directory, only deletion of the parent is necessary
+    this.removeRedundantFilesToDelete = function(fileIdList) {
+        var highestRelevantParent = [];
+        
+        for (var i = 0; i < fileIdList.length; i ++) {
+            var id = fileIdList[i];
+            var allParentsOfId = FILE_MANAGER.iterativelyGetListOfParents(
+                FILE_MANAGER.idToFileMap.get(
+                    FILE_MANAGER.idToFileMap.get(id).getParentDirectoryId));
+
+            if (!FILE_MANAGER.checkIfValueExistsInBothArrays(
+                    fileIdList, allParentsOfId)) {
+                highestRelevantParent.push(id);
+            }
+        }
+
+        return highestRelevantParent;
+    }
+
+
     // deletes a single existing file, updates id maps and UI
     this.deleteFileRecord = function(parentId, fileId) {
         FILE_MANAGER.removeIdToFileMapEntry(fileId);
         FILE_MANAGER.removeParentToChildMapEntries(
             parentId, fileId);
 
-        document.getElementById(fileId).innerHTML = "";
+        document.getElementById(fileId).remove();
     }
 
     // creates a single new file, updates id maps, returns the size of created file
@@ -188,6 +213,29 @@ var FILE_MANAGER = new function() {
     }
 
 
+    // iteratively update directory sizes upwards along a chain
+    this.iterativelyGetListOfParents = function(directory) {
+        var parentIdList = [];
+
+        while (directory != undefined && directory != null) {
+            parentIdList.push(directory.getId);
+            directory = FILE_MANAGER.idToFileMap.get(directory.getParentDirectoryId);
+        }
+        return parentIdList;
+    }
+
+
+    // iteratively update directory sizes upwards along a chain
+    this.iterativelyUpdateDirectorySizes = function(directory, sizeChange) {
+        while (directory != undefined && directory != null) {
+            directory.updateSize(sizeChange);
+            document.getElementById(directory.getId).innerHTML = 
+                directory.getHTMLRepresentation;
+            directory = FILE_MANAGER.idToFileMap.get(directory.getParentDirectoryId);
+        }
+    }
+
+
     // recursibely update directory sizes upwards along a chain
     this.recursivelyUpdateDirectorySizes = function(directory, sizeChange) {
         if (directory != undefined && directory != null) {
@@ -201,15 +249,7 @@ var FILE_MANAGER = new function() {
     }
 
 
-    // iteratively update directory sizes upwards along a chain
-    this.iterativelyUpdateDirectorySizes = function(directory, sizeChange) {
-        while (directory != undefined && directory != null) {
-            directory.updateSize(sizeChange);
-            document.getElementById(directory.getId).innerHTML = 
-                directory.getHTMLRepresentation;
-            directory = FILE_MANAGER.idToFileMap.get(directory.getParentDirectoryId);
-        }
-    }
+    
     
 
     // creates a mapping of id to a file representation
@@ -245,7 +285,7 @@ var FILE_MANAGER = new function() {
 
     // reoves childId from the parentId's list of children
     this.removeParentToChildMapEntry = function(parentId, childId) {
-        childIdsOfParent = FILE_MANAGER.parentToChildMap.get(parentId);
+        var childIdsOfParent = FILE_MANAGER.parentToChildMap.get(parentId);
 
         for (var i = childIdsOfParent.length - 1; i >= 0; -- i) {
             if (childIdsOfParent[i] == childId) {
@@ -254,4 +294,17 @@ var FILE_MANAGER = new function() {
             }
         }
     }
+
+
+    /**
+     * @description determine if an array contains one or more items from another array.
+     * @param {array} searchList the array to search.
+     * @param {array} arr the array providing items to check for in the searchList.
+     * @return {boolean} true|false if searchList contains at least one item from arr.
+     */
+    this.checkIfValueExistsInBothArrays = function(searchList, arr) {
+        return arr.some(function (v) {
+            return searchList.indexOf(v) >= 0;
+        });
+    };
 }

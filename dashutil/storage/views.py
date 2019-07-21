@@ -44,12 +44,6 @@ def storage_page(request, storage_page_name):
 
             return_data = File_Data.file_datamanager.move_files(
                 parent_directory, file_ids_to_move) 
-        
-        elif ('file_ids_to_delete' in data):
-            file_ids_to_delete = data['file_ids_to_delete']
-
-            return_data = File_Data.file_datamanager.delete_files(
-                file_ids_to_delete) 
 
         elif ('file_ids_to_rename' in data):
             renamed_file_name = data['renamed_file_name']
@@ -57,6 +51,12 @@ def storage_page(request, storage_page_name):
 
             return_data = File_Data.file_datamanager.rename_files(
                 renamed_file_name, files_ids_to_rename) 
+
+        elif ('file_ids_to_delete' in data):
+            file_ids_to_delete = data['file_ids_to_delete'].split(",")
+
+            return_data = File_Data.file_datamanager.delete_files(
+                file_ids_to_delete, storage_page_name) 
 
         else:
             files_to_post = request.FILES.getlist('file')

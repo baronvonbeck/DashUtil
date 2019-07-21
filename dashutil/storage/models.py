@@ -98,60 +98,7 @@ class File_DataManager(models.Manager):
             bulk_size_update_list)
 
         return bulk_parent_update_list
-
-    # deletes a list of files/directories
-    def delete_files(self, file_ids_to_delete):
-        bulk_delete_list = []
-        bulk_url_delete_list = set()
-        bulk_size_update_list = {}
-
-        size_increase = 0
-
-        for file_id in file_ids_to_delete:
-
-            file_to_delete = File_Data.file_datamanager.get_file_data(file_id)
-            current_parent = file_to_delete.parent_directory
-            size_increase += file_to_delete.size
-
-            bulk_delete_list.append(file_to_delete)
-
-            if (current_parent in bulk_size_update_list):
-                bulk_size_update_list[current_parent] -= file_to_delete.size
-            else:
-                bulk_size_update_list[current_parent] = file_to_delete.size * -1
-
-            if (file_to_delete in bulk_size_update_list):
-                del bulk_size_update_list[file_to_delete]
-            
-            if (file_to_delete.upload_path is not None):
-                bulk_url_delete_list.add(file_to_delete.upload_path)
-            else: 
-                bulk_url_delete_list = File_Data.file_datamanager._get_urls_of_all_subchildren(
-                    bulk_url_delete_list,
-                    File_Data.file_datamanager.get_children_of_directory(file_to_delete))
-
-        self.filter(id__in=file_ids_to_delete).delete()
-
-        File_Data.file_datamanager.update_list_of_file_id_sizes(
-            bulk_size_update_list)
-        
-        s3_delete_url_list(list(bulk_url_delete_list))
-
-        return bulk_delete_list
     
-    # returns a list of all of the urls of all subchildren for a directory
-    def _get_urls_of_all_subchildren(self, bulk_url_delete_list, child_list):
-        for child in child_list:
-            if (child.upload_path is not None):
-                bulk_url_delete_list.add(child.upload_path)
-            else: 
-                bulk_url_delete_list = File_Data.file_datamanager._get_urls_of_all_subchildren(
-                    bulk_url_delete_list,
-                    File_Data.file_datamanager.get_children_of_directory(child))
-        
-        return bulk_url_delete_list
-            
-
     # renames a file to the given filename. automatically append correct extension
     # if necessary
     def rename_files(self, new_name, files_ids_to_rename):
@@ -173,12 +120,59 @@ class File_DataManager(models.Manager):
         self.bulk_update(bulk_rename_list, ['filename', 'modify_timestamp'])
         return bulk_rename_list
 
+    # deletes a list of files/directories
+    def delete_files(self, file_ids_to_delete, storage_name):
+        bulk_delete_list = []
+        bulk_url_delete_list = set()
+        bulk_size_update_list = {}
+
+        for file_id in file_ids_to_delete:
+
+            file_to_delete = File_Data.file_datamanager.get_file_data(file_id)
+            current_parent_id = str(file_to_delete.parent_directory_id)
+
+            bulk_delete_list.append(file_to_delete)
+
+            if (current_parent_id in bulk_size_update_list):
+                bulk_size_update_list[current_parent_id] -= file_to_delete.size
+            else:
+                bulk_size_update_list[current_parent_id] = file_to_delete.size * -1
+            
+            if (file_to_delete.upload_path is not None):
+                bulk_url_delete_list.add(file_to_delete.upload_path)
+            else: 
+                bulk_url_delete_list = File_Data.file_datamanager._get_urls_of_all_subchildren(
+                    bulk_url_delete_list,
+                    File_Data.file_datamanager.get_children_of_directory(file_to_delete))
+
+        self.filter(id__in=file_ids_to_delete).delete()
+
+        File_Data.file_datamanager.update_list_of_file_id_sizes(
+            bulk_size_update_list)
+        
+        s3_delete_url_list(list(bulk_url_delete_list), storage_name)
+
+        return bulk_delete_list
+    
+    # returns a list of all of the urls of all subchildren for a directory
+    def _get_urls_of_all_subchildren(self, bulk_url_delete_list, child_list):
+        for child in child_list:
+            if (child.upload_path is not None):
+                bulk_url_delete_list.add(child.upload_path)
+            else: 
+                bulk_url_delete_list = File_Data.file_datamanager._get_urls_of_all_subchildren(
+                    bulk_url_delete_list,
+                    File_Data.file_datamanager.get_children_of_directory(child))
+        
+        return bulk_url_delete_list
+
     # compiles a list of files to update by a given size, and performs
     # a bulk update on that list
     def update_list_of_file_id_sizes(self, files_to_update):
-        for next_parent, size_change in files_to_update:
+        for next_parent_id, size_change in files_to_update.items():
             File_Data.file_datamanager.update_parent_directory_sizes_iteratively(
-                next_parent, size_change)
+                size_change, 
+                File_Data.file_datamanager.get_file_data(next_parent_id))
 
             # bulk_update_size_list = File_Data.file_datamanager._merge_file_size_update_lists(
             #     bulk_size_update_list, 

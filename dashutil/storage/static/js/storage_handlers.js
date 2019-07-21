@@ -14,9 +14,13 @@ var STORAGE_EVENT_HANDLERS = new function() {
 	// file uploaded, and parent directory id as parameters
     this.createNewDirectoryCallback = null;
 
-    // Method to call back to upload a new file. Takes storage page name, 
-	// file uploaded, and parent directory id as parameters
+    // Method to call back to rename a file or file(s). Takes storage page name, 
+	// a list of file ids to rename, and the new name as parameters
     this.renameFilesCallback = null;
+
+    // Method to call back to delete a file. Takes storage page name and
+    // list of file ids to delete as parameters
+    this.deleteFilesCallback = null;
     
     // storage variables
     this.storagePageId = null;
@@ -25,11 +29,13 @@ var STORAGE_EVENT_HANDLERS = new function() {
 	
 	// Handler to set up event listeners. 1 callback passed in from storage.js
     this.addAllEventListeners = function(newUploadNewFileToDirectoryCallback, 
-        newCreateNewDirectoryCallback, newRenameFilesCallback) {
+            newCreateNewDirectoryCallback, newRenameFilesCallback, 
+            newDeleteFilesCallback) {
 
 		this.uploadNewFileToDirectoryCallback = newUploadNewFileToDirectoryCallback;
         this.createNewDirectoryCallback = newCreateNewDirectoryCallback;
         this.renameFilesCallback = newRenameFilesCallback;
+        this.deleteFilesCallback = newDeleteFilesCallback;
 
 
 	    // submit file button click
@@ -47,7 +53,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
         // click ok to create a new directory
         STORAGE_CONSTANTS.directoryOkButtonEl.addEventListener(
-            "click", this.createNewDirectory, false);
+            "click", this.createNewDirectoryHandler, false);
 
 
         // rename modal button
@@ -60,7 +66,20 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
         // click ok to rename file(s)
         STORAGE_CONSTANTS.renameOkButtonEl.addEventListener(
-            "click", this.renameFiles, false);
+            "click", this.renameFilesHandler, false);
+
+
+        // delete modal button
+        STORAGE_CONSTANTS.deleteModalButtonEl.addEventListener(
+            "click", this.openDeleteModal, false);
+
+        // close delete modal by clicking cancel
+        STORAGE_CONSTANTS.deleteCloseButtonEl.addEventListener(
+            "click", this.closeDeleteModal, false);
+
+        // click ok to delete file(s)
+        STORAGE_CONSTANTS.deleteOkButtonEl.addEventListener(
+            "click", this.deleteFilesHandler, false);
         
         // STORAGE_CONSTANTS.tableBodyEl.addEventListener(
         //     "click", function(event) {
@@ -83,7 +102,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 
     // creates a new directory
-    this.createNewDirectory = function() {
+    this.createNewDirectoryHandler = function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
         var newDirectoryName = STORAGE_EVENT_HANDLERS.unicodeToChar(
             STORAGE_EVENT_HANDLERS.formatString(
@@ -101,7 +120,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 
     // renames a selected file or list of files
-    this.renameFiles = function() {
+    this.renameFilesHandler = function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
         var renameName = STORAGE_EVENT_HANDLERS.unicodeToChar(
             STORAGE_EVENT_HANDLERS.formatString(
@@ -122,6 +141,28 @@ var STORAGE_EVENT_HANDLERS = new function() {
         STORAGE_EVENT_HANDLERS.closeRenameModal();
     };
 
+    
+    // renames a selected file or list of files
+    this.deleteFilesHandler = function() {
+        var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
+        var fileIdsToDelete = STORAGE_EVENT_HANDLERS.getIdsOfClickedElements();
+        fileIdsToDelete = FILE_MANAGER.removeRedundantFilesToDelete(
+            fileIdsToDelete);
+
+        if (fileIdsToDelete.length > 0) {
+            STORAGE_EVENT_HANDLERS.deleteFilesCallback(
+                storagePageName, fileIdsToDelete);
+        }
+        else {
+            console.log("No files selected!");
+            // error
+            // say that files renamed must be > length 0
+            // and that 1 or more files must be selected
+        }
+
+        STORAGE_EVENT_HANDLERS.closeDeleteModal();
+    };
+
 
     // opens the new directory modal
     this.openDirectoryModal = function() {
@@ -133,6 +174,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
         STORAGE_CONSTANTS.renameModalEl.style.display = "block";
     };
 
+    // opens the delete modal
+    this.openDeleteModal = function() {
+        STORAGE_CONSTANTS.deleteModalEl.style.display = "block";
+    };
+
 
     // closes the new directory modal
     this.closeDirectoryModal = function() {
@@ -142,6 +188,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // closes the rename modal
     this.closeRenameModal = function() {
         STORAGE_CONSTANTS.renameModalEl.style.display = "none";
+    };
+
+    // closes the delete modal
+    this.closeDeleteModal = function() {
+        STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
     };
 
 

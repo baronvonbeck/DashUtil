@@ -44,7 +44,8 @@ $.ajaxSetup({
 
 // searches for a storage; if none is found, creates one
 function searchOrCreateAndGoToStorage(storageName, errorCallback) {
-    window.location.href = ALL_CONSTANTS.storagePath + encodeURIComponent( storageName );
+    window.location.href = ALL_CONSTANTS.storagePath + 
+        encodeURIComponent(storageName);
     // $.ajax({
     //     url: ALL_CONSTANTS.storagePath + storageName,
     //     async: true,
@@ -70,7 +71,7 @@ function uploadFileToStorageDB(successCallback, errorCallback, storageName,
         fileData.append("file", filesToUpload[i]);
     }
     $.ajax({
-        url: ALL_CONSTANTS.storagePath + encodeURIComponent( storageName ),
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
         method: 'POST',
         data: fileData,
         cache: false,   
@@ -95,7 +96,7 @@ function createNewDirectoryDB(successCallback, errorCallback, storageName,
     directoryData.append("new_directory_name", newDirectoryName);
     
     $.ajax({
-        url: ALL_CONSTANTS.storagePath + encodeURIComponent( storageName ),
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
         method: 'POST',
         data: directoryData,
         cache: false,   
@@ -120,32 +121,7 @@ function moveFilesToDirectoryDB(successCallback, errorCallback, storageName,
     directoryData.append("file_ids_to_move", fileIdsToMove);
     
     $.ajax({
-        url: ALL_CONSTANTS.storagePath + encodeURIComponent( storageName ),
-        method: 'POST',
-        data: directoryData,
-        cache: false,   
-        processData: false,
-        contentType: false,
-        success: function(data) {
-            successCallback(getJsonFromDataString(data));
-        },
-        error: function(data) {
-            errorCallback(getJsonFromDataString(data), parentDirectoryId);
-        }
-    });
-}
-
-
-// deletes a list of files and directories from the database
-function deleteFilesDB(successCallback, errorCallback, storageName,
-    fileIdsToMove, parentDirectoryId) {
-
-    var directoryData = new FormData();
-    directoryData.append("parent_directory_id", parentDirectoryId);
-    directoryData.append("file_ids_to_move", fileIdsToMove);
-    
-    $.ajax({
-        url: ALL_CONSTANTS.storagePath + encodeURIComponent( storageName ),
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
         method: 'POST',
         data: directoryData,
         cache: false,   
@@ -170,7 +146,7 @@ function renameFilesDB(successCallback, errorCallback, storageName,
     directoryData.append("file_ids_to_rename", fileIdsToRename);
     
     $.ajax({
-        url: ALL_CONSTANTS.storagePath + encodeURIComponent( storageName ),
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
         method: 'POST',
         data: directoryData,
         cache: false,   
@@ -181,6 +157,30 @@ function renameFilesDB(successCallback, errorCallback, storageName,
         },
         error: function(data) {
             errorCallback(getJsonFromDataString(data), parentDirectoryId);
+        }
+    });
+}
+
+
+// deletes a list of files and directories from the database
+function deleteFilesDB(successCallback, errorCallback, storageName,
+    fileIdsToDelete) {
+
+    var directoryData = new FormData();
+    directoryData.append("file_ids_to_delete", fileIdsToDelete);
+    
+    $.ajax({
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
+        method: 'POST',
+        data: directoryData,
+        cache: false,   
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            successCallback(getJsonFromDataString(data));
+        },
+        error: function(data) {
+            errorCallback(getJsonFromDataString(data), null);
         }
     });
 }
@@ -203,7 +203,8 @@ function getJsonFromDataString(dataString) {
 
  // goes to a single file page. if one does not exist, go back to home page
 function searchForAndGoToSingleFile(singlePageId) {
-    window.location.href = ALL_CONSTANTS.singlePath + encodeURIComponent( singlePageId );
+    window.location.href = ALL_CONSTANTS.singlePath + 
+        encodeURIComponent(singlePageId);
     // $.ajax({
     //     url: ALL_CONSTANTS.storagePath + storageName,
     //     async: true,

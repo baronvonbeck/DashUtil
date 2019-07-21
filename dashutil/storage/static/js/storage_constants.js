@@ -24,7 +24,11 @@ const STORAGE_CONSTANTS = new function() {
     this.renameOkButtonEl =         document.getElementById("rename-ok-id");
     this.renameCloseButtonEl =      document.getElementById("rename-cancel-id");
 
-    this.deleteButtonEl =           document.getElementById("delete-button-id");
+    this.deleteModalButtonEl =      document.getElementById("delete-button-id");
+    this.deleteModalEl =            document.getElementById("delete-modal-id");
+    this.deleteModalContentEl =     document.getElementById("delete-modal-content-id");
+    this.deleteOkButtonEl =         document.getElementById("delete-ok-id");
+    this.deleteCloseButtonEl =      document.getElementById("delete-cancel-id");
 
     this.darkThemeClass =      	    "dark-theme";
     this.lightThemeClass =     	    "light-theme";

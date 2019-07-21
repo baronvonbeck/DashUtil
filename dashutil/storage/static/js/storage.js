@@ -5,8 +5,8 @@
 $(document).ready(function() {
 
     // Set up event handlers
-    STORAGE_EVENT_HANDLERS.addAllEventListeners(
-        uploadNewFilesToDirectory, createNewDirectory, renameFiles);
+    STORAGE_EVENT_HANDLERS.addAllEventListeners(uploadNewFilesToDirectory, 
+        createNewDirectory, renameFiles, deleteFiles);
 
     FILE_MANAGER.createStorageFileRecord(
         STORAGE_EVENT_HANDLERS.getStoragePageId(), 
@@ -49,6 +49,15 @@ function renameFiles(storageName, fileIdsToRename, renameName) {
 }
 
 
+// Deletes a file or list of files
+// This method is called back from STORAGE_EVENT_HANDLERS
+function deleteFiles(storageName, fileIdsToDelete) {
+
+    deleteFilesDB(deleteExistingFiles, deleteFailedError,
+        storageName, fileIdsToDelete);
+}
+
+
 // Adds files/directories to the storage page
 function addNewFilesToPage(files) {
 
@@ -59,6 +68,12 @@ function addNewFilesToPage(files) {
 // rename existing files on the page with new information
 function renameExistingFiles(files) {
     FILE_MANAGER.renameExistingFilesOnPage(files);
+}
+
+
+// deletes existing files on the page
+function deleteExistingFiles(files) {
+    FILE_MANAGER.deleteExistingFilesOnPage(files, true);
 }
 
 
@@ -82,6 +97,12 @@ function renameFailedError(errorMessage, parentDirectoryId) {
     // TODO: handle this
 }
 
+// Displays error after file(s) failed to be renamed
+// This method is called back after file(s) failed to be renamed
+function deleteFailedError(errorMessage, parentDirectoryId) {
+    // TODO: handle this
+}
+
 /*****************************************************************************
  * Storage Functions ----- END ------
  *****************************************************************************/
@@ -91,25 +112,6 @@ function renameFailedError(errorMessage, parentDirectoryId) {
 /*****************************************************************************
  * Helper Functions ----- START ------
  *****************************************************************************/
-
-// converts file size to a human readable format, copying django filesizeformat
-// functionality. si determines whether or not to use si standard
-function formatFileSizeToString(bytes, si) {
-    var thresh = si ? 1000 : 1024;
-    if (Math.abs(bytes) < thresh) {
-        return bytes + ' bytes';
-    }
-    var units = si
-        ? ['KB','MB','GB','TB','PB','EB','ZB','YB']
-        : ['KB','MB','GB','TB','PB','EB','ZB','YB']
-        // : ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
-    var u = -1;
-    do {
-        bytes /= thresh;
-        ++u;
-    } while (Math.abs(bytes) >= thresh && u < units.length - 1);
-    return bytes.toFixed(1) + ' ' + units[u];
-}
 
 /*****************************************************************************
  * Helper Functions ----- END ------

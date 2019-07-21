@@ -38,18 +38,19 @@ def s3_multi_part_upload(file_to_upload, s_name):
 
 
 # deletes files for a given upload path from s3, in batch sizes of 1000
-def s3_delete_url_list(urls_to_delete):
+def s3_delete_url_list(urls_to_delete, s_name):
     delete_keys = {'Objects': []}
-    for key in urls_to_delete:
+    for url in urls_to_delete:
+        key = AWS_SUBFOLDER_NAME + '/' + s_name + '/' + url.split('/')[-1]
         delete_keys['Objects'].append({'Key': key})
 
         if (len(delete_keys['Objects']) >= 1000):
-            s3_resource.delete_objects(Bucket=AWS_STORAGE_BUCKET_NAME, 
+            s3_resource.meta.client.delete_objects(Bucket=AWS_STORAGE_BUCKET_NAME, 
                 Delete=delete_keys)
             delete_keys = {'Objects': []}
     
     if (len(delete_keys['Objects'])):
-        s3_resource.delete_objects(Bucket=AWS_STORAGE_BUCKET_NAME, 
+        s3_resource.meta.client.delete_objects(Bucket=AWS_STORAGE_BUCKET_NAME, 
             Delete=delete_keys)
 
 
