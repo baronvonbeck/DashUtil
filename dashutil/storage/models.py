@@ -1,8 +1,8 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-import uuid
+from django.utils import timezone
 from dashutil.S3Boto3Handler import s3_multi_part_upload, s3_delete_url_list
-
+import uuid
 # Managers #
 
 # File_Data manager class
@@ -157,6 +157,7 @@ class File_DataManager(models.Manager):
     def rename_files(self, new_name, files_ids_to_rename):
         bulk_rename_list = []
         new_extension = new_name.split(".")[-1]
+        new_timestamp = timezone.now()
         for file_id in files_ids_to_rename:
             file_to_rename = File_Data.file_datamanager.get_file_data(file_id)
             extension = file_to_rename.filename.split(".")[-1]
@@ -165,10 +166,11 @@ class File_DataManager(models.Manager):
                 file_to_rename.filename = new_name + "." + extension
             else:
                 file_to_rename.filename = new_name
-                
+
+            file_to_rename.modify_timestamp = new_timestamp
             bulk_rename_list.append(file_to_rename)
 
-        self.bulk_update(bulk_rename_list, ['filename'])
+        self.bulk_update(bulk_rename_list, ['filename', 'modify_timestamp'])
         return bulk_rename_list
 
     # compiles a list of files to update by a given size, and performs

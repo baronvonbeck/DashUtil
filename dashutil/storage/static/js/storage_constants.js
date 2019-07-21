@@ -24,6 +24,8 @@ const STORAGE_CONSTANTS = new function() {
     this.renameOkButtonEl =         document.getElementById("rename-ok-id");
     this.renameCloseButtonEl =      document.getElementById("rename-cancel-id");
 
+    this.deleteButtonEl =           document.getElementById("delete-button-id");
+
     this.darkThemeClass =      	    "dark-theme";
     this.lightThemeClass =     	    "light-theme";
     this.fileClass =                "fileobj"
