@@ -51,6 +51,16 @@ class FileObject {
     }
 
 
+    // updates the filename and timestamps of an object
+    updateFilenameAndTimestamps(newFilename, newCreateTimestamp, 
+            newModifyTimestamp) {
+        this.filename = newFilename;
+        this.createTimestamp = new Date(newCreateTimestamp);
+        this.modifyTimestamp = new Date(newModifyTimestamp);
+        this.htmlRepresentation = this.updateHTMLRepresentation();
+    }
+
+
     // updates the HTML Representation of the object
     updateHTMLRepresentation() {
         var fullHTMLStringRepresentation = "";
@@ -58,6 +68,16 @@ class FileObject {
         var column2_createTimestamp = "";
         var column3_modifyTimestamp = "";
         var column4_size = "";
+        var htmlNode = document.getElementById(this.id);
+        var classString = "";
+
+        if (this.parentDirectoryId != null) {
+            classString += STORAGE_CONSTANTS.fileClass;
+        }
+        if (htmlNode && document.getElementById(this.id)
+                .classList.contains(STORAGE_CONSTANTS.selectedClass)) {
+            classString += " " + STORAGE_CONSTANTS.selectedClass;
+        }
 
         if (this.uploadPath != null) {
             column1_filename_path = "<td><a href=" + this.uploadPath + 
@@ -74,7 +94,8 @@ class FileObject {
         column4_size = "<td>" + 
             this.formatFileSizeToString(this.size) + "</td>";
 
-        fullHTMLStringRepresentation = "<tr id=\"" + this.id + "\">" +
+        fullHTMLStringRepresentation = "<tr id=\"" + this.id + 
+            "\" class=\"" + classString + "\">" +
             column1_filename_path + column2_createTimestamp + 
             column3_modifyTimestamp + column4_size + "</tr>";
 

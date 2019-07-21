@@ -38,6 +38,16 @@ var FILE_MANAGER = new function() {
     }
 
 
+    // adds new files to the page. updates the size
+    this.renameExistingFilesOnPage = function(fileList) {
+        for (var i = 0; i < fileList.length; i ++) {
+
+            FILE_MANAGER.renameExistingFileRecord(fileList[i].pk, 
+                fileList[i].fields);    
+        }
+    }
+
+
     // moves files, directories, and their contents from one 
     // directory to another
     this.moveFilesToDirectory = function(destinatiomId, fileIdList, initial) {
@@ -130,7 +140,6 @@ var FILE_MANAGER = new function() {
     }
 
     // creates a single new file, updates id maps, returns the size of created file
-    // TODO: update innerHTML
     this.createNewFileRecord = function(fileId, fileJSONObject) {
         var newFile = new FileObject(fileId, fileJSONObject.filename, 
             fileJSONObject.upload_path, fileJSONObject.create_timestamp, 
@@ -143,7 +152,20 @@ var FILE_MANAGER = new function() {
         FILE_MANAGER.createParentToChildMapEntry(
             fileJSONObject.parent_directory, fileId);
 
-        STORAGE_CONSTANTS.tableBodyEl.innerHTML += newFile.getHTMLRepresentation;
+        STORAGE_CONSTANTS.tableBodyEl.insertAdjacentHTML('beforeend', 
+            newFile.getHTMLRepresentation);
+        STORAGE_EVENT_HANDLERS.activateClickToSelectItemCallback(fileId);
+    }
+
+
+    // creates a single new file, updates id maps, returns the size of created file
+    this.renameExistingFileRecord = function(fileId, fileJSONObject) {
+        FILE_MANAGER.idToFileMap.get(fileId).updateFilenameAndTimestamps(
+            fileJSONObject.filename, fileJSONObject.create_timestamp, 
+            fileJSONObject.modify_timestamp);
+
+        document.getElementById(fileId).innerHTML = 
+            FILE_MANAGER.idToFileMap.get(fileId).getHTMLRepresentation;
 
         // TODO: update innerHTML so that parent now contains the new fileID
         // document.getElementById(destinationId).innerHTML = 

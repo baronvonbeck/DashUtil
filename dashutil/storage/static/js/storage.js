@@ -44,7 +44,7 @@ function createNewDirectory(storageName, newDirectoryName, parentDirectoryId) {
 // This method is called back from STORAGE_EVENT_HANDLERS
 function renameFiles(storageName, fileIdsToRename, renameName) {
 
-    renameFilesDB(addNewFilesToPage, renameFailedError,
+    renameFilesDB(renameExistingFiles, renameFailedError,
         storageName, fileIdsToRename, renameName);
 }
 
@@ -53,6 +53,12 @@ function renameFiles(storageName, fileIdsToRename, renameName) {
 function addNewFilesToPage(files) {
 
     FILE_MANAGER.addNewFileListToPage(files);
+}
+
+
+// rename existing files on the page with new information
+function renameExistingFiles(files) {
+    FILE_MANAGER.renameExistingFilesOnPage(files);
 }
 
 

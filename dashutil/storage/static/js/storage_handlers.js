@@ -25,7 +25,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 	
 	// Handler to set up event listeners. 1 callback passed in from storage.js
     this.addAllEventListeners = function(newUploadNewFileToDirectoryCallback, 
-        newCreateNewDirectoryCallback) {
+        newCreateNewDirectoryCallback, newRenameFilesCallback) {
 
 		this.uploadNewFileToDirectoryCallback = newUploadNewFileToDirectoryCallback;
         this.createNewDirectoryCallback = newCreateNewDirectoryCallback;
@@ -52,7 +52,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
         // rename modal button
         STORAGE_CONSTANTS.renameModalButtonEl.addEventListener(
-            "click", this.openRenameyModal, false);
+            "click", this.openRenameModal, false);
 
         // close rename modal by clicking cancel
         STORAGE_CONSTANTS.renameCloseButtonEl.addEventListener(
@@ -61,6 +61,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
         // click ok to rename file(s)
         STORAGE_CONSTANTS.renameOkButtonEl.addEventListener(
             "click", this.renameFiles, false);
+        
+        // STORAGE_CONSTANTS.tableBodyEl.addEventListener(
+        //     "click", function(event) {
+        //         console.log(event.target);
+        //     }
+        // )
 
         
         // click off of modals to close
@@ -102,11 +108,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 STORAGE_CONSTANTS.renameTextEl.value));
         var fileIdsToRename = STORAGE_EVENT_HANDLERS.getIdsOfClickedElements();
 
-        if (renameName.length > 0 && filesToRename.length > 0) {
+        if (renameName.length > 0 && fileIdsToRename.length > 0) {
             STORAGE_EVENT_HANDLERS.renameFilesCallback(
                 storagePageName, fileIdsToRename, renameName);
         }
         else {
+            console.log("No files selected or length of new name is less than 0!");
             // error
             // say that files renamed must be > length 0
             // and that 1 or more files must be selected
@@ -138,7 +145,14 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
 
-    
+    // adds click callbacks to see selected files
+    this.activateClickToSelectItemCallback = function(itemId) {
+        document.getElementById(itemId).addEventListener(
+            "click", function(event) {
+                this.classList.toggle(
+                    STORAGE_CONSTANTS.selectedClass);
+            }, false);
+    }
     
     
     // handles uploading of the file to the storage room or a subdirectory
@@ -180,20 +194,14 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
     // gets the id(s) of clicked elements
     this.getIdsOfClickedElements = function() {
-        var idList = [];
-        var parentDirectoryId = STORAGE_EVENT_HANDLERS.getStoragePageId();
+        var htmlList = document.getElementsByClassName(
+            STORAGE_CONSTANTS.fileClass + " " + STORAGE_CONSTANTS.selectedClass);
 
-        /* Psuedocode, fill in later when implementation catches up 
-        if (context of the file is the storage page itself, base directory)
-            parentDirectoryId = this.getStoragePageId();
-        else {
-            if uploadPath of clicked directory == null
-                parentDirectoryId = the clicked directory
-            else
-                // element clicked wasn't a directory, it was a regular file
-                parentDirectoryId = parent directory of the clicked file
+        var idList = [];
+
+        for (var i = 0; i < htmlList.length; i ++) {
+            idList.push(htmlList[i].id);
         }
-        */
 
         return idList;
     };

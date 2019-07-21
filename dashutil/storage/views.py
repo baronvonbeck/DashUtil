@@ -53,13 +53,15 @@ def storage_page(request, storage_page_name):
 
         elif ('file_ids_to_rename' in data):
             renamed_file_name = data['renamed_file_name']
-            files_to_rename = data['file_ids_to_rename']
+            files_ids_to_rename = data['file_ids_to_rename'].split(",")
 
             return_data = File_Data.file_datamanager.rename_files(
-                renamed_file_name, files_to_rename) 
+                renamed_file_name, files_ids_to_rename) 
 
         else:
             files_to_post = request.FILES.getlist('file')
+            parent_directory = File_Data.file_datamanager.get_file_data(
+                data['parent_directory_id'])
             
             size_increase, return_data = File_Data.file_datamanager.upload_new_files(
                 parent_directory, storage_page_name, files_to_post)

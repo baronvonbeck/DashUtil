@@ -26,4 +26,7 @@ const STORAGE_CONSTANTS = new function() {
 
     this.darkThemeClass =      	    "dark-theme";
     this.lightThemeClass =     	    "light-theme";
+    this.fileClass =                "fileobj"
+    this.selectedClass =            "selected";
+    
 };

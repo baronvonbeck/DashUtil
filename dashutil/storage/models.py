@@ -152,16 +152,24 @@ class File_DataManager(models.Manager):
         return bulk_url_delete_list
             
 
-    # renames a file to the given filename
-    def rename_files(self, new_name, files_to_rename):
+    # renames a file to the given filename. automatically append correct extension
+    # if necessary
+    def rename_files(self, new_name, files_ids_to_rename):
         bulk_rename_list = []
-        for file_id in files_to_rename:
+        new_extension = new_name.split(".")[-1]
+        for file_id in files_ids_to_rename:
             file_to_rename = File_Data.file_datamanager.get_file_data(file_id)
-            file_to_rename.filename = new_name
+            extension = file_to_rename.filename.split(".")[-1]
+            if (extension != new_extension and
+                file_to_rename.upload_path is not None):
+                file_to_rename.filename = new_name + "." + extension
+            else:
+                file_to_rename.filename = new_name
+                
             bulk_rename_list.append(file_to_rename)
 
         self.bulk_update(bulk_rename_list, ['filename'])
-        return files_to_rename
+        return bulk_rename_list
 
     # compiles a list of files to update by a given size, and performs
     # a bulk update on that list

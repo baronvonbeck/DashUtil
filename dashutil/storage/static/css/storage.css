@@ -37,6 +37,17 @@ table thead {
     border-bottom: 2px solid #eceeef; 
 }
 
+tr.fileobj {
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+tr.fileobj.selected {
+    background-color: #bdbdbd;
+}
+
+
+
 
 
 /* Modal Content/Box */

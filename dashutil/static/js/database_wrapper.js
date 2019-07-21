@@ -187,9 +187,8 @@ function renameFilesDB(successCallback, errorCallback, storageName,
 
 
 function getJsonFromDataString(dataString) {
-    return JSON.parse(dataString.replace('\'upload_path\': None', 
-                '\'upload_path\': null').replace(/[']+/g, '"')
-            );
+    return JSON.parse(dataString.replace(/'upload_path': None/g, 
+                '\'upload_path\': null').replace(/[']+/g, '"'));
 }
 
 /*****************************************************************************
