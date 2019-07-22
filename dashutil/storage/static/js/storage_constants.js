@@ -36,4 +36,8 @@ const STORAGE_CONSTANTS = new function() {
     
     this.ulIDAppend =               "__ul";
     this.infoIDAppend =             "__in";
+
+    this.createdText =              "Created: ";
+    this.modifiedText =             "Modified: ";
+    this.sizeText =                 "Size";
 };

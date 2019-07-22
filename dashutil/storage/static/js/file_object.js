@@ -67,7 +67,7 @@ class FileObject {
     }
 
 
-    // updates the HTML Representation of the object
+    // updates the HTML representations of the object
     updateHTMLRepresentation() {
         var fullHTMLStringRepresentation = "";
         var column1_filename_path = "";
@@ -87,11 +87,13 @@ class FileObject {
         }
 
         if (this.uploadPath != null) {
-            column1_filename_path = "<div class=\"fileinfo\"><a href=" + this.uploadPath + 
-                " target=\"_blank\">" + this.filename + "</a></div>";
+            column1_filename_path = "<div class=\"fileinfo\"><a href=" + 
+                this.uploadPath + " target=\"_blank\">" + 
+                this.filename + "</a></div>";
         }
         else {
-            column1_filename_path = "<div class=\"fileinfo\">" + this.filename + "</div>";
+            column1_filename_path = "<div class=\"fileinfo\">" + 
+                this.filename + "</div>";
 
             if (this.level > 0) {
                 directoryAddUL = "<ul id=\"" + this.id + 
@@ -151,13 +153,12 @@ class FileObject {
             return bytes + ' bytes';
         }
         var units = si
-            ? ['KB','MB','GB','TB','PB','EB','ZB','YB']
-            : ['KB','MB','GB','TB','PB','EB','ZB','YB']
-            // : ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
+            ? ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB']
+            : ['KB','MB','GB','TB','PB','EB','ZB','YB'];
         var u = -1;
         do {
             bytes /= thresh;
-            ++u;
+            ++ u;
         } while (Math.abs(bytes) >= thresh && u < units.length - 1);
         return bytes.toFixed(2) + ' ' + units[u];
     }

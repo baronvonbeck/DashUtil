@@ -15,6 +15,9 @@ $(document).ready(function() {
     FILE_MANAGER.addExistingFileListToPage(
         STORAGE_EVENT_HANDLERS.getJsonFromDataString(
             storageFiles.textContent));
+
+    document.getElementById("storageFiles").remove();
+    document.getElementById("storagePage").remove();
 }); 
 
 
@@ -24,7 +27,8 @@ $(document).ready(function() {
 
 // Uploads a new file to a given directory within a storage
 // This method is called back from STORAGE_EVENT_HANDLERS
-function uploadNewFilesToDirectory(storageName, filesToUpload, parentDirectoryId) {
+function uploadNewFilesToDirectory(storageName, filesToUpload, 
+    parentDirectoryId) {
 
     uploadFileToStorageDB(addNewFilesToPage, fileUploadFailedError,
         storageName, filesToUpload, parentDirectoryId);

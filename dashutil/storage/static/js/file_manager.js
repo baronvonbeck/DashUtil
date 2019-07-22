@@ -20,7 +20,7 @@ var FILE_MANAGER = new function() {
         }
     }
 
-    // adds new files to the page. updates the size
+    // adds new files to the page, updates the size
     this.addNewFileListToPage = function(fileList) {
         var sizeChange = 0;
 
