@@ -6,9 +6,8 @@
 const STORAGE_CONSTANTS = new function() {
     this.uploadFieldEl =            document.getElementById("submit-file-id");
     this.uploadButtonEl =           document.getElementById("submit-button-id");
-    this.tableIdEl   =              document.getElementById("table-id");
-    this.tableBodyEl =              this.tableIdEl.getElementsByTagName("tbody")[0];
     this.storagePageInfoEl =        document.getElementById("storage-page-info-id");
+    this.listIdEl   =               document.getElementById("file-list-temp-id");
 
     this.directoryModalButtonEl =   document.getElementById("directory-modal-button-id");
     this.directoryModalEl =         document.getElementById("directory-modal-id");
@@ -35,4 +34,6 @@ const STORAGE_CONSTANTS = new function() {
     this.fileClass =                "fileobj"
     this.selectedClass =            "selected";
     
+    this.ulIDAppend =               "__ul";
+    this.infoIDAppend =             "__in";
 };

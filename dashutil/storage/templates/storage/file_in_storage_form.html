@@ -37,24 +37,19 @@
     <div id="delete-modal-id" class="modal">
         <div id="delete-modal-content-id" class="modal-content">
             <p>All files, directories, and their contents will be deleted.</p>
-            <p>You will not be able to recover them</p>
+            <p>You will not be able to recover them.</p>
             <p>Are you sure you want to delete the file(s)?</p>
             <button id="delete-ok-id">OK</button>
             <button id="delete-cancel-id">Cancel</button>
         </div>
     </div>
 
-    <table id="storage-page-info-id"></div>
+    <div id="storage-page-info-id"></div>
 
-    <table id="table-id">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Created</th>
-                <th>Modified</th>
-                <th>Size</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <h3>Files:</h3>
+
+    <div class="file-list">
+        <ul id="file-list-temp-id"></ul>
+    </div>
+
 {% endblock %}

@@ -16,11 +16,17 @@ class FileObject {
         this.size = newSize;
         this.parentDirectoryId = newParentDirectoryId;
         this.level = newLevel;
-        this.htmlRepresentation = this.updateHTMLRepresentation();
+        this.fullHtmlRepresentation = "";
+        this.infoHtmlRepresentation = "";
+        this.updateHTMLRepresentation();
     }
 
-    get getHTMLRepresentation() {
-        return this.htmlRepresentation;
+    get getFullHTMLRepresentation() {
+        return this.fullHtmlRepresentation;
+    }
+
+    get getInfoHTMLRepresentation() {
+        return this.infoHtmlRepresentation;
     }
 
     get getId() {
@@ -39,7 +45,7 @@ class FileObject {
     // updates the size of the object. size will be negative or positive
     updateSize(sizeChange) {
         this.size += sizeChange;
-        this.htmlRepresentation = this.updateHTMLRepresentation();
+        this.updateHTMLRepresentation();
     }
 
 
@@ -47,7 +53,7 @@ class FileObject {
     // down the file is within the context of the storage page
     updateLevel(newLevel) {
         this.level = newLevel;
-        this.htmlRepresentation = this.updateHTMLRepresentation();
+        this.updateHTMLRepresentation();
     }
 
 
@@ -57,7 +63,7 @@ class FileObject {
         this.filename = newFilename;
         this.createTimestamp = new Date(newCreateTimestamp);
         this.modifyTimestamp = new Date(newModifyTimestamp);
-        this.htmlRepresentation = this.updateHTMLRepresentation();
+        this.updateHTMLRepresentation();
     }
 
 
@@ -69,37 +75,53 @@ class FileObject {
         var column3_modifyTimestamp = "";
         var column4_size = "";
         var htmlNode = document.getElementById(this.id);
+        var directoryAddUL = "";
         var classString = "";
 
         if (this.parentDirectoryId != null) {
             classString += STORAGE_CONSTANTS.fileClass;
         }
-        if (htmlNode && document.getElementById(this.id)
-                .classList.contains(STORAGE_CONSTANTS.selectedClass)) {
-            classString += " " + STORAGE_CONSTANTS.selectedClass;
+        if (htmlNode && htmlNode.classList.contains(
+            STORAGE_CONSTANTS.selectedClass)) {
+                classString += " " + STORAGE_CONSTANTS.selectedClass;
         }
 
         if (this.uploadPath != null) {
-            column1_filename_path = "<td><a href=" + this.uploadPath + 
-            " target=\"_blank\">" + this.filename + "</a></td>";
+            column1_filename_path = "<div class=\"fileinfo\"><a href=" + this.uploadPath + 
+                " target=\"_blank\">" + this.filename + "</a></div>";
         }
         else {
-            column1_filename_path = "<td>" + this.filename + "</td>"
+            column1_filename_path = "<div class=\"fileinfo\">" + this.filename + "</div>";
+
+            if (this.level > 0) {
+                directoryAddUL = "<ul id=\"" + this.id + 
+                    STORAGE_CONSTANTS.ulIDAppend + "\">";
+
+                if (document.getElementById(
+                    this.id + STORAGE_CONSTANTS.ulIDAppend)) {
+                        directoryAddUL += document.getElementById(
+                            this.id + STORAGE_CONSTANTS.ulIDAppend).innerText;
+                }
+                directoryAddUL += "</ul>";
+            }
         }
 
-        column2_createTimestamp = "<td>" + 
-            this.formatDateToString(this.createTimestamp) + "</td>";
-        column3_modifyTimestamp = "<td>" + 
-            this.formatDateToString(this.modifyTimestamp) + "</td>";
-        column4_size = "<td>" + 
-            this.formatFileSizeToString(this.size) + "</td>";
+        column2_createTimestamp = "<div class=\"fileinfo\">" + 
+            this.formatDateToString(this.createTimestamp) + "</div>";
+        column3_modifyTimestamp = "<div class=\"fileinfo\">" + 
+            this.formatDateToString(this.modifyTimestamp) + "</div>";
+        column4_size = "<div class=\"fileinfo\">" + 
+            this.formatFileSizeToString(this.size) + "</div>";
 
-        fullHTMLStringRepresentation = "<tr id=\"" + this.id + 
-            "\" class=\"" + classString + "\">" +
-            column1_filename_path + column2_createTimestamp + 
-            column3_modifyTimestamp + column4_size + "</tr>";
+        fullHTMLStringRepresentation = "<li id=\"" + this.id + 
+            "\" class=\"" + classString + "\"><div id=\"" + this.id + 
+            STORAGE_CONSTANTS.infoIDAppend + "\">" + column1_filename_path + 
+            column2_createTimestamp + column3_modifyTimestamp + column4_size +
+            "</div>" + directoryAddUL + "</li>";
 
-        return fullHTMLStringRepresentation;
+        this.fullHtmlRepresentation = fullHTMLStringRepresentation;
+        this.infoHtmlRepresentation = column1_filename_path + 
+            column2_createTimestamp + column3_modifyTimestamp + column4_size;
     }
 
 

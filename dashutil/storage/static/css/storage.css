@@ -9,6 +9,10 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+ul, li {
+    list-style: none;
+}
+
 .container {
     width: 80%;
     border: 1px solid #ddd;
@@ -37,16 +41,31 @@ table thead {
     border-bottom: 2px solid #eceeef; 
 }
 
-tr.fileobj {
+li.fileobj {
     cursor: pointer;
     background-color: #ffffff;
 }
 
-tr.fileobj.selected {
+li.fileobj.selected {
     background-color: #bdbdbd;
 }
 
 
+.fileinfo {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+#storage-page-info-id {
+    margin-top: 40px;
+}
+
+/* #storage-page-info-id li, .file-list ul {
+} */
+
+.file-list {
+    margin-left: -40px;
+}
 
 
 
