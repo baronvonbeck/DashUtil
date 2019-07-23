@@ -8,7 +8,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 	// Method to call back to upload a new file. Takes storage page name, 
 	// file uploaded, and parent directory id as parameters
-    this.uploadNewFileToDirectoryCallback = null;
+    this.uploadNewFilesToDirectoryCallback = null;
     
     // Method to call back to create a new directory. Takes storage page name, 
 	// file uploaded, and parent directory id as parameters
@@ -28,19 +28,27 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.storagePageFields = null;
 	
 	// Handler to set up event listeners. 1 callback passed in from storage.js
-    this.addAllEventListeners = function(newUploadNewFileToDirectoryCallback, 
+    this.addAllEventListeners = function(newUploadNewFilesToDirectoryCallback, 
             newCreateNewDirectoryCallback, newRenameFilesCallback, 
             newDeleteFilesCallback) {
 
-		this.uploadNewFileToDirectoryCallback = newUploadNewFileToDirectoryCallback;
+		this.uploadNewFilesToDirectoryCallback = newUploadNewFilesToDirectoryCallback;
         this.createNewDirectoryCallback = newCreateNewDirectoryCallback;
         this.renameFilesCallback = newRenameFilesCallback;
         this.deleteFilesCallback = newDeleteFilesCallback;
 
 
-	    // submit file button click
+        // upload new files modal button
+        STORAGE_CONSTANTS.uploadModalButtonEl.addEventListener(
+            "click", this.openUploadModal, false);
+
+        // close upload files modal by clicking cancel
+        STORAGE_CONSTANTS.uploadCloseButtonEl.addEventListener(
+            "click", this.closeUploadModal, false);
+
+	    // click upload to upload new file(s)
 	    STORAGE_CONSTANTS.uploadButtonEl.addEventListener(
-            "click", this.uploadNewFileToDirectoryHandler, false);
+            "click", this.uploadNewFilesToDirectoryHandler, false);
             
 
         // create new directory modal button
@@ -80,24 +88,90 @@ var STORAGE_EVENT_HANDLERS = new function() {
         // click ok to delete file(s)
         STORAGE_CONSTANTS.deleteOkButtonEl.addEventListener(
             "click", this.deleteFilesHandler, false);
-        
-        // STORAGE_CONSTANTS.tableBodyEl.addEventListener(
-        //     "click", function(event) {
-        //         console.log(event.target);
-        //     }
-        // )
 
         
         // click off of modals to close
         window.addEventListener(
             "click", function(event) {
-                if (event.target == STORAGE_CONSTANTS.directoryModalEl)
+                if (event.target == STORAGE_CONSTANTS.uploadModalEl)
+                    STORAGE_EVENT_HANDLERS.closeUploadModal();
+                else if (event.target == STORAGE_CONSTANTS.directoryModalEl)
                     STORAGE_EVENT_HANDLERS.closeDirectoryModal();
                 else if (event.target == STORAGE_CONSTANTS.renameModalEl)
                     STORAGE_EVENT_HANDLERS.closeRenameModal();
+                else if (event.target == STORAGE_CONSTANTS.renameModalEl)
+                    STORAGE_EVENT_HANDLERS.closeDeleteModal();
             }, false);
+    };
 
-        
+
+    
+    // opens the upload new file modal
+    this.openUploadModal = function() {
+        STORAGE_CONSTANTS.uploadModalEl.style.display = "block";
+    };
+
+    // opens the new directory modal
+    this.openDirectoryModal = function() {
+        STORAGE_CONSTANTS.directoryModalEl.style.display = "block";
+    };
+
+    // opens the rename modal
+    this.openRenameModal = function() {
+        STORAGE_CONSTANTS.renameModalEl.style.display = "block";
+    };
+
+    // opens the delete modal
+    this.openDeleteModal = function() {
+        STORAGE_CONSTANTS.deleteModalEl.style.display = "block";
+    };
+
+
+    // closes the upload new file modal
+    this.closeUploadModal = function() {
+        STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
+    };
+
+    // closes the new directory modal
+    this.closeDirectoryModal = function() {
+        STORAGE_CONSTANTS.directoryModalEl.style.display = "none";
+    };
+
+    // closes the rename modal
+    this.closeRenameModal = function() {
+        STORAGE_CONSTANTS.renameModalEl.style.display = "none";
+    };
+
+    // closes the delete modal
+    this.closeDeleteModal = function() {
+        STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
+    };
+
+
+    // adds click callbacks to see selected files
+    this.activateClickToSelectItemCallback = function(itemId) {
+        document.getElementById(itemId).addEventListener(
+            "click", function(event) {
+                this.classList.toggle(
+                    STORAGE_CONSTANTS.selectedClass);
+            }, false);
+    };
+    
+    
+    // handles uploading of the file to the storage room or a subdirectory
+    // using the callback provided
+	this.uploadNewFilesToDirectoryHandler = function() {
+        var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
+        var filesToUpload = STORAGE_CONSTANTS.uploadFieldEl.files;
+        var parentDirectoryId = 
+            STORAGE_EVENT_HANDLERS.getParentDirectoriesForAction();
+
+        if (filesToUpload.length > 0 && parentDirectoryId.length == 1) {
+            STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryCallback(
+                storagePageName, filesToUpload, parentDirectoryId[0]);
+
+            STORAGE_CONSTANTS.uploadFieldEl.value = '';
+        }
     };
 
 
@@ -108,11 +182,17 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_EVENT_HANDLERS.formatString(
                 STORAGE_CONSTANTS.directoryTextEl.value));
         var parentDirectoryId = 
-            STORAGE_EVENT_HANDLERS.getParentDirectoryForAction();
+            STORAGE_EVENT_HANDLERS.getParentDirectoriesForAction();
 
-        if (newDirectoryName.length > 0) {
+        console.log(parentDirectoryId);
+        console.log(parentDirectoryId[0]);
+
+        if (newDirectoryName.length > 0 && parentDirectoryId.length == 1) {
             STORAGE_EVENT_HANDLERS.createNewDirectoryCallback(
-                storagePageName, newDirectoryName, parentDirectoryId);
+                storagePageName, newDirectoryName, parentDirectoryId[0]);
+        }
+        else {
+            console.log("No");
         }
 
         STORAGE_EVENT_HANDLERS.closeDirectoryModal();
@@ -164,82 +244,26 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
 
-    // opens the new directory modal
-    this.openDirectoryModal = function() {
-        STORAGE_CONSTANTS.directoryModalEl.style.display = "block";
-    };
-
-    // opens the rename modal
-    this.openRenameModal = function() {
-        STORAGE_CONSTANTS.renameModalEl.style.display = "block";
-    };
-
-    // opens the delete modal
-    this.openDeleteModal = function() {
-        STORAGE_CONSTANTS.deleteModalEl.style.display = "block";
-    };
 
 
-    // closes the new directory modal
-    this.closeDirectoryModal = function() {
-        STORAGE_CONSTANTS.directoryModalEl.style.display = "none";
-    };
+    // returns the parent directories an action corresponds too, based on 
+    // current selected ids of clicked elements
+    this.getParentDirectoriesForAction = function() {
+        var idClickedList = STORAGE_EVENT_HANDLERS.getIdsOfClickedElements();
 
-    // closes the rename modal
-    this.closeRenameModal = function() {
-        STORAGE_CONSTANTS.renameModalEl.style.display = "none";
-    };
-
-    // closes the delete modal
-    this.closeDeleteModal = function() {
-        STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
-    };
-
-
-    // adds click callbacks to see selected files
-    this.activateClickToSelectItemCallback = function(itemId) {
-        document.getElementById(itemId).addEventListener(
-            "click", function(event) {
-                this.classList.toggle(
-                    STORAGE_CONSTANTS.selectedClass);
-            }, false);
-    }
-    
-    
-    // handles uploading of the file to the storage room or a subdirectory
-    // using the callback provided
-	this.uploadNewFileToDirectoryHandler = function() {
-        var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
-        var filesToUpload = STORAGE_CONSTANTS.uploadFieldEl.files;
-        var parentDirectoryId = 
-            STORAGE_EVENT_HANDLERS.getParentDirectoryForAction();
-
-        if (filesToUpload.length > 0) {
-            STORAGE_EVENT_HANDLERS.uploadNewFileToDirectoryCallback(
-                storagePageName, filesToUpload, parentDirectoryId);
-
-            STORAGE_CONSTANTS.uploadFieldEl.value = '';
+        if (idClickedList.length == 0) {
+            return [STORAGE_EVENT_HANDLERS.getStoragePageId()];
         }
-    };
 
+        for (var i = 0; i < idClickedList.length; i ++) {
+            var clickedFile = FILE_MANAGER.idToFileMap.get(idClickedList[i]);
 
-    // returns the parent directory an action corresponds too
-    this.getParentDirectoryForAction = function() {
-        var parentDirectoryId = STORAGE_EVENT_HANDLERS.getStoragePageId();
-
-        /* Psuedocode, fill in later when implementation catches up 
-        if (context of the file is the storage page itself, base directory)
-            parentDirectoryId = this.getStoragePageId();
-        else {
-            if uploadPath of clicked directory == null
-                parentDirectoryId = the clicked directory
-            else
-                // element clicked wasn't a directory, it was a regular file
-                parentDirectoryId = parent directory of the clicked file
+            if (clickedFile.getUploadPath) {
+                idClickedList[i] = clickedFile.getParentDirectoryId;
+            }
         }
-        */
-
-        return parentDirectoryId;
+        
+        return idClickedList;
     };
 
 

@@ -41,6 +41,10 @@ class FileObject {
         return this.size;
     }
 
+    get getUploadPath() {
+        return this.uploadPath;
+    }
+
 
     // updates the size of the object. size will be negative or positive
     updateSize(sizeChange) {

@@ -4,10 +4,16 @@
 
 // Storage constants
 const STORAGE_CONSTANTS = new function() {
-    this.uploadFieldEl =            document.getElementById("submit-file-id");
-    this.uploadButtonEl =           document.getElementById("submit-button-id");
+
     this.storagePageInfoEl =        document.getElementById("storage-page-info-id");
     this.listIdEl   =               document.getElementById("file-list-temp-id");
+
+    this.uploadModalButtonEl =      document.getElementById("upload-modal-button-id");
+    this.uploadModalEl =            document.getElementById("upload-modal-id");
+    this.uploadModalContentEl =     document.getElementById("upload-modal-content-id");
+    this.uploadFieldEl =            document.getElementById("upload-file-id");
+    this.uploadButtonEl =           document.getElementById("upload-button-id");
+    this.uploadCloseButtonEl =      document.getElementById("upload-cancel-id");
 
     this.directoryModalButtonEl =   document.getElementById("directory-modal-button-id");
     this.directoryModalEl =         document.getElementById("directory-modal-id");

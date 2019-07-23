@@ -4,11 +4,25 @@
     <h2>Public Uploads</h2>
     <h3>Upload to Amazon S3</h3>
 
-    <div>
-        {% csrf_token %}
-        {{ form }}
-        <input type="file" id="submit-file-id" multiple>
-        <button type="submit" id="submit-button-id">Submit</button>
+    
+
+    <button id="upload-modal-button-id">Upload File(s)</button>
+    <div id="upload-modal-id" class="modal">
+        <div id="upload-modal-content-id" class="modal-content">
+            <p>Upload files to the specified directory.</p>
+            <p>If no directory is chosen, files will be uploaded to the
+                 top level.</p>
+            <p>If a non-directory file is chosen, the file will be uploaded 
+                 to that file's parent directory.</p>
+            <p>Please choose only one destination, I am poor</p>
+            <div>
+                {% csrf_token %}
+                {{ form }}
+                <input type="file" id="upload-file-id" multiple>
+                <button type="submit" id="upload-button-id">Upload</button>
+            </div>
+            <button id="upload-cancel-id">Cancel</button>
+        </div>
     </div>
 
     <button id="directory-modal-button-id">Create New Folder</button>
@@ -36,7 +50,7 @@
     <button id="delete-button-id">Delete File(s)</button>
     <div id="delete-modal-id" class="modal">
         <div id="delete-modal-content-id" class="modal-content">
-            <p>All files, directories, and their contents will be deleted.</p>
+            <p>All specified files, directories, and their contents will be deleted.</p>
             <p>You will not be able to recover them.</p>
             <p>Are you sure you want to delete the file(s)?</p>
             <button id="delete-ok-id">OK</button>
