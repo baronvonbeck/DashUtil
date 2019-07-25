@@ -70,10 +70,35 @@ function uploadFileToStorageDB(successCallback, errorCallback, storageName,
     for (var i = 0; i < filesToUpload.length; i ++) {
         fileData.append("file", filesToUpload[i]);
     }
+
     $.ajax({
         url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
         method: 'POST',
         data: fileData,
+        cache: false,   
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            successCallback(getJsonFromDataString(data));
+        },
+        error: function(data) {
+            errorCallback(getJsonFromDataString(data), parentDirectoryId);
+        }
+    });
+}
+
+
+// gets the files within a directory on a storge page
+function getFilesWithinDirectoryDB(successCallback, errorCallback, storageName,
+    directoryId) {
+
+    var directoryData = new FormData();
+    directoryData.append("directory_id", directoryId);
+
+    $.ajax({
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
+        method: 'POST',
+        data: directoryData,
         cache: false,   
         processData: false,
         contentType: false,
@@ -103,6 +128,8 @@ function createNewDirectoryDB(successCallback, errorCallback, storageName,
         processData: false,
         contentType: false,
         success: function(data) {
+            console.log('new directory created');
+            console.log(data);
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
@@ -177,6 +204,7 @@ function deleteFilesDB(successCallback, errorCallback, storageName,
         processData: false,
         contentType: false,
         success: function(data) {
+            console.log(data);
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {

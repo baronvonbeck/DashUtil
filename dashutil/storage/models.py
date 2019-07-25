@@ -33,7 +33,6 @@ class File_DataManager(models.Manager):
     # return the child files of the storage
     def get_children_of_directory(self, directory):
         
-
         # TODO: default filter for return (directories first, 
         # first created, last updated, first updated, etc)
         return self.filter(parent_directory=directory)

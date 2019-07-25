@@ -20,12 +20,12 @@ ul, li {
     margin: 40px auto;
 }
 
-li.fileobj {
+.fileobj {
     cursor: pointer;
     background-color: #ffffff;
 }
 
-li.fileobj.selected {
+.fileobj.selected {
     background-color: #bdbdbd;
 }
 

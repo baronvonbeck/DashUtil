@@ -23,7 +23,8 @@ def storage_page(request, storage_page_name):
     if request.method == "GET":
         context = _get_context_for_storage(storage_page_name)
         
-        return render(request, 'storage/file_in_storage_form.html', context)
+        return render(request, 'storage/file_in_storage_form.html',
+            context)
   
     elif request.method == "POST":
         data = request.POST.dict()
@@ -35,7 +36,7 @@ def storage_page(request, storage_page_name):
             new_directory_name = data['new_directory_name']
 
             return_data = File_Data.file_datamanager.create_new_directory(
-                parent_directory, new_directory_name) 
+                parent_directory, new_directory_name)
 
         elif ('file_ids_to_move' in data):
             parent_directory = File_Data.file_datamanager.get_file_data(
@@ -57,6 +58,13 @@ def storage_page(request, storage_page_name):
 
             return_data = File_Data.file_datamanager.delete_files(
                 file_ids_to_delete, storage_page_name) 
+
+        elif ('directory_id' in data):
+            directory = File_Data.file_datamanager.get_file_data(
+                data['directory_id'])
+
+            return_data = File_Data.file_datamanager.get_children_of_directory(
+                directory)            
 
         else:
             files_to_post = request.FILES.getlist('file')

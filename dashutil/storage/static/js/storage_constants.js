@@ -42,6 +42,7 @@ const STORAGE_CONSTANTS = new function() {
     
     this.ulIDAppend =               "__ul";
     this.infoIDAppend =             "__in";
+    this.liIDAppend =               "__li";
 
     this.createdText =              "Created: ";
     this.modifiedText =             "Modified: ";

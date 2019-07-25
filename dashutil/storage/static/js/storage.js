@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     // Set up event handlers
     STORAGE_EVENT_HANDLERS.addAllEventListeners(uploadNewFilesToDirectory, 
-        createNewDirectory, renameFiles, deleteFiles);
+        createNewDirectory, renameFiles, deleteFiles, getFilesWithinDirectory);
 
     FILE_MANAGER.createStorageFileRecord(
         STORAGE_EVENT_HANDLERS.getStoragePageId(), 
@@ -34,6 +34,14 @@ function uploadNewFilesToDirectory(storageName, filesToUpload,
         storageName, filesToUpload, parentDirectoryId);
 }
 
+
+// Gets child files for a given directory
+// This method is called back from STORAGE_EVENT_HANDLERS
+function getFilesWithinDirectory(storageName, directoryId) {
+
+    getFilesWithinDirectoryDB(addExistingFilesToPage, 
+        directoryExpandFailedError, storageName, directoryId);
+}
 
 // Creates a new directory under a given directory within a storage
 // This method is called back from STORAGE_EVENT_HANDLERS
@@ -64,8 +72,13 @@ function deleteFiles(storageName, fileIdsToDelete) {
 
 // Adds files/directories to the storage page
 function addNewFilesToPage(files) {
-
     FILE_MANAGER.addNewFileListToPage(files);
+}
+
+
+// Adds files/directories to the storage page
+function addExistingFilesToPage(files) {
+    FILE_MANAGER.addExistingFileListToPage(files);
 }
 
 
@@ -77,13 +90,20 @@ function renameExistingFiles(files) {
 
 // deletes existing files on the page
 function deleteExistingFiles(files) {
-    FILE_MANAGER.deleteExistingFilesOnPage(files, true);
+    FILE_MANAGER.deleteExistingFilesOnPage(files);
 }
 
 
 // Displays error after a file failed to upload
 // This method is called back after a file failed to upload
 function fileUploadFailedError(errorMessage, parentDirectoryId) {
+    // TODO: handle this
+}
+
+
+// Displays error after a directory failed to expand
+// This method is called back after a directory failed to expand
+function directoryExpandFailedError(errorMessage, parentDirectoryId) {
     // TODO: handle this
 }
 

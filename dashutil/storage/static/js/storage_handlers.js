@@ -21,6 +21,10 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // Method to call back to delete a file. Takes storage page name and
     // list of file ids to delete as parameters
     this.deleteFilesCallback = null;
+
+    // Method to call back to delete a file. Takes storage page name and
+    // list of file ids to delete as parameters
+    this.expandContractDirectoryCallback = null;
     
     // storage variables
     this.storagePageId = null;
@@ -30,12 +34,15 @@ var STORAGE_EVENT_HANDLERS = new function() {
 	// Handler to set up event listeners. 1 callback passed in from storage.js
     this.addAllEventListeners = function(newUploadNewFilesToDirectoryCallback, 
             newCreateNewDirectoryCallback, newRenameFilesCallback, 
-            newDeleteFilesCallback) {
+            newDeleteFilesCallback, newExpandContractDirectoryCallback) {
 
-		this.uploadNewFilesToDirectoryCallback = newUploadNewFilesToDirectoryCallback;
+        this.uploadNewFilesToDirectoryCallback = 
+            newUploadNewFilesToDirectoryCallback;
         this.createNewDirectoryCallback = newCreateNewDirectoryCallback;
         this.renameFilesCallback = newRenameFilesCallback;
         this.deleteFilesCallback = newDeleteFilesCallback;
+        this.expandContractDirectoryCallback = 
+            newExpandContractDirectoryCallback;
 
 
         // upload new files modal button
@@ -152,8 +159,23 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.activateClickToSelectItemCallback = function(itemId) {
         document.getElementById(itemId).addEventListener(
             "click", function(event) {
-                this.classList.toggle(
-                    STORAGE_CONSTANTS.selectedClass);
+
+                if (event.ctrlKey) {
+                    this.classList.toggle(STORAGE_CONSTANTS.selectedClass);
+                }
+                else {
+                    var ids = 
+                        STORAGE_EVENT_HANDLERS.getIdsOfClickedElements();
+                    for (var i = 0; i < ids.length; i ++) {
+                        document.getElementById(ids[i]).classList.remove(
+                            STORAGE_CONSTANTS.selectedClass);
+                    }
+                    this.classList.add(STORAGE_CONSTANTS.selectedClass);
+                
+                    STORAGE_EVENT_HANDLERS.expandContractDirectoryCallback(
+                        STORAGE_EVENT_HANDLERS.getStoragePageName(), 
+                        this.id);
+                }  
             }, false);
     };
     
@@ -183,9 +205,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 STORAGE_CONSTANTS.directoryTextEl.value));
         var parentDirectoryId = 
             STORAGE_EVENT_HANDLERS.getParentDirectoriesForAction();
-
-        console.log(parentDirectoryId);
-        console.log(parentDirectoryId[0]);
 
         if (newDirectoryName.length > 0 && parentDirectoryId.length == 1) {
             STORAGE_EVENT_HANDLERS.createNewDirectoryCallback(

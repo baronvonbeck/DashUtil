@@ -120,10 +120,11 @@ class FileObject {
             this.formatFileSizeToString(this.size) + "</div>";
 
         fullHTMLStringRepresentation = "<li id=\"" + this.id + 
+            STORAGE_CONSTANTS.liIDAppend + "\"><div id=\"" + this.id + 
             "\" class=\"" + classString + "\"><div id=\"" + this.id + 
             STORAGE_CONSTANTS.infoIDAppend + "\">" + column1_filename_path + 
             column2_createTimestamp + column3_modifyTimestamp + column4_size +
-            "</div>" + directoryAddUL + "</li>";
+            "</div></div>" + directoryAddUL + "</li>";
 
         this.fullHtmlRepresentation = fullHTMLStringRepresentation;
         this.infoHtmlRepresentation = column1_filename_path + 
