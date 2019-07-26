@@ -73,7 +73,6 @@ class FileObject {
 
     // updates the HTML representations of the object
     updateHTMLRepresentation() {
-        var fullHTMLStringRepresentation = "";
         var fileTypeRepresentation = "";
         var column1_filename_path = "";
         var column2_createTimestamp = "";
@@ -92,7 +91,7 @@ class FileObject {
         }
 
         if (this.uploadPath != null) {
-            column1_filename_path = "<div class=\"file-info-left\"><a href=" + 
+            column1_filename_path = "<div class=\"file-info\"><a href=" + 
                 this.uploadPath + " target=\"_blank\">" + 
                 this.filename + "</a></div>";
 
@@ -101,7 +100,7 @@ class FileObject {
                     this.filename.split("\.").pop()) + "\">";
         }
         else {
-            column1_filename_path = "<div class=\"file-info-left\">" + 
+            column1_filename_path = "<div class=\"file-info\">" + 
                 this.filename + "</div>";
 
             if (this.level > 0) {
@@ -127,42 +126,45 @@ class FileObject {
             }
         }
 
-        column2_createTimestamp = "<div class=\"file-info-right\">" + 
+        column2_createTimestamp = "<div class=\"file-info\">" + 
             this.formatDateToString(this.createTimestamp) + "</div>";
-        column3_modifyTimestamp = "<div class=\"file-info-right\">" + 
+        column3_modifyTimestamp = "<div class=\"file-info\">" + 
             this.formatDateToString(this.modifyTimestamp) + "</div>";
-        column4_size = "<div class=\"file-info-right\">" + 
+        column4_size = "<div class=\"file-info\">" + 
             this.formatFileSizeToString(this.size) + "</div>";
 
-        fullHTMLStringRepresentation = "<li id=\"" + this.id + 
+        this.infoHtmlRepresentation = "<div class=\"file-info-left\">" + 
+            column1_filename_path + "</div><div class=\"file-info-right\">" +
+            column2_createTimestamp + column3_modifyTimestamp + column4_size +
+            "</div>";
+
+        this.fullHtmlRepresentation = "<li id=\"" + this.id + 
             STORAGE_CONSTANTS.liIDAppend + "\"><div id=\"" + this.id + 
             "\" class=\"" + classString + "\">" + fileTypeRepresentation + 
             "<div id=\"" + this.id + STORAGE_CONSTANTS.infoIDAppend + 
             "\" class=\"file-info-container\">" + 
-            column1_filename_path + column2_createTimestamp + column3_modifyTimestamp + 
-            column4_size + "</div></div>" + directoryAddUL + "</li>";
-
-        this.fullHtmlRepresentation = fullHTMLStringRepresentation;
-        this.infoHtmlRepresentation = column1_filename_path + 
-            column2_createTimestamp + column3_modifyTimestamp + column4_size;
+            this.infoHtmlRepresentation + "</div></div>" + directoryAddUL + "</li>";        
     }
 
 
     // formats a date object to a string
     formatDateToString(date) {
         var time = "";
+        var mins = String(date.getMinutes());
+        var hours = "";
+        if (date.getMinutes() < 10)
+            mins = "0" + mins;
+
         if (date.getHours() - 12 > 0) {
-            var temp = date.getHours() - 12;
-            time = temp + ":" + date.getMinutes() + "." + 
-                date.getMilliseconds() + " PM";
+            hours = String(date.getHours() - 12);
         }
         else {
-            time = (date.getHours() == 0 ? "12" : date.getHours()) + 
-                ":" + date.getMinutes() + "." + date.getMilliseconds() + " AM";
+            hours = String((date.getHours() == 0 ? "12" : date.getHours()));
         }
 
         return date.getMonth() + "/" + date.getDate() + "/" + 
-            date.getFullYear() + " " + time;
+            date.getFullYear() + " " + hours + ":" + mins + 
+            "." + date.getMilliseconds() + " AM";
     }
 
 

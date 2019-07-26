@@ -354,6 +354,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
 
+    // https://icons8.com/icons/set/closed-folder
     this.getFileIcon = function(fileExtension) {
         var pathToIcon = "";
         switch(fileExtension) {
