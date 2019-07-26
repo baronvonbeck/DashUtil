@@ -75,8 +75,8 @@ class FileObject {
     updateHTMLRepresentation() {
         var fileTypeRepresentation = "";
         var column1_filename_path = "";
-        var column2_createTimestamp = "";
-        var column3_modifyTimestamp = "";
+        var column2_modifyTimestamp = "";
+        var column3_createTimestamp = "";
         var column4_size = "";
         var htmlNode = document.getElementById(this.id);
         var directoryAddUL = "";
@@ -91,7 +91,7 @@ class FileObject {
         }
 
         if (this.uploadPath != null) {
-            column1_filename_path = "<div class=\"file-info\"><a href=" + 
+            column1_filename_path = "<div class=\"file-info-name\"><a href=" + 
                 this.uploadPath + " target=\"_blank\">" + 
                 this.filename + "</a></div>";
 
@@ -100,7 +100,7 @@ class FileObject {
                     this.filename.split("\.").pop()) + "\">";
         }
         else {
-            column1_filename_path = "<div class=\"file-info\">" + 
+            column1_filename_path = "<div class=\"file-info-name\">" + 
                 this.filename + "</div>";
 
             if (this.level > 0) {
@@ -126,16 +126,17 @@ class FileObject {
             }
         }
 
-        column2_createTimestamp = "<div class=\"file-info\">" + 
-            this.formatDateToString(this.createTimestamp) + "</div>";
-        column3_modifyTimestamp = "<div class=\"file-info\">" + 
+        
+        column2_modifyTimestamp = "<div class=\"file-info-date\">" + 
             this.formatDateToString(this.modifyTimestamp) + "</div>";
-        column4_size = "<div class=\"file-info\">" + 
+        column3_createTimestamp = "<div class=\"file-info-date\">" + 
+            this.formatDateToString(this.createTimestamp) + "</div>";
+        column4_size = "<div class=\"file-info-size\">" + 
             this.formatFileSizeToString(this.size) + "</div>";
 
         this.infoHtmlRepresentation = "<div class=\"file-info-left\">" + 
             column1_filename_path + "</div><div class=\"file-info-right\">" +
-            column2_createTimestamp + column3_modifyTimestamp + column4_size +
+            column2_modifyTimestamp + column3_createTimestamp + column4_size +
             "</div>";
 
         this.fullHtmlRepresentation = "<li id=\"" + this.id + 

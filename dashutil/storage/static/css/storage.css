@@ -28,6 +28,13 @@ ul, li {
     background-color: #ffffff;
 }
 
+.headerobj {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #ffffff;
+}
+
 .fileobj.selected, .fileobj.selected:hover {
     background-color: #bdbdbd;
 }
@@ -48,16 +55,28 @@ ul, li {
     width: 100%;
     align-items: center;
 }
+.headerobj .file-info-container .file-info-left {
+    margin-left: 25px;
+}
 
 
 .file-info-container .file-info-left {
     display: flex;
     height: 100%;
-    margin-left: 12px;
-    align-items:  center;
+    align-items: center;
     flex: 1 1 auto;
     justify-self: flex-start;
     justify-content: flex-start;
+    word-break: break-word;
+}
+
+.file-info-left .file-info-name {
+    display: flex;
+    margin-left: 12px;
+    justify-self: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+    word-break: break-word;
 }
 
 .file-info-container .file-info-right {
@@ -69,15 +88,23 @@ ul, li {
     flex: 1 1 auto;
 }
 
-.file-info-right .file-info {
-    display: flex;
-    align-items: center;
-}
-
-.file-info-right .file-info {
+.file-info-right .file-info-date {
     display: flex;
     margin-left: 25px;
+    justify-self: flex-end;
+    justify-content: flex-end;
     align-items: center;
+    width: 10vw;
+    text-align: right;
+}
+
+.file-info-right .file-info-size {
+    display: flex;
+    margin-left: 25px;
+    justify-self: flex-end;
+    justify-content: flex-end;
+    align-items: center;
+    width: 5vw;
 }
 
 
