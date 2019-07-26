@@ -25,6 +25,7 @@ var FILE_MANAGER = new function() {
         }
     };
 
+    
     /**
      * @description adds new files to the page, and updates the sizes
      * @param {array} fileJSONList the list of new files to add

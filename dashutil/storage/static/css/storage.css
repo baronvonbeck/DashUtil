@@ -21,8 +21,12 @@ ul, li {
 }
 
 .fileobj {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     cursor: pointer;
     background-color: #ffffff;
+    height: 25px;
 }
 
 .fileobj.selected, .fileobj.selected:hover {
@@ -33,10 +37,41 @@ ul, li {
     background-color: #e2e2e2;
 }
 
-.fileinfo {
-    display: inline-block;
-    margin-right: 20px;
+.fileobj img.fileico {
+    height: 100%;
+    width: auto;
 }
+
+.file-info-container {
+    display: flex;
+    vertical-align: middle;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+}
+
+.file-info-container .file-info-left {
+    display: flex;
+    height: 100%;
+    margin-left: 20px;
+    vertical-align: middle;
+    align-items:  center;
+    flex: 1 1 auto;
+    justify-self: flex-start;
+    margin-right: 400px;
+}
+
+.file-info-container .file-info-right {
+    display: flex;
+    height: 100%;
+    margin-left: 20px;
+    vertical-align: middle;
+    align-items:  center;
+    justify-self: flex-end;
+    flex: 1 1 auto;
+}
+
+
 
 #storage-page-info-id {
     margin-top: 40px;

@@ -74,6 +74,7 @@ class FileObject {
     // updates the HTML representations of the object
     updateHTMLRepresentation() {
         var fullHTMLStringRepresentation = "";
+        var fileTypeRepresentation = "";
         var column1_filename_path = "";
         var column2_createTimestamp = "";
         var column3_modifyTimestamp = "";
@@ -91,15 +92,22 @@ class FileObject {
         }
 
         if (this.uploadPath != null) {
-            column1_filename_path = "<div class=\"fileinfo\"><a href=" + 
+            column1_filename_path = "<div class=\"file-info-left\"><a href=" + 
                 this.uploadPath + " target=\"_blank\">" + 
                 this.filename + "</a></div>";
+
+            fileTypeRepresentation = "<img class=\"fileico\"src=\"" + 
+                STORAGE_EVENT_HANDLERS.getFileIcon(
+                    this.filename.split("\.").pop()) + "\">";
         }
         else {
-            column1_filename_path = "<div class=\"fileinfo\">" + 
+            column1_filename_path = "<div class=\"file-info-left\">" + 
                 this.filename + "</div>";
 
             if (this.level > 0) {
+                fileTypeRepresentation = "<img class=\"fileico\" src=\"" + 
+                    STORAGE_EVENT_HANDLERS.getFileIcon("") + "\">";
+
                 directoryAddUL = "<ul id=\"" + this.id + 
                     STORAGE_CONSTANTS.ulIDAppend + "\" style=\"display: ";
             
@@ -107,7 +115,7 @@ class FileObject {
                     this.id + STORAGE_CONSTANTS.ulIDAppend);
 
                 if (existingDirectory) {
-                    directoryAddUl += 
+                    directoryAddUL += 
                         (existingDirectory.style.display === "block" ? 
                             "block" : "none") + ";\">";
                     directoryAddUL += existingDirectory.innerText;
@@ -119,19 +127,20 @@ class FileObject {
             }
         }
 
-        column2_createTimestamp = "<div class=\"fileinfo\">" + 
+        column2_createTimestamp = "<div class=\"file-info-right\">" + 
             this.formatDateToString(this.createTimestamp) + "</div>";
-        column3_modifyTimestamp = "<div class=\"fileinfo\">" + 
+        column3_modifyTimestamp = "<div class=\"file-info-right\">" + 
             this.formatDateToString(this.modifyTimestamp) + "</div>";
-        column4_size = "<div class=\"fileinfo\">" + 
+        column4_size = "<div class=\"file-info-right\">" + 
             this.formatFileSizeToString(this.size) + "</div>";
 
         fullHTMLStringRepresentation = "<li id=\"" + this.id + 
             STORAGE_CONSTANTS.liIDAppend + "\"><div id=\"" + this.id + 
-            "\" class=\"" + classString + "\"><div id=\"" + this.id + 
-            STORAGE_CONSTANTS.infoIDAppend + "\">" + column1_filename_path + 
-            column2_createTimestamp + column3_modifyTimestamp + column4_size +
-            "</div></div>" + directoryAddUL + "</li>";
+            "\" class=\"" + classString + "\">" + fileTypeRepresentation + 
+            "<div id=\"" + this.id + STORAGE_CONSTANTS.infoIDAppend + 
+            "\" class=\"file-info-container\">" + 
+            column1_filename_path + column2_createTimestamp + column3_modifyTimestamp + 
+            column4_size + "</div></div>" + directoryAddUL + "</li>";
 
         this.fullHtmlRepresentation = fullHTMLStringRepresentation;
         this.infoHtmlRepresentation = column1_filename_path + 

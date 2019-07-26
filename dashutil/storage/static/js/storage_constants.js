@@ -48,4 +48,10 @@ const STORAGE_CONSTANTS = new function() {
     this.createdText =              "Created: ";
     this.modifiedText =             "Modified: ";
     this.sizeText =                 "Size";
+
+    this.fileIconPath =             "/static/img/fileico/";
+    this.directoryCloseLightIcon =  this.fileIconPath + "directory-close-light.png";
+    this.directoryOpenLightIcon =   this.fileIconPath + "directory-open-light.png";
+    this.genericFileLightIcon =     this.fileIconPath + "generic-file-light.png";
+
 };

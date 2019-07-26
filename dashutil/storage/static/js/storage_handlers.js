@@ -181,9 +181,15 @@ var STORAGE_EVENT_HANDLERS = new function() {
                         STORAGE_EVENT_HANDLERS.expandDirectoryCallback(
                             STORAGE_EVENT_HANDLERS.getStoragePageName(), 
                             this.id);
+                        
+                        this.getElementsByTagName("img")[0].src = 
+                            STORAGE_CONSTANTS.directoryOpenLightIcon;
                     }
                     else {
                         directoryFileList.style.display = "none";
+
+                        this.getElementsByTagName("img")[0].src = 
+                            STORAGE_CONSTANTS.directoryCloseLightIcon;
                     }
                 }
             }  
@@ -346,6 +352,19 @@ var STORAGE_EVENT_HANDLERS = new function() {
         
         return this.storagePageFields;
     };
+
+
+    this.getFileIcon = function(fileExtension) {
+        var pathToIcon = "";
+        switch(fileExtension) {
+            case "":
+                pathToIcon = STORAGE_CONSTANTS.directoryCloseLightIcon;
+                break;
+            default:
+                pathToIcon = STORAGE_CONSTANTS.genericFileLightIcon;
+        }
+        return pathToIcon;
+    }
 
     
     // formats a string to remove all single and double quotes ['"]
