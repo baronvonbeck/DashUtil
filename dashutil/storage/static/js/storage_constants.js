@@ -39,6 +39,7 @@ const STORAGE_CONSTANTS = new function() {
     this.lightThemeClass =     	    "light-theme";
     this.fileClass =                "fileobj"
     this.selectedClass =            "selected";
+    // this.collapsibleClass =         "collapsible";
     
     this.ulIDAppend =               "__ul";
     this.infoIDAppend =             "__in";

@@ -101,12 +101,19 @@ class FileObject {
 
             if (this.level > 0) {
                 directoryAddUL = "<ul id=\"" + this.id + 
-                    STORAGE_CONSTANTS.ulIDAppend + "\">";
+                    STORAGE_CONSTANTS.ulIDAppend + "\" style=\"display: ";
+            
+               var existingDirectory = document.getElementById(
+                    this.id + STORAGE_CONSTANTS.ulIDAppend);
 
-                if (document.getElementById(
-                    this.id + STORAGE_CONSTANTS.ulIDAppend)) {
-                        directoryAddUL += document.getElementById(
-                            this.id + STORAGE_CONSTANTS.ulIDAppend).innerText;
+                if (existingDirectory) {
+                    directoryAddUl += 
+                        (existingDirectory.style.display === "block" ? 
+                            "block" : "none") + ";\">";
+                    directoryAddUL += existingDirectory.innerText;
+                }
+                else {
+                    directoryAddUL += "none;\">";
                 }
                 directoryAddUL += "</ul>";
             }

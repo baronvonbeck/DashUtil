@@ -400,9 +400,19 @@ var FILE_MANAGER = new function() {
      * @param {string} directoryId id of the directory to check
      * @return {boolean} true|false if directory has been expanded
      */
-    this.checkIfDirectoryExpanded = function(directoryId) {
+    this.checkIfDirectoryisExpanded = function(directoryId) {
         return FILE_MANAGER.parentToChildMap.has(directoryId);
     };
+
+
+    /**
+     * @description check if a fileId is a directory
+     * @param {string} directoryId id of the file to check
+     * @return {boolean} true|false if file is a directory
+     */
+    this.checkIfFileIsDirectory = function(fileId) {
+        return FILE_MANAGER.idToFileMap.get(fileId).getUploadPath == null;
+    }
 
 
     /**

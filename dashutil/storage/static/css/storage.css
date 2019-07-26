@@ -25,10 +25,13 @@ ul, li {
     background-color: #ffffff;
 }
 
-.fileobj.selected {
+.fileobj.selected, .fileobj.selected:hover {
     background-color: #bdbdbd;
 }
 
+.fileobj:hover {
+    background-color: #e2e2e2;
+}
 
 .fileinfo {
     display: inline-block;
