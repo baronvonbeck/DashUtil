@@ -26,6 +26,7 @@ ul, li {
     align-items: center;
     cursor: pointer;
     background-color: #ffffff;
+    cursor: pointer;
 }
 
 .headerobj {
@@ -105,6 +106,55 @@ ul, li {
     justify-content: flex-end;
     align-items: center;
     width: 5vw;
+}
+
+.headerobj .file-info-container .file-info-left .file-info-name:hover,
+.headerobj .file-info-container .file-info-right .file-info-date:hover,
+.headerobj .file-info-container .file-info-right .file-info-size:hover {
+    background-color: #e2e2e2;
+    cursor: pointer;
+}
+
+
+
+.arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.sort-up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+  
+.sort-down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.file-info-name .arrow.sort-up,
+.file-info-name .arrow.sort-down {
+    visibility: hidden;
+    margin-left: 10px;
+    margin-right: 4px;
+}
+.file-info-date .arrow.sort-up,
+.file-info-size .arrow.sort-up,
+.file-info-date .arrow.sort-down,
+.file-info-size .arrow.sort-down {
+    visibility: hidden;
+    margin-left: 4px;
+    margin-right: 10px;
+}
+.file-info-name .arrow.sort-up.sorting,
+.file-info-date .arrow.sort-up.sorting,
+.file-info-size .arrow.sort-up.sorting, 
+.file-info-name .arrow.sort-down.sorting,
+.file-info-date .arrow.sort-down.sorting,
+.file-info-size .arrow.sort-down.sorting {
+    visibility: visible;
 }
 
 

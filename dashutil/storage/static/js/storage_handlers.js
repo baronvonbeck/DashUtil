@@ -109,6 +109,15 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 else if (event.target == STORAGE_CONSTANTS.renameModalEl)
                     STORAGE_EVENT_HANDLERS.closeDeleteModal();
             }, false);
+
+
+        [STORAGE_CONSTANTS.nameSortEl, STORAGE_CONSTANTS.modifySortEl, 
+         STORAGE_CONSTANTS.createSortEl, STORAGE_CONSTANTS.sizeSortEl].forEach(
+            function(el) {
+                el.addEventListener("click", function(event) {
+                    STORAGE_EVENT_HANDLERS.changeSortOrder(this);
+                }, false);
+            });
     };
 
 
@@ -153,6 +162,29 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.closeDeleteModal = function() {
         STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
     };
+
+
+    this.changeSortOrder = function(newSort) {
+        var previousSort = document.getElementsByClassName("sorting")[0];
+        
+        if (previousSort.parentElement == newSort) {
+            newSort = newSort.getElementsByTagName("div")[0];
+            if (newSort.classList.contains(STORAGE_CONSTANTS.sortUpClass)) {
+                newSort.classList.remove(STORAGE_CONSTANTS.sortUpClass);
+                newSort.classList.add(STORAGE_CONSTANTS.sortDownClass);
+            }
+            else {
+                newSort.classList.remove(STORAGE_CONSTANTS.sortDownClass);
+                newSort.classList.add(STORAGE_CONSTANTS.sortUpClass);
+            }
+        }
+        else {
+            previousSort.classList.remove(
+                STORAGE_CONSTANTS.sortingClass);
+            newSort.getElementsByTagName("div")[0].classList.add(
+                STORAGE_CONSTANTS.sortingClass);
+        }               
+    }
 
 
     // adds click callbacks to see selected files, expand/contract directories

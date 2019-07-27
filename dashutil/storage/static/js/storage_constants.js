@@ -35,10 +35,23 @@ const STORAGE_CONSTANTS = new function() {
     this.deleteOkButtonEl =         document.getElementById("delete-ok-id");
     this.deleteCloseButtonEl =      document.getElementById("delete-cancel-id");
 
+
+    this.nameSortId =               "name-sort-id";
+    this.modifySortId =             "modify-sort-id";
+    this.createSortId =             "create-sort-id";
+    this.sizeSortId =               "size-sort-id";
+    this.nameSortEl =               document.getElementById(this.nameSortId);
+    this.modifySortEl =             document.getElementById(this.modifySortId);
+    this.createSortEl =             document.getElementById(this.createSortId);
+    this.sizeSortEl =               document.getElementById(this.sizeSortId);
+
     this.darkThemeClass =      	    "dark-theme";
     this.lightThemeClass =     	    "light-theme";
     this.fileClass =                "fileobj"
     this.selectedClass =            "selected";
+    this.sortingClass =             "sorting";
+    this.sortUpClass =              "sort-up";
+    this.sortDownClass =            "sort-down";
     // this.collapsibleClass =         "collapsible";
     
     this.ulIDAppend =               "__ul";
