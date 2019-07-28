@@ -37,6 +37,18 @@ class FileObject {
         return this.parentDirectoryId;
     }
 
+    get getFilename() {
+        return this.filename;
+    }
+
+    get getModifyTimestamp() {
+        return this.modifyTimestamp;
+    }
+
+    get getCreateTimestamp() {
+        return this.createTimestamp;
+    }
+
     get getSize() {
         return this.size;
     }

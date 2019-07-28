@@ -10,6 +10,38 @@ var FILE_MANAGER = new function() {
     // map of parent uuid -> list of child file uuids
     this.parentToChildMap = new Map();
 
+    this.currentSortType = STORAGE_CONSTANTS.nameSortId;
+    this.currentSortOrder = STORAGE_CONSTANTS.sortUpClass;
+    this.compareFunctions = new Map();
+
+
+    /**
+     * @description initializes sorting map
+     * @param {none}
+     * @return {none}
+     */
+    this.initializeSelf = function() {
+        FILE_MANAGER.compareFunctions.set(STORAGE_CONSTANTS.nameSortId + 
+            STORAGE_CONSTANTS.sortUpClass, FILE_MANAGER.compareNameUp);
+        FILE_MANAGER.compareFunctions.set(STORAGE_CONSTANTS.nameSortId + 
+            STORAGE_CONSTANTS.sortDownClass, FILE_MANAGER.compareNameDown);
+
+        FILE_MANAGER.compareFunctions.set(STORAGE_CONSTANTS.modifySortId + 
+            STORAGE_CONSTANTS.sortUpClass, FILE_MANAGER.compareModifyUp);
+        FILE_MANAGER.compareFunctions.set(STORAGE_CONSTANTS.modifySortId + 
+            STORAGE_CONSTANTS.sortDownClass, FILE_MANAGER.compareModifyDown);
+
+        FILE_MANAGER.compareFunctions.set(STORAGE_CONSTANTS.createSortId + 
+            STORAGE_CONSTANTS.sortUpClass, FILE_MANAGER.compareCreateUp);
+        FILE_MANAGER.compareFunctions.set(STORAGE_CONSTANTS.createSortId + 
+            STORAGE_CONSTANTS.sortDownClass, FILE_MANAGER.compareCreateDown);
+
+        FILE_MANAGER.compareFunctions.set(STORAGE_CONSTANTS.sizeSortId + 
+            STORAGE_CONSTANTS.sortUpClass, FILE_MANAGER.compareSizeUp);
+        FILE_MANAGER.compareFunctions.set(STORAGE_CONSTANTS.sizeSortId + 
+            STORAGE_CONSTANTS.sortDownClass, FILE_MANAGER.compareSizeDown);
+    };
+
     /**
      * @description adds existing files to the page 
      * @param {array} fileJSONList the list of esisting files to add
@@ -178,9 +210,26 @@ var FILE_MANAGER = new function() {
         FILE_MANAGER.createParentToChildMapEntry(
             fileJSONObject.parent_directory, fileId);
 
-        document.getElementById(fileJSONObject.parent_directory + 
-            STORAGE_CONSTANTS.ulIDAppend).insertAdjacentHTML(
-                "beforeend", newFile.getFullHTMLRepresentation);
+        var parentEl = document.getElementById(
+            fileJSONObject.parent_directory + STORAGE_CONSTANTS.ulIDAppend);
+        
+        parentEl.insertAdjacentHTML("beforeend", 
+            newFile.getFullHTMLRepresentation);
+
+        var newEl = document.getElementById(fileId + 
+            STORAGE_CONSTANTS.liIDAppend);
+        var childrenEl = parentEl.childNodes;
+        var compareEl = null;
+
+        for (var i = 0; i < childrenEl.length; i ++) {
+            compareEl = childrenEl[i]
+            if (newEl != compareEl && FILE_MANAGER.compareElementsForInsert(
+                newEl, childrenEl[i]) < 0) {
+                break;
+            }     
+        }
+
+        parentEl.insertBefore(newEl, compareEl);
 
         STORAGE_EVENT_HANDLERS.activateClickToSelectItemCallback(fileId);
     };
@@ -456,4 +505,103 @@ var FILE_MANAGER = new function() {
             return searchList.indexOf(v) >= 0;
         });
     };
+
+
+    
+
+
+    this.updateSortOrder = function(newSortType, newSortOrder) {
+        FILE_MANAGER.currentSortType = newSortType;
+        FILE_MANAGER.currentSortOrder = newSortOrder;
+
+        var ulEls = document.getElementsByTagName("ul");
+        for (var i = 0; i < ulEls.length; i ++) {
+            FILE_MANAGER.sortDirectory(ulEls[i]);
+        }
+    };
+
+
+    this.sortDirectory = function(ulEl) {
+        Array.from(ulEl.childNodes).sort(function(a, b) {
+            return FILE_MANAGER.compareElementsForInsert(a, b);
+        }).forEach(li => ulEl.appendChild(li));
+    }
+
+    this.compareElementsForInsert = function(liElA, liElB) {
+        return FILE_MANAGER.compareFunctions.get(FILE_MANAGER.currentSortType +
+            FILE_MANAGER.currentSortOrder)(
+                FILE_MANAGER.idToFileMap.get(
+                    liElA.id.replace(STORAGE_CONSTANTS.liIDAppend, "")), 
+                FILE_MANAGER.idToFileMap.get(
+                    liElB.id.replace(STORAGE_CONSTANTS.liIDAppend, "")));
+    }
+
+
+    this.compareNameUp = function(fileA, fileB) {
+        if ((fileA.getUploadPath == null && fileB.getUploadPath == null) ||
+            (fileA.getUploadPath == null && fileB.getUploadPath == null)) {
+            var c = fileA.getFilename.localeCompare(fileB.getFilename);
+            if (c == 0) {
+                c = FILE_MANAGER.compareSizeUp(fileA, fileB);
+                if (c == 0) {
+                    c = FILE_MANAGER.compareModifyUp(fileA, fileB);
+                    if (c == 0) {
+                        c = FILE_MANAGER.compareCreateUp(fileA, fileB);
+                        if (c == 0) return -1;
+                    }
+                }
+            }
+            return c;
+        }
+        else {
+            if (fileA.getUploadPath == null)
+                return -1; 
+        }
+        return 1;
+    };
+    this.compareNameDown = function(fileA, fileB) {
+        if ((fileA.getUploadPath == null && fileB.getUploadPath == null) ||
+            (fileA.getUploadPath == null && fileB.getUploadPath == null)) {
+            var c = fileB.getFilename.localeCompare(fileA.getFilename);
+            if (c == 0) {
+                c = FILE_MANAGER.compareSizeDown(fileA, fileB);
+                if (c == 0) {
+                    c = FILE_MANAGER.compareModifyDown(fileA, fileB);
+                    if (c == 0) {
+                        c = FILE_MANAGER.compareCreateDown(fileA, fileB);
+                        if (c == 0) return -1;
+                    }
+                }
+            }
+            return c;
+        }
+        else {
+            if (fileA.getUploadPath == null)
+                return 1;
+        }
+        return -1;
+    };
+
+    this.compareModifyUp = function(fileA, fileB) {
+
+    };
+    this.compareModifyDown = function(fileA, fileB) {
+
+    };
+
+    this.compareCreateUp = function(fileA, fileB) {
+
+    };
+    this.compareCreateDown = function(fileA, fileB) {
+
+    };
+
+    this.compareSizeUp = function(fileA, fileB) {
+
+    };
+    this.compareSizeDown = function(fileA, fileB) {
+
+    };
+
+
 }

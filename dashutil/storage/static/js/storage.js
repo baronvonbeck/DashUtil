@@ -8,6 +8,8 @@ $(document).ready(function() {
     STORAGE_EVENT_HANDLERS.addAllEventListeners(uploadNewFilesToDirectory, 
         createNewDirectory, renameFiles, deleteFiles, getFilesWithinDirectory);
 
+    FILE_MANAGER.initializeSelf();
+    
     FILE_MANAGER.createStorageFileRecord(
         STORAGE_EVENT_HANDLERS.getStoragePageId(), 
         STORAGE_EVENT_HANDLERS.getStoragePageFields());

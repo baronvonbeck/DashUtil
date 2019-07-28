@@ -52,7 +52,6 @@ const STORAGE_CONSTANTS = new function() {
     this.sortingClass =             "sorting";
     this.sortUpClass =              "sort-up";
     this.sortDownClass =            "sort-down";
-    // this.collapsibleClass =         "collapsible";
     
     this.ulIDAppend =               "__ul";
     this.infoIDAppend =             "__in";

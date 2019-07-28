@@ -128,8 +128,6 @@ function createNewDirectoryDB(successCallback, errorCallback, storageName,
         processData: false,
         contentType: false,
         success: function(data) {
-            console.log('new directory created');
-            console.log(data);
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
@@ -204,7 +202,6 @@ function deleteFilesDB(successCallback, errorCallback, storageName,
         processData: false,
         contentType: false,
         success: function(data) {
-            console.log(data);
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {

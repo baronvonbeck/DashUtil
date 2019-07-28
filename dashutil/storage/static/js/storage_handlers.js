@@ -166,24 +166,35 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
     this.changeSortOrder = function(newSort) {
         var previousSort = document.getElementsByClassName("sorting")[0];
+        var sortType = newSort.id;
+        var sortOrder = "";
         
         if (previousSort.parentElement == newSort) {
             newSort = newSort.getElementsByTagName("div")[0];
             if (newSort.classList.contains(STORAGE_CONSTANTS.sortUpClass)) {
                 newSort.classList.remove(STORAGE_CONSTANTS.sortUpClass);
                 newSort.classList.add(STORAGE_CONSTANTS.sortDownClass);
+                sortOrder = STORAGE_CONSTANTS.sortDownClass;
             }
             else {
                 newSort.classList.remove(STORAGE_CONSTANTS.sortDownClass);
                 newSort.classList.add(STORAGE_CONSTANTS.sortUpClass);
+                sortOrder = STORAGE_CONSTANTS.sortUpClass;
             }
         }
         else {
-            previousSort.classList.remove(
-                STORAGE_CONSTANTS.sortingClass);
-            newSort.getElementsByTagName("div")[0].classList.add(
-                STORAGE_CONSTANTS.sortingClass);
-        }               
+            newSort = newSort.getElementsByTagName("div")[0];
+            previousSort.classList.remove(STORAGE_CONSTANTS.sortingClass);
+            newSort.classList.add(STORAGE_CONSTANTS.sortingClass);
+            if (newSort.classList.contains(STORAGE_CONSTANTS.sortUpClass)) {
+                sortOrder = STORAGE_CONSTANTS.sortUpClass;
+            }
+            else {
+                sortOrder = STORAGE_CONSTANTS.sortDownClass;
+            }
+        }
+
+        FILE_MANAGER.updateSortOrder(sortType, sortOrder);
     }
 
 
