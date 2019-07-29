@@ -87,10 +87,20 @@ var FILE_MANAGER = new function() {
      * @return {none}
      */
     this.renameExistingFilesOnPage = function(fileJSONList) {
+        var resortDirectoryList = new Set();
+
         for (var i = 0; i < fileJSONList.length; i ++) {
 
             FILE_MANAGER.renameExistingFileRecord(fileJSONList[i].pk, 
-                fileJSONList[i].fields);    
+                fileJSONList[i].fields);  
+            
+            resortDirectoryList.add(this.idToFileMap.get(
+                fileJSONList[i].pk).getParentDirectoryId);
+        }
+
+        for (let parentId of resortDirectoryList) {
+            FILE_MANAGER.sortDirectory(document.getElementById(
+                parentId + STORAGE_CONSTANTS.ulIDAppend));
         }
     };
 
@@ -560,26 +570,7 @@ var FILE_MANAGER = new function() {
         return 1;
     };
     this.compareNameDown = function(fileA, fileB) {
-        if ((fileA.getUploadPath == null && fileB.getUploadPath == null) ||
-            (fileA.getUploadPath == null && fileB.getUploadPath == null)) {
-            var c = fileB.getFilename.localeCompare(fileA.getFilename);
-            if (c == 0) {
-                c = FILE_MANAGER.compareSizeDown(fileA, fileB);
-                if (c == 0) {
-                    c = FILE_MANAGER.compareModifyDown(fileA, fileB);
-                    if (c == 0) {
-                        c = FILE_MANAGER.compareCreateDown(fileA, fileB);
-                        if (c == 0) return -1;
-                    }
-                }
-            }
-            return c;
-        }
-        else {
-            if (fileA.getUploadPath == null)
-                return 1;
-        }
-        return -1;
+        return -1 * FILE_MANAGER.compareNameUp(fileA, fileB);
     };
 
     this.compareModifyUp = function(fileA, fileB) {
