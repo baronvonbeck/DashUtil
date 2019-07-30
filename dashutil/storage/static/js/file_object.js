@@ -138,7 +138,6 @@ class FileObject {
             }
         }
 
-        
         column2_modifyTimestamp = "<div class=\"file-info-date\">" + 
             this.formatDateToString(this.modifyTimestamp) + "</div>";
         column3_createTimestamp = "<div class=\"file-info-date\">" + 
@@ -161,30 +160,94 @@ class FileObject {
 
 
     // formats a date object to a string
-    formatDateToString(date) {
-        var currentDate = new Date().getUTCDate();
+    // courtesy of https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site/23259289#23259289
+    formatDateToString(date) {        
+        var seconds = Math.floor((new Date() - date) / 1000);
+        var temp;
+        var intervalString = "";
 
-        return this.formatFullDate(date);
+        // return this.formatFullDate(date);
+
+        var interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) {
+            return this.formatFullDate(date);
+        } 
+        else {
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) {
+                intervalString += interval + " month";
+                if (interval > 1) intervalString += "s";
+                
+                temp = Math.floor((seconds - (interval * 2592000)) / 86400);
+
+                intervalString += ", " + temp + " day";
+                if (temp != 1) intervalString += "s";
+            } 
+            else {
+                interval = Math.floor(seconds / 86400);
+                if (interval >= 1) {
+                    intervalString += interval + " day";
+                    if (interval > 1) intervalString += "s";
+
+                    temp = Math.floor((seconds - (interval * 86400)) / 3600);
+                    
+                    intervalString += ", " + temp + " hour";
+                    if (temp != 1) intervalString += "s";
+                } 
+                else {
+                    interval = Math.floor(seconds / 3600);
+                    if (interval >= 1) {
+                        intervalString += interval + " hour";
+                        if (interval > 1) intervalString += "s";
+
+                        temp = Math.floor((seconds - (interval * 3600)) / 60);
+                        
+                        intervalString += ", " + temp + " minute";
+                        if (temp != 1) intervalString += "s";
+                    } 
+                    else {
+                        interval = Math.floor(seconds / 60);
+                        if (interval >= 1) {
+                            intervalString += interval + " minute";
+                            if (interval > 1) intervalString += "s";
+
+                            temp = (seconds - (interval * 60));
+                            
+                            intervalString += ", " + (seconds % 60) + " second";
+                            if (temp != 1) intervalString += "s";
+                        } 
+                        else {
+                            intervalString += seconds + " second";
+                            if (seconds != 1) intervalString += "s";
+                        }
+                    }
+                }
+            }
+        }
+
+        return intervalString;
     }
 
-
     formatFullDate(date) {
-        var time = "";
-        var mins = String(date.getMinutes());
-        var hours = "";
-        if (date.getMinutes() < 10)
-            mins = "0" + mins;
+        // var time = "";
+        // var mins = String(date.getMinutes());
+        // var hours = "";
+        // if (date.getMinutes() < 10)
+        //     mins = "0" + mins;
 
-        if (date.getHours() - 12 > 0) {
-            hours = String(date.getHours() - 12);
-        }
-        else {
-            hours = String((date.getHours() == 0 ? "12" : date.getHours()));
-        }
+        // if (date.getHours() - 12 > 0)
+        //     hours = String(date.getHours() - 12);
+        // else 
+        //     hours = String((date.getHours() == 0 ? "12" : date.getHours()));
 
-        return date.getMonth() + "/" + date.getDate() + "/" + 
-            date.getFullYear() + " " + hours + ":" + mins + 
-            "." + date.getMilliseconds() + " AM";
+        // if (date.getHours() < 12) time = " AM";
+        // else time = " PM";
+
+        return (date.getMonth() + 1) + "/" + date.getDate() + "/" + 
+            date.getFullYear();
+            
+            // + " " + hours + ":" + mins + 
+            // "." + date.getMilliseconds() + time;
     }
 
 
@@ -193,7 +256,7 @@ class FileObject {
     formatFileSizeToString(bytes, si=false) {
         var thresh = si ? 1000 : 1024;
         if (Math.abs(bytes) < thresh) {
-            return bytes + ' bytes';
+            return bytes + '&nbsp;&nbsp;&nbsp;B';
         }
         var units = si
             ? ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB']
