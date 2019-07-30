@@ -9,7 +9,8 @@
     <button id="upload-modal-button-id">Upload File(s)</button>
     <div id="upload-modal-id" class="modal">
         <div id="upload-modal-content-id" class="modal-content">
-            <p>Upload files to the specified directory.</p>
+            <p>Upload files to the specified DashUtil directory from 
+                your computer.</p>
             <p>If no directory is chosen, files will be uploaded to the
                  top level.</p>
             <p>If a non-directory file is chosen, the file will be uploaded 
@@ -22,6 +23,21 @@
                 <button type="submit" id="upload-button-id">Upload</button>
             </div>
             <button id="upload-cancel-id">Cancel</button>
+        </div>
+    </div>
+
+    <button id="download-modal-button-id">Download File(s)</button>
+    <div id="download-modal-id" class="modal">
+        <div id="download-modal-content-id" class="modal-content">
+            <p>Download files from DashUtil to the specified directory 
+                on your computer.</p>
+            <div>
+                {% csrf_token %}
+                {{ form }}
+                <input type="file" id="download-file-id" multiple>
+                <button type="submit" id="download-button-id">Upload</button>
+            </div>
+            <button id="download-cancel-id">Cancel</button>
         </div>
     </div>
 

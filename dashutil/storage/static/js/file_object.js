@@ -162,6 +162,13 @@ class FileObject {
 
     // formats a date object to a string
     formatDateToString(date) {
+        var currentDate = new Date().getUTCDate();
+
+        return this.formatFullDate(date);
+    }
+
+
+    formatFullDate(date) {
         var time = "";
         var mins = String(date.getMinutes());
         var hours = "";

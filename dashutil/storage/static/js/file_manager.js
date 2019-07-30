@@ -71,13 +71,15 @@ var FILE_MANAGER = new function() {
             sizeChange += fileJSONList[i].fields.size;
             
             FILE_MANAGER.createNewFileRecord(fileJSONList[i].pk, 
-                fileJSONList[i].fields);    
+                fileJSONList[i].fields);
         }
 
-        FILE_MANAGER.iterativelyUpdateDirectorySizes(
-            FILE_MANAGER.idToFileMap.get(
-                fileJSONList[0].fields.parent_directory), 
-            sizeChange);
+        if (sizeChange > 0) {
+            FILE_MANAGER.iterativelyUpdateDirectorySizes(
+                FILE_MANAGER.idToFileMap.get(
+                    fileJSONList[0].fields.parent_directory), 
+                sizeChange);
+        }
     };
 
 
@@ -98,10 +100,7 @@ var FILE_MANAGER = new function() {
                 fileJSONList[i].pk).getParentDirectoryId);
         }
 
-        for (let parentId of resortDirectoryList) {
-            FILE_MANAGER.sortDirectory(document.getElementById(
-                parentId + STORAGE_CONSTANTS.ulIDAppend));
-        }
+        FILE_MANAGER.resortListOfDirectories(resortDirectoryList);
     };
 
 
@@ -121,10 +120,13 @@ var FILE_MANAGER = new function() {
         for (var i = 0; i < fileIdList.length; i ++) {
             var fileToRemove = FILE_MANAGER.idToFileMap.get(fileIdList[i]);
    
-            FILE_MANAGER.iterativelyUpdateDirectorySizes(
-                FILE_MANAGER.idToFileMap.get(
-                    fileToRemove.getParentDirectoryId), 
-                fileToRemove.getSize * -1);
+
+            if (fileToRemove.getSize > 0) {
+                FILE_MANAGER.iterativelyUpdateDirectorySizes(
+                    FILE_MANAGER.idToFileMap.get(
+                        fileToRemove.getParentDirectoryId), 
+                    fileToRemove.getSize * -1);
+                    }
 
             FILE_MANAGER.deleteFileRecord(fileToRemove.getParentDirectoryId, 
                 fileToRemove.getId, true);
@@ -152,7 +154,7 @@ var FILE_MANAGER = new function() {
             // we assume all file sizes up to this point have been maintained 
             // correctly, so subtract the initially selected sizes. subfile sizes 
             // don't matter with this assumption
-            if (initial) {
+            if (initial && fileToMove.getSize > 0) {
                 sizeChange += fileToMove.getSize;
                 FILE_MANAGER.iterativelyUpdateDirectorySizes(
                     FILE_MANAGER.idToFileMap.get(
@@ -170,7 +172,7 @@ var FILE_MANAGER = new function() {
             FILE_MANAGER.moveFileRecord(destinationId, fileToMove.getId, false);
         }
 
-        if (initial) { 
+        if (initial && sizeChange > 0) { 
             FILE_MANAGER.iterativelyUpdateDirectorySizes(
                 newParent, sizeChange);
         }
@@ -327,12 +329,14 @@ var FILE_MANAGER = new function() {
      */
     this.iterativelyGetListOfParents = function(directory) {
         var parentIdList = [];
+        
 
         while (directory != undefined && directory != null) {
             parentIdList.push(directory.getId);
             directory = FILE_MANAGER.idToFileMap.get(
                 directory.getParentDirectoryId);
         }
+
         return parentIdList;
     };
 
@@ -346,13 +350,22 @@ var FILE_MANAGER = new function() {
      * @return {none}
      */
     this.iterativelyUpdateDirectorySizes = function(directory, sizeChange) {
+        var resortDirectoryList = new Set();
+
         while (directory != undefined && directory != null) {
             directory.updateSize(sizeChange);
             document.getElementById(directory.getId + 
                 STORAGE_CONSTANTS.infoIDAppend).innerHTML = 
                     directory.getInfoHTMLRepresentation;
+
+            resortDirectoryList.add(directory.getParentDirectoryId);
+            
             directory = FILE_MANAGER.idToFileMap.get(
                 directory.getParentDirectoryId);
+        }
+
+        if (FILE_MANAGER.currentSortType.includes("size")) {
+            FILE_MANAGER.resortListOfDirectories(resortDirectoryList);
         }
     };
 
@@ -371,6 +384,12 @@ var FILE_MANAGER = new function() {
             document.getElementById(directory.getId + 
                 STORAGE_CONSTANTS.infoIDAppend).innerHTML = 
                     directory.getInfoHTMLRepresentation;
+            
+            if (FILE_MANAGER.currentSortType.includes("size")) {
+                FILE_MANAGER.resortListOfDirectories(
+                    [directory.getParentDirectoryId]);
+            }
+
             FILE_MANAGER.recursivelyUpdateDirectorySizes(
                 FILE_MANAGER.idToFileMap.get(directory.getParentDirectoryId),
                 sizeChange);
@@ -517,9 +536,6 @@ var FILE_MANAGER = new function() {
     };
 
 
-    
-
-
     this.updateSortOrder = function(newSortType, newSortOrder) {
         FILE_MANAGER.currentSortType = newSortType;
         FILE_MANAGER.currentSortOrder = newSortOrder;
@@ -530,6 +546,15 @@ var FILE_MANAGER = new function() {
         }
     };
 
+    
+    this.resortListOfDirectories = function(resortDirectoryList) {
+        for (let parentId of resortDirectoryList) {
+            if (parentId)
+                FILE_MANAGER.sortDirectory(document.getElementById(
+                    parentId + STORAGE_CONSTANTS.ulIDAppend));
+        }
+    };
+
 
     this.sortDirectory = function(ulEl) {
         Array.from(ulEl.childNodes).sort(function(a, b) {
@@ -537,62 +562,85 @@ var FILE_MANAGER = new function() {
         }).forEach(li => ulEl.appendChild(li));
     }
 
+
     this.compareElementsForInsert = function(liElA, liElB) {
-        return FILE_MANAGER.compareFunctions.get(FILE_MANAGER.currentSortType +
-            FILE_MANAGER.currentSortOrder)(
-                FILE_MANAGER.idToFileMap.get(
-                    liElA.id.replace(STORAGE_CONSTANTS.liIDAppend, "")), 
-                FILE_MANAGER.idToFileMap.get(
-                    liElB.id.replace(STORAGE_CONSTANTS.liIDAppend, "")));
-    }
-
-
-    this.compareNameUp = function(fileA, fileB) {
+        var fileA = FILE_MANAGER.idToFileMap.get(
+            liElA.id.replace(STORAGE_CONSTANTS.liIDAppend, ""));
+        var fileB = FILE_MANAGER.idToFileMap.get(
+            liElB.id.replace(STORAGE_CONSTANTS.liIDAppend, ""));
+          
         if ((fileA.getUploadPath == null && fileB.getUploadPath == null) ||
-            (fileA.getUploadPath == null && fileB.getUploadPath == null)) {
-            var c = fileA.getFilename.localeCompare(fileB.getFilename);
-            if (c == 0) {
-                c = FILE_MANAGER.compareSizeUp(fileA, fileB);
-                if (c == 0) {
+                (fileA.getUploadPath != null && fileB.getUploadPath != null)) {
+            
+            var c = FILE_MANAGER.compareFunctions.get(FILE_MANAGER.currentSortType +
+                FILE_MANAGER.currentSortOrder)(fileA, fileB);
+
+            if (c == 0) {  // ugly
+                if (FILE_MANAGER.currentSortOrder.includes("up")) {
+                    c = FILE_MANAGER.compareNameUp(fileA, fileB);
+                    if (c != 0) return c;
+                    c = FILE_MANAGER.compareSizeUp(fileA, fileB);
+                    if (c != 0) return c;
                     c = FILE_MANAGER.compareModifyUp(fileA, fileB);
-                    if (c == 0) {
-                        c = FILE_MANAGER.compareCreateUp(fileA, fileB);
-                        if (c == 0) return -1;
-                    }
+                    if (c != 0) return c;
+                    c = FILE_MANAGER.compareCreateUp(fileA, fileB);
+                    if (c != 0) return c;
+                }
+                else {
+                    c = FILE_MANAGER.compareNameDown(fileA, fileB);
+                    if (c != 0) return c;
+                    c = FILE_MANAGER.compareSizeDown(fileA, fileB);
+                    if (c != 0) return c;
+                    c = FILE_MANAGER.compareModifyDown(fileA, fileB);
+                    if (c != 0) return c;
+                    c = FILE_MANAGER.compareCreateDown(fileA, fileB);
+                    if (c != 0) return c;
                 }
             }
             return c;
         }
+        else if (FILE_MANAGER.currentSortOrder == STORAGE_CONSTANTS.sortUpClass) {
+            if (fileA.getUploadPath == null)
+                return -1;
+            return 1;
+        }
         else {
             if (fileA.getUploadPath == null)
-                return -1; 
+                return 1;
+            return -1;
         }
-        return 1;
+    }
+
+
+    this.compareNameUp = function(fileA, fileB) {
+        return fileA.getFilename.localeCompare(fileB.getFilename);
     };
     this.compareNameDown = function(fileA, fileB) {
         return -1 * FILE_MANAGER.compareNameUp(fileA, fileB);
     };
-
+ 
     this.compareModifyUp = function(fileA, fileB) {
-
+        if (fileA.getModifyTimestamp > fileB.getModifyTimestamp) return -1;
+        else if (fileA.getModifyTimestamp < fileB.getModifyTimestamp) return 1;
+        return 0;
     };
     this.compareModifyDown = function(fileA, fileB) {
-
+        return -1 * FILE_MANAGER.compareModifyUp(fileA, fileB);
     };
 
     this.compareCreateUp = function(fileA, fileB) {
-
+        if (fileA.getCreateTimestamp > fileB.getCreateTimestamp) return -1;
+        else if (fileA.getCreateTimestamp < fileB.getCreateTimestamp) return 1;
+        return 0;
     };
     this.compareCreateDown = function(fileA, fileB) {
-
+        return -1 * FILE_MANAGER.compareCreateUp(fileA, fileB);
     };
 
     this.compareSizeUp = function(fileA, fileB) {
-
+        return fileA.getSize - fileB.getSize;
     };
     this.compareSizeDown = function(fileA, fileB) {
-
+        return -1 * FILE_MANAGER.compareSizeUp(fileA, fileB);
     };
-
-
 }
