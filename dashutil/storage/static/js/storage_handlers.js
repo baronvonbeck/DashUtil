@@ -25,6 +25,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // Method to call back to delete a file. Takes storage page name and
     // list of file ids to delete as parameters
     this.expandDirectoryCallback = null;
+
+    this.prevClickedId = null;
     
     // storage variables
     this.storagePageId = null;
@@ -43,7 +45,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
         this.deleteFilesCallback = newDeleteFilesCallback;
         this.expandDirectoryCallback = 
             newexpandDirectoryCallback;
-
 
         // upload new files modal button
         STORAGE_CONSTANTS.uploadModalButtonEl.addEventListener(
@@ -202,40 +203,71 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.activateClickToSelectItemCallback = function(itemId) {
         document.getElementById(itemId).addEventListener(
                 "click", function(event) {
-
+        
             if (event.ctrlKey) {
                 this.classList.toggle(STORAGE_CONSTANTS.selectedClass);
+               
+            }
+            else if (event.shiftKey && STORAGE_EVENT_HANDLERS.prevClickedId) {
+
+                var allFiles = STORAGE_CONSTANTS.fileListEl.innerHTML.toString();
+                var startEl = document.getElementById(
+                    STORAGE_EVENT_HANDLERS.prevClickedId);
+                var endEl = this;
+               
+                if (allFiles.indexOf("\"" + endEl.id + "\"") > allFiles.indexOf(
+                        "\"" + startEl.id + "\"")) {
+                    endEl = startEl;
+                    startEl = this;
+                }
+               
+                STORAGE_EVENT_HANDLERS.clearSelected();
+                startEl.classList.add(STORAGE_CONSTANTS.selectedClass);
+                if (startEl.id == endEl.id) return;
+               
+                endEl.classList.add(STORAGE_CONSTANTS.selectedClass);
+               
+                allFiles = allFiles.substring(
+                    allFiles.indexOf("\"" + startEl.id + "\"") + startEl.id.length + 1,
+                    allFiles.indexOf("\"" + endEl.id + "\"") - 1);
+               
+                var elIdsToSelect =
+                    STORAGE_EVENT_HANDLERS.parseElementIdsFromString(allFiles);
+                    
+                for (var i = 0; i < elIdsToSelect.length; i ++) {
+                    document.getElementById(elIdsToSelect[i]).classList.add(
+                        STORAGE_CONSTANTS.selectedClass);
+                } 
+                
             }
             else {
-                var ids = 
-                    STORAGE_EVENT_HANDLERS.getIdsOfClickedElements();
-                for (var i = 0; i < ids.length; i ++) {
-                    document.getElementById(ids[i]).classList.remove(
-                        STORAGE_CONSTANTS.selectedClass);
-                }
+                STORAGE_EVENT_HANDLERS.clearSelected();
                 this.classList.add(STORAGE_CONSTANTS.selectedClass);
-            
+               
                 if (FILE_MANAGER.checkIfFileIsDirectory(this.id)) {
                     var directoryFileList = document.getElementById(
                         this.id + STORAGE_CONSTANTS.ulIDAppend);
-
+ 
                     if (directoryFileList.style.display === "none") {
                         directoryFileList.style.display = "block";
                         STORAGE_EVENT_HANDLERS.expandDirectoryCallback(
-                            STORAGE_EVENT_HANDLERS.getStoragePageName(), 
+                            STORAGE_EVENT_HANDLERS.getStoragePageName(),
                             this.id);
-                        
-                        this.getElementsByTagName("img")[0].src = 
+                       
+                        this.getElementsByTagName("img")[0].src =
                             STORAGE_CONSTANTS.directoryOpenLightIcon;
                     }
                     else {
                         directoryFileList.style.display = "none";
-
-                        this.getElementsByTagName("img")[0].src = 
+ 
+                        this.getElementsByTagName("img")[0].src =
                             STORAGE_CONSTANTS.directoryCloseLightIcon;
                     }
                 }
-            }  
+            } 
+
+            STORAGE_EVENT_HANDLERS.prevClickedId = this.id;
+
         }, false);
     };
     
@@ -323,6 +355,18 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
 
+    this.parseElementIdsFromString = function(s) {
+        var elIds = [];
+        var liStr = "<li id=\"";
+        var ind;
+       
+        while ((ind = s.indexOf(liStr)) > 0) {
+            s = s.substring(ind + liStr.length, s.length);
+            elIds.push(s.substring(0, s.indexOf("\"")).replace(STORAGE_CONSTANTS.liIDAppend, ""));
+          }
+       
+        return elIds;
+    }
 
 
     // returns the parent directories an action corresponds too, based on 
@@ -359,6 +403,16 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
         return idList;
     };
+
+
+    this.clearSelected = function() {
+        var ids =
+            STORAGE_EVENT_HANDLERS.getIdsOfClickedElements();
+        for (var i = 0; i < ids.length; i ++) {
+            document.getElementById(ids[i]).classList.remove(
+                STORAGE_CONSTANTS.selectedClass);
+        }
+    }
 
 
     // returns the storage page id, formatted to remove all single and 

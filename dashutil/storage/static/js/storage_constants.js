@@ -6,7 +6,8 @@
 const STORAGE_CONSTANTS = new function() {
 
     this.storagePageInfoEl =        document.getElementById("storage-page-info-id");
-    this.listIdEl   =               document.getElementById("file-list-temp-id");
+    this.fileListEl =               document.getElementById("file-list-id");
+    this.listIdEl =                 document.getElementById("file-list-temp-id");
 
     this.uploadModalButtonEl =      document.getElementById("upload-modal-button-id");
     this.uploadModalEl =            document.getElementById("upload-modal-id");
