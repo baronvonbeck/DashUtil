@@ -84,6 +84,38 @@ var FILE_MANAGER = new function() {
 
 
     /**
+     * @description downloads the file list
+     * @param {array} fileIdList the list of file ids to download
+     * @return {none}
+     */
+    this.downloadFileList = function(fileIdList) {
+        console.log(fileIdList);
+    };
+
+
+    /**
+     * @description downloads a singular file
+     * @param {array} fileId the id of the file to download
+     * @return {none}
+     */
+    this.downloadFile = function(fileId) {
+        var f = FILE_MANAGER.idToFileMap.get(fileId);
+
+        // downloadFileDB(f.getUploadPath, f.getFilename);
+
+        // fetch(f.getUploadPath).then(function(t) {
+        //         return t.blob().then((b) => {
+        //             var a = document.createElement("a");
+        //             a.href = URL.createObjectURL(b);
+        //             a.setAttribute("download", f.filename);
+        //             a.click();
+        //         }
+        //     );
+        // });
+    };
+
+
+    /**
      * @description renames files and directories
      * @param {array} fileJSONList the list of files to rename
      * @return {none}
@@ -115,7 +147,7 @@ var FILE_MANAGER = new function() {
             return o.pk;
         });
             
-        fileIdList = FILE_MANAGER.removeRedundantFilesToDelete(fileIdList);
+        fileIdList = FILE_MANAGER.removeRedundantFiles(fileIdList);
 
         for (var i = 0; i < fileIdList.length; i ++) {
             var fileToRemove = FILE_MANAGER.idToFileMap.get(fileIdList[i]);
@@ -495,14 +527,14 @@ var FILE_MANAGER = new function() {
 
 
     /**
-     * @description removes any redundant files from a deletion list. For
+     * @description removes any redundant files from a list of ids. For
      *      example, if a parent directory is marked for deletion along
      *      with a descandant child file or directory, only deletion
      *      of the parent is necessary
-     * @param {array} fileIdList the storage file id mapping to create
+     * @param {array} fileIdList the list to search
      * @return {none}
      */
-    this.removeRedundantFilesToDelete = function(fileIdList) {
+    this.removeRedundantFiles = function(fileIdList) {
         var highestRelevantParent = [];
         
         for (var i = 0; i < fileIdList.length; i ++) {

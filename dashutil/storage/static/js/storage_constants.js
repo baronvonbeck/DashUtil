@@ -16,6 +16,13 @@ const STORAGE_CONSTANTS = new function() {
     this.uploadButtonEl =           document.getElementById("upload-button-id");
     this.uploadCloseButtonEl =      document.getElementById("upload-cancel-id");
 
+    this.downloadModalButtonEl =      document.getElementById("download-modal-button-id");
+    this.downloadModalEl =            document.getElementById("download-modal-id");
+    this.downloadModalContentEl =     document.getElementById("download-modal-content-id");
+    this.downloadFieldEl =            document.getElementById("download-file-id");
+    this.downloadButtonEl =           document.getElementById("download-button-id");
+    this.downloadCloseButtonEl =      document.getElementById("download-cancel-id");
+
     this.directoryModalButtonEl =   document.getElementById("directory-modal-button-id");
     this.directoryModalEl =         document.getElementById("directory-modal-id");
     this.directoryModalContentEl =  document.getElementById("directory-modal-content-id");

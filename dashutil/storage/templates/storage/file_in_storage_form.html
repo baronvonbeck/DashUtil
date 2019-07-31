@@ -29,13 +29,13 @@
     <button id="download-modal-button-id">Download File(s)</button>
     <div id="download-modal-id" class="modal">
         <div id="download-modal-content-id" class="modal-content">
-            <p>Download files from DashUtil to the specified directory 
+            <p>Download selected files from DashUtil to the specified directory 
                 on your computer.</p>
             <div>
                 {% csrf_token %}
                 {{ form }}
                 <input type="file" id="download-file-id" multiple>
-                <button type="submit" id="download-button-id">Upload</button>
+                <button type="submit" id="download-button-id">Download</button>
             </div>
             <button id="download-cancel-id">Cancel</button>
         </div>

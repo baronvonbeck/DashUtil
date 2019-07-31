@@ -112,6 +112,14 @@ function getFilesWithinDirectoryDB(successCallback, errorCallback, storageName,
 }
 
 
+function downloadFileDB(url, filename) {
+    // $.ajax({
+	// 	url: url, 
+	// 	success: download.bind(true, "text/html", filename)
+	// });
+}
+
+
 // creates a new directory representation within database for a storage page
 function createNewDirectoryDB(successCallback, errorCallback, storageName,
     newDirectoryName, parentDirectoryId) {

@@ -57,6 +57,19 @@ var STORAGE_EVENT_HANDLERS = new function() {
 	    // click upload to upload new file(s)
 	    STORAGE_CONSTANTS.uploadButtonEl.addEventListener(
             "click", this.uploadNewFilesToDirectoryHandler, false);
+
+
+        // download new files modal button
+        STORAGE_CONSTANTS.downloadModalButtonEl.addEventListener(
+            "click", this.openDownloadModal, false);
+
+        // close download files modal by clicking cancel
+        STORAGE_CONSTANTS.downloadCloseButtonEl.addEventListener(
+            "click", this.closeDownloadModal, false);
+
+	    // click download to download new file(s)
+	    STORAGE_CONSTANTS.downloadButtonEl.addEventListener(
+            "click", this.downloadFilesToDirectoryHandler, false);
             
 
         // create new directory modal button
@@ -103,6 +116,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
             "click", function(event) {
                 if (event.target == STORAGE_CONSTANTS.uploadModalEl)
                     STORAGE_EVENT_HANDLERS.closeUploadModal();
+                else if (event.target == STORAGE_CONSTANTS.downloadModalEl)
+                    STORAGE_EVENT_HANDLERS.closeDownloadModal();
                 else if (event.target == STORAGE_CONSTANTS.directoryModalEl)
                     STORAGE_EVENT_HANDLERS.closeDirectoryModal();
                 else if (event.target == STORAGE_CONSTANTS.renameModalEl)
@@ -132,6 +147,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
         STORAGE_CONSTANTS.uploadModalEl.style.display = "block";
     };
 
+    // opens the download file modal
+    this.openDownloadModal = function() {
+        STORAGE_CONSTANTS.downloadModalEl.style.display = "block";
+    };
+
     // opens the new directory modal
     this.openDirectoryModal = function() {
         STORAGE_CONSTANTS.directoryModalEl.style.display = "block";
@@ -148,9 +168,15 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
 
+
     // closes the upload new file modal
     this.closeUploadModal = function() {
         STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
+    };
+
+    // closes the download file modal
+    this.closeDownloadModal = function() {
+        STORAGE_CONSTANTS.downloadModalEl.style.display = "none";
     };
 
     // closes the new directory modal
@@ -168,6 +194,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
     };
 
+    
 
     this.changeSortOrder = function(newSort) {
         var previousSort = document.getElementsByClassName("sorting")[0];
@@ -293,6 +320,26 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
 
+    // handles downloading of files
+	this.downloadFilesToDirectoryHandler = function() {
+        var fileIdsToDownload = 
+            STORAGE_EVENT_HANDLERS.getIdsOfClickedElements();
+        fileIdsToDownload = 
+            FILE_MANAGER.removeRedundantFiles(fileIdsToDownload);
+
+        if (fileIdsToDownload.length == 1 && 
+                !FILE_MANAGER.checkIfFileIsDirectory(fileIdsToDownload[0])) {
+            FILE_MANAGER.downloadFile(fileIdsToDownload[0]);
+        }
+        else if (fileIdsToDownload.length > 0) {
+            FILE_MANAGER.downloadFileList(fileIdsToDownload);
+        }
+        else {
+            console.log("must have 1 or more files selected to download");
+        }
+    };
+
+
     // creates a new directory
     this.createNewDirectoryHandler = function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
@@ -307,7 +354,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 storagePageName, newDirectoryName, parentDirectoryId[0]);
         }
         else {
-            console.log("No");
+            console.log("Directory must have name length greater than 0");
+            console.log("Please select only 1 parent to create a new directory in");
         }
 
         STORAGE_EVENT_HANDLERS.closeDirectoryModal();
@@ -341,7 +389,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.deleteFilesHandler = function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
         var fileIdsToDelete = STORAGE_EVENT_HANDLERS.getIdsOfClickedElements();
-        fileIdsToDelete = FILE_MANAGER.removeRedundantFilesToDelete(
+        fileIdsToDelete = FILE_MANAGER.removeRedundantFiles(
             fileIdsToDelete);
 
         if (fileIdsToDelete.length > 0) {
