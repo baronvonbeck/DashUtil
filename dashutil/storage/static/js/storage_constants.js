@@ -4,7 +4,7 @@
 
 // Storage constants
 const STORAGE_CONSTANTS = new function() {
-
+    this.mainEl =                   document.getElementById("main-id");
     this.storagePageInfoEl =        document.getElementById("storage-page-info-id");
     this.fileListEl =               document.getElementById("file-list-id");
     this.listIdEl =                 document.getElementById("file-list-temp-id");

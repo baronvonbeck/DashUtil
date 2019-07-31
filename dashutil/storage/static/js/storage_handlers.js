@@ -109,6 +109,10 @@ var STORAGE_EVENT_HANDLERS = new function() {
                     STORAGE_EVENT_HANDLERS.closeRenameModal();
                 else if (event.target == STORAGE_CONSTANTS.renameModalEl)
                     STORAGE_EVENT_HANDLERS.closeDeleteModal();
+                else if (!event.ctrlKey && !event.shiftKey && 
+                        !STORAGE_CONSTANTS.mainEl.contains(event.target)) {
+                    STORAGE_EVENT_HANDLERS.clearSelected();
+                }
             }, false);
 
 
