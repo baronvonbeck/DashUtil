@@ -101,17 +101,26 @@ var FILE_MANAGER = new function() {
     this.downloadFile = function(fileId) {
         var f = FILE_MANAGER.idToFileMap.get(fileId);
 
-        // downloadFileDB(f.getUploadPath, f.getFilename);
+        const url = f.getUploadPath;
+        const fileStream = streamSaver.createWriteStream(f.getFilename);
 
-        // fetch(f.getUploadPath).then(function(t) {
-        //         return t.blob().then((b) => {
-        //             var a = document.createElement("a");
-        //             a.href = URL.createObjectURL(b);
-        //             a.setAttribute("download", f.filename);
-        //             a.click();
-        //         }
-        //     );
-        // });
+        fetch(url).then(res => {
+            const readableStream = res.body;
+
+            // more optimized
+            if (window.WritableStream && readableStream.pipeTo) {
+                return readableStream.pipeTo(fileStream)
+                .then(() => console.log('Download complete'));
+            }
+
+            window.writer = fileStream.getWriter();
+            const reader = res.body.getReader();
+            const pump = () => reader.read().then(res => res.done
+                ? writer.close()
+                : writer.write(res.value).then(pump));
+
+            pump();
+        });
     };
 
 

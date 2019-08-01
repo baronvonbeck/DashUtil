@@ -9,7 +9,7 @@ $(document).ready(function() {
         createNewDirectory, renameFiles, deleteFiles, getFilesWithinDirectory);
 
     FILE_MANAGER.initializeSelf();
-    
+
     FILE_MANAGER.createStorageFileRecord(
         STORAGE_EVENT_HANDLERS.getStoragePageId(), 
         STORAGE_EVENT_HANDLERS.getStoragePageFields());

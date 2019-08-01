@@ -29,7 +29,20 @@
     <script src="{% static '/js/all_constants.js' %}" type="text/javascript"></script>
 
     {% load static %}
+    <script src="{% static '/js/ponyfill.min.js' %}" type="text/javascript"></script>
+
+    {% load static %}
+    <script src="{% static '/js/StreamSaver.min.js' %}" type="text/javascript"></script>
+    <script type="module">
+        const streamSaver = window.streamSaver;
+    </script>
+
+    {% load static %}
     <script src="{% static '/js/database_wrapper.js' %}" type="text/javascript"></script>
+    
+
+    {% comment %} {% load static %}
+    <script src="{% static '/js/download.js' %}" type="text/javascript"></script> {% endcomment %}
 
     {% load static %}
     <script src="{% static '/js/storage_constants.js' %}" type="text/javascript"></script>
