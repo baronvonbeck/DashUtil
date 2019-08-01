@@ -4,6 +4,9 @@
 
 var FILE_MANAGER = new function() {
 
+    const streamSaver = window.streamSaver;
+    streamSaver.mitm = ALL_CONSTANTS.mitmPath;
+
     // map of file uuid -> file object
     this.idToFileMap = new Map();
 
@@ -100,9 +103,10 @@ var FILE_MANAGER = new function() {
      */
     this.downloadFile = function(fileId) {
         var f = FILE_MANAGER.idToFileMap.get(fileId);
-
+        
         const url = f.getUploadPath;
-        const fileStream = streamSaver.createWriteStream(f.getFilename);
+        const fileStream = streamSaver.createWriteStream(f.getFilename,
+            {size: f.getSize});
 
         fetch(url).then(res => {
             const readableStream = res.body;

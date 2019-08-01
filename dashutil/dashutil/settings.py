@@ -62,7 +62,9 @@ TEMPLATES = [
                     os.path.join(BASE_DIR, './home/templates/'),
                     os.path.join(BASE_DIR, './about/templates/'),
                     os.path.join(BASE_DIR, './storage/templates/'),
-                    os.path.join(BASE_DIR, './single/templates/')
+                    os.path.join(BASE_DIR, './single/templates/'),
+                    os.path.join(BASE_DIR, './static/html/'),
+                    os.path.join(BASE_DIR, './static/js/'),
                 ],
         'APP_DIRS': True,
         'OPTIONS': {

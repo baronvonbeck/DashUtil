@@ -8,4 +8,5 @@ const ALL_CONSTANTS = new function() {
     this.aboutPath =        "/about/";
     this.storagePath =      "/storage/";
     this.singlePath =       "/single/";
+    this.mitmPath =         "/mitm";
 };
