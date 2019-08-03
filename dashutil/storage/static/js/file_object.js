@@ -100,6 +100,7 @@ class FileObject {
         var htmlNode = document.getElementById(this.id);
         var directoryAddUL = "";
         var classString = "";
+        var draggable = "draggable=\"true\"";
 
         if (this.parentDirectoryId != null) {
             classString += STORAGE_CONSTANTS.fileClass;
@@ -159,7 +160,7 @@ class FileObject {
 
         this.fullHtmlRepresentation = "<li id=\"" + this.id + 
             STORAGE_CONSTANTS.liIDAppend + "\"><div id=\"" + this.id + 
-            "\" class=\"" + classString + "\">" + fileTypeRepresentation + 
+            "\" class=\"" + classString + "\"" + draggable + ">" + fileTypeRepresentation + 
             "<div id=\"" + this.id + STORAGE_CONSTANTS.infoIDAppend + 
             "\" class=\"file-info-container\">" + 
             this.infoHtmlRepresentation + "</div></div>" + directoryAddUL + "</li>";        

@@ -162,7 +162,64 @@ var STORAGE_EVENT_HANDLERS = new function() {
                     STORAGE_EVENT_HANDLERS.changeSortOrder(this);
                 }, false);
             });
+
+        this.addDragEventHandlers();
     };
+
+    this.addDragEventHandlers = function() {
+        var prevTarget = null;
+
+        document.addEventListener("dragstart", function(event) {
+            var selectedEls = document.getElementsByClassName(
+                STORAGE_CONSTANTS.selectedClass);
+
+            for (var i = 0; i < selectedEls.length; i ++) {
+                var el = selectedEls[i];
+                el.style.opacity = "0.4";
+            }
+        }, false);
+        document.addEventListener("drag", function(event) {
+
+        }, false);
+        // document.addEventListener("drag", function(event) {
+
+        // }, false);
+        document.addEventListener("dragend", function(event) {
+            var selectedEls = document.getElementsByClassName(
+                STORAGE_CONSTANTS.selectedClass);
+
+            for (var i = 0; i < selectedEls.length; i ++) {
+                var el = selectedEls[i];
+                el.style.opacity = "1";
+            }
+        }, false);
+
+
+        document.addEventListener("dragenter", function(event) {
+            
+            if (event.target.classList.contains(STORAGE_CONSTANTS.fileClass) && prevTarget != event.target) {
+                event.target.style.backgroundColor = "#bdbdbd";
+                
+
+                if (prevTarget) {
+                    prevTarget.style.backgroundColor = "#ffffff";
+                    
+                }
+                prevTarget = event.target;
+            }
+            
+        }, false);
+        
+        document.addEventListener("dragover", function(event) {
+            event.preventDefault();
+        }, false);
+        
+        // document.addEventListener("dragleave", function(event) {
+        //     if (event.target.classList.contains(STORAGE_CONSTANTS.fileClass)) {
+        //         event.target.style.backgroundColor = "#ffffff";
+        //     }
+        // }, false);
+    }
 
 
     
