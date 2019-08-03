@@ -57,6 +57,30 @@ class File_DataManager(models.Manager):
         new_file_data = File_Data.file_datamanager.create_file_data(new_files)
 
         return size_increase, new_file_data
+
+    # gets full path and url info for file downloading on client
+    def get_download_information(self, files_to_download, prepend):
+        file_path_url_list = []
+
+        for f in files_to_download:
+
+            if (f.upload_path):
+                file_path_url_list.append(
+                    [prepend + f.filename, f.upload_path])
+            else:
+                sub_dir_file_path_url_list = \
+                    File_Data.file_datamanager.get_download_information(
+                        File_Data.file_datamanager.get_children_of_directory(f),
+                        prepend + f.filename + "/")
+                
+                if (not len(sub_dir_file_path_url_list)):
+                    file_path_url_list.append(
+                        [prepend + f.filename + "/", None])
+                else:
+                    for sub in sub_dir_file_path_url_list:
+                        file_path_url_list.append(sub)
+
+        return file_path_url_list
     
     # creates a new directory, returns the data
     def create_new_directory(self, new_parent_directory, new_directory_name):

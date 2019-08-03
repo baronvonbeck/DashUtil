@@ -87,12 +87,16 @@ var FILE_MANAGER = new function() {
 
 
     /**
-     * @description downloads the file list
-     * @param {array} fileIdList the list of file ids to download
+     * @description downloads the file list as a zipped archive
+     * @param {array} filePathUrlList the list of file paths/names and urls
      * @return {none}
      */
-    this.downloadFileList = function(fileIdList) {
-        console.log(fileIdList);
+    this.downloadFileList = function(filePathUrlList) {
+        console.log(filePathUrlList);
+
+        for (var i = 0; i < filePathUrlList.length; i ++) {
+            console.log(filePathUrlList[i][0] + "  " + filePathUrlList[i][1]);
+        }
     };
 
 
@@ -590,6 +594,39 @@ var FILE_MANAGER = new function() {
         }
         
         return path;
+    }
+
+
+    this.getListOfFilePathsToURLsForZip = function(fileIdList, prepend) {
+        var filePathUrlList = [];
+        if (fileIdList == undefined || fileIdList == null) {
+            return filePathUrlList;
+        }
+
+        for (var i = 0; i < fileIdList.length; i ++) {
+            var f = FILE_MANAGER.idToFileMap.get(fileIdList[i]);
+
+            if (f.getUploadPath) {
+                console.log(f.getUploadPath);
+                filePathUrlList.push(
+                    [prepend + f.getFilename, f.getUploadPath]);
+            }
+            else {
+                var subDirFilePathUrlList = 
+                    FILE_MANAGER.getListOfFilePathsToURLsForZip(
+                        FILE_MANAGER.parentToChildMap.get(f.getId), 
+                        prepend + f.getFilename + "/");
+
+                if (!subDirFilePathUrlList.length) 
+                    filePathUrlList.push([prepend + f.getFilename, null]);
+                else 
+                    for (var j = 0; j < subDirFilePathUrlList.length; j ++)
+                        filePathUrlList.push([subDirFilePathUrlList[j][0], 
+                            subDirFilePathUrlList[j][1]]);
+            }
+        }
+
+        return filePathUrlList;
     }
 
 

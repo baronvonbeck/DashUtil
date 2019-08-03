@@ -30,6 +30,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // list of file ids to delete as parameters
     this.expandDirectoryCallback = null;
 
+    this.downloadFileListCallback = null;
+
     this.prevClickedId = null;
     this.moveIds = null;
     
@@ -42,7 +44,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.addAllEventListeners = function(newUploadNewFilesToDirectoryCallback, 
         newCreateNewDirectoryCallback, newRenameFilesCallback, 
         newDeleteFilesCallback, newExpandDirectoryCallback,
-        newMoveFilesCallback) {
+        newMoveFilesCallback, newDownloadFileListCallback) {
 
         this.uploadNewFilesToDirectoryCallback = 
             newUploadNewFilesToDirectoryCallback;
@@ -51,6 +53,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         this.deleteFilesCallback = newDeleteFilesCallback;
         this.expandDirectoryCallback = newExpandDirectoryCallback;
         this.moveFilesCallback = newMoveFilesCallback;
+        this.downloadFileListCallback = newDownloadFileListCallback;
 
         // upload new files modal button
         STORAGE_CONSTANTS.uploadModalButtonEl.addEventListener(
@@ -377,7 +380,9 @@ var STORAGE_EVENT_HANDLERS = new function() {
             FILE_MANAGER.downloadFile(fileIdsToDownload[0]);
         }
         else if (fileIdsToDownload.length > 0) {
-            FILE_MANAGER.downloadFileList(fileIdsToDownload);
+            STORAGE_EVENT_HANDLERS.downloadFileListCallback(
+                STORAGE_EVENT_HANDLERS.getStoragePageName(), 
+                fileIdsToDownload);
         }
         else {
             console.log("must have 1 or more files selected to download");

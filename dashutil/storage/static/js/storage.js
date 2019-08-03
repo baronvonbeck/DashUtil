@@ -7,7 +7,7 @@ $(document).ready(function() {
     // Set up event handlers
     STORAGE_EVENT_HANDLERS.addAllEventListeners(uploadNewFilesToDirectory, 
         createNewDirectory, renameFiles, deleteFiles, 
-        getFilesWithinDirectory, moveFiles);
+        getFilesWithinDirectory, moveFiles, getFilePathsAndUrls);
 
     FILE_MANAGER.initializeSelf();
 
@@ -44,6 +44,14 @@ function getFilesWithinDirectory(storageName, directoryId) {
 
     getFilesWithinDirectoryDB(addExistingFilesToPage, 
         directoryExpandFailedError, storageName, directoryId);
+}
+
+// Gets a list of all file path/names and urls to download from a 
+// list of fileIds, including subfiles and directories if applicable
+// This method is called back from STORAGE_EVENT_HANDLERS
+function getFilePathsAndUrls(storageName, fileIdsToDownload) {
+    getFilePathsAndUrlsDB(downloadSelectedFiles, downloadFailedError, 
+        storageName, fileIdsToDownload);
 }
 
 // Creates a new directory under a given directory within a storage
@@ -95,6 +103,11 @@ function addExistingFilesToPage(files) {
 }
 
 
+function downloadSelectedFiles(files) { 
+    FILE_MANAGER.downloadFileList(files);
+}
+
+
 // rename existing files on the page with new information
 function renameExistingFiles(files) {
     FILE_MANAGER.renameExistingFilesOnPage(files);
@@ -122,6 +135,13 @@ function fileUploadFailedError(errorMessage, parentDirectoryId) {
 // Displays error after a directory failed to expand
 // This method is called back after a directory failed to expand
 function directoryExpandFailedError(errorMessage, parentDirectoryId) {
+    // TODO: handle this
+}
+
+
+// Displays error after information get for file download failed
+// This method is called back after information get for file download failed
+function downloadFailedError(errorMessage, parentDirectoryId) {
     // TODO: handle this
 }
 

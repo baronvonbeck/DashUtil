@@ -43,7 +43,20 @@ def storage_page(request, storage_page_name):
                 data['directory_id'])
 
             return_data = File_Data.file_datamanager.get_children_of_directory(
-                directory)   
+                directory) 
+        
+        elif ('file_ids_to_download' in data):
+            file_ids_to_download = data['file_ids_to_download'].split(",")
+
+            files_to_download = []
+
+            for file_id in file_ids_to_download:
+                files_to_download.append(
+                    File_Data.file_datamanager.get_file_data(file_id))
+
+            return HttpResponse(
+                [File_Data.file_datamanager.get_download_information(
+                    files_to_download, '')])
 
         elif ('file_ids_to_rename' in data):
             renamed_file_name = data['renamed_file_name']

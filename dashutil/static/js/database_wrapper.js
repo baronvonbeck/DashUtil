@@ -87,6 +87,29 @@ function uploadFileToStorageDB(successCallback, errorCallback, storageName,
     });
 }
 
+// gets a list of files (with paths) and upload urls from the database
+function getFilePathsAndUrlsDB(successCallback, errorCallback, storageName,
+    fileIdsToDownload) {
+
+    var directoryData = new FormData();
+    directoryData.append("file_ids_to_download", fileIdsToDownload);
+    
+    $.ajax({
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
+        method: 'POST',
+        data: directoryData,
+        cache: false,   
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            successCallback(getJsonFromDataString(data));
+        },
+        error: function(data) {
+            errorCallback(getJsonFromDataString(data), null);
+        }
+    });
+}
+
 
 // gets the files within a directory on a storge page
 function getFilesWithinDirectoryDB(successCallback, errorCallback, storageName,
@@ -109,14 +132,6 @@ function getFilesWithinDirectoryDB(successCallback, errorCallback, storageName,
             errorCallback(getJsonFromDataString(data), parentDirectoryId);
         }
     });
-}
-
-
-function downloadFileDB(url, filename) {
-    // $.ajax({
-	// 	url: url, 
-	// 	success: download.bind(true, "text/html", filename)
-	// });
 }
 
 
@@ -220,8 +235,11 @@ function moveFilesToDirectoryDB(successCallback, errorCallback, storageName,
 
 
 function getJsonFromDataString(dataString) {
+    console.log(dataString);
     return JSON.parse(dataString.replace(/'upload_path': None/g, 
-                '\'upload_path\': null').replace(/[']+/g, '"'));
+                '\'upload_path\': null').replace(/[']+/g, '"')
+                // .replace(/\"\]\[\"/g, "\"],[\"")
+                .replace(/\"\, None\]\,/g, "\"\, null\]\,"));
 }
 
 /*****************************************************************************
