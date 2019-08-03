@@ -145,31 +145,6 @@ function createNewDirectoryDB(successCallback, errorCallback, storageName,
 }
 
 
-// moves a list of files and directories to underneath a given parent
-function moveFilesToDirectoryDB(successCallback, errorCallback, storageName,
-    fileIdsToMove, parentDirectoryId) {
-
-    var directoryData = new FormData();
-    directoryData.append("parent_directory_id", parentDirectoryId);
-    directoryData.append("file_ids_to_move", fileIdsToMove);
-    
-    $.ajax({
-        url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
-        method: 'POST',
-        data: directoryData,
-        cache: false,   
-        processData: false,
-        contentType: false,
-        success: function(data) {
-            successCallback(getJsonFromDataString(data));
-        },
-        error: function(data) {
-            errorCallback(getJsonFromDataString(data), parentDirectoryId);
-        }
-    });
-}
-
-
 // deletes a list of files and directories from the database
 function renameFilesDB(successCallback, errorCallback, storageName,
     fileIdsToRename, renamedFileName) {
@@ -217,6 +192,31 @@ function deleteFilesDB(successCallback, errorCallback, storageName,
         }
     });
 }
+
+
+// moves a list of files and directories to underneath a given parent
+function moveFilesToDirectoryDB(successCallback, errorCallback, storageName,
+    fileIdsToMove, parentDirectoryId) {
+
+    var directoryData = new FormData();
+    directoryData.append("parent_directory_id", parentDirectoryId);
+    directoryData.append("file_ids_to_move", fileIdsToMove);
+    
+    $.ajax({
+        url: ALL_CONSTANTS.storagePath + encodeURIComponent(storageName),
+        method: 'POST',
+        data: directoryData,
+        cache: false,   
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            successCallback(getJsonFromDataString(data));
+        },
+        error: function(data) {
+            errorCallback(getJsonFromDataString(data), parentDirectoryId);
+        }
+    });
+} 
 
 
 function getJsonFromDataString(dataString) {

@@ -38,13 +38,12 @@ def storage_page(request, storage_page_name):
             return_data = File_Data.file_datamanager.create_new_directory(
                 parent_directory, new_directory_name)
 
-        elif ('file_ids_to_move' in data):
-            parent_directory = File_Data.file_datamanager.get_file_data(
-                data['parent_directory_id'])
-            file_ids_to_move = data['file_ids_to_move']
+        elif ('directory_id' in data):
+            directory = File_Data.file_datamanager.get_file_data(
+                data['directory_id'])
 
-            return_data = File_Data.file_datamanager.move_files(
-                parent_directory, file_ids_to_move) 
+            return_data = File_Data.file_datamanager.get_children_of_directory(
+                directory)   
 
         elif ('file_ids_to_rename' in data):
             renamed_file_name = data['renamed_file_name']
@@ -58,13 +57,14 @@ def storage_page(request, storage_page_name):
 
             return_data = File_Data.file_datamanager.delete_files(
                 file_ids_to_delete, storage_page_name) 
+        
+        elif ('file_ids_to_move' in data):
+            parent_directory = File_Data.file_datamanager.get_file_data(
+                data['parent_directory_id'])
+            file_ids_to_move = data['file_ids_to_move'].split(",")
 
-        elif ('directory_id' in data):
-            directory = File_Data.file_datamanager.get_file_data(
-                data['directory_id'])
-
-            return_data = File_Data.file_datamanager.get_children_of_directory(
-                directory)            
+            return_data = File_Data.file_datamanager.move_files(
+                parent_directory, file_ids_to_move)          
 
         else:
             files_to_post = request.FILES.getlist('file')

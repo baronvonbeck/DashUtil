@@ -22,11 +22,16 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // list of file ids to delete as parameters
     this.deleteFilesCallback = null;
 
+    // Method to call back to move files. Takes storage page name, 
+    // list of file ids, and destinationId as parameters
+    this.moveFilesCallback = null;
+
     // Method to call back to delete a file. Takes storage page name and
     // list of file ids to delete as parameters
     this.expandDirectoryCallback = null;
 
     this.prevClickedId = null;
+    this.moveIds = null;
     
     // storage variables
     this.storagePageId = null;
@@ -35,16 +40,17 @@ var STORAGE_EVENT_HANDLERS = new function() {
 	
 	// Handler to set up event listeners. 1 callback passed in from storage.js
     this.addAllEventListeners = function(newUploadNewFilesToDirectoryCallback, 
-            newCreateNewDirectoryCallback, newRenameFilesCallback, 
-            newDeleteFilesCallback, newexpandDirectoryCallback) {
+        newCreateNewDirectoryCallback, newRenameFilesCallback, 
+        newDeleteFilesCallback, newExpandDirectoryCallback,
+        newMoveFilesCallback) {
 
         this.uploadNewFilesToDirectoryCallback = 
             newUploadNewFilesToDirectoryCallback;
         this.createNewDirectoryCallback = newCreateNewDirectoryCallback;
         this.renameFilesCallback = newRenameFilesCallback;
         this.deleteFilesCallback = newDeleteFilesCallback;
-        this.expandDirectoryCallback = 
-            newexpandDirectoryCallback;
+        this.expandDirectoryCallback = newExpandDirectoryCallback;
+        this.moveFilesCallback = newMoveFilesCallback;
 
         // upload new files modal button
         STORAGE_CONSTANTS.uploadModalButtonEl.addEventListener(
@@ -111,6 +117,19 @@ var STORAGE_EVENT_HANDLERS = new function() {
             "click", this.deleteFilesHandler, false);
 
         
+        // move modal button
+        STORAGE_CONSTANTS.moveModalButtonEl.addEventListener(
+            "click", this.openMoveModal, false);
+
+        // close move modal by clicking cancel
+        STORAGE_CONSTANTS.moveCloseButtonEl.addEventListener(
+            "click", this.closeMoveModal, false);
+
+        // click ok to move file(s)
+        STORAGE_CONSTANTS.moveOkButtonEl.addEventListener(
+            "click", this.moveFilesHandler, false);
+
+        
         // click off of modals to close
         window.addEventListener(
             "click", function(event) {
@@ -122,8 +141,10 @@ var STORAGE_EVENT_HANDLERS = new function() {
                     STORAGE_EVENT_HANDLERS.closeDirectoryModal();
                 else if (event.target == STORAGE_CONSTANTS.renameModalEl)
                     STORAGE_EVENT_HANDLERS.closeRenameModal();
-                else if (event.target == STORAGE_CONSTANTS.renameModalEl)
+                else if (event.target == STORAGE_CONSTANTS.deleteModalEl)
                     STORAGE_EVENT_HANDLERS.closeDeleteModal();
+                else if (event.target == STORAGE_CONSTANTS.deleteModalEl)
+                    STORAGE_EVENT_HANDLERS.moveDeleteModal();
                 else if (!event.ctrlKey && !event.shiftKey && 
                         !STORAGE_CONSTANTS.mainEl.contains(event.target)) {
                     STORAGE_EVENT_HANDLERS.clearSelected();
@@ -166,6 +187,10 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.openDeleteModal = function() {
         STORAGE_CONSTANTS.deleteModalEl.style.display = "block";
     };
+    // opens the move modal
+    this.openMoveModal = function() {
+        STORAGE_CONSTANTS.moveModalEl.style.display = "block";
+    };
 
 
 
@@ -192,6 +217,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // closes the delete modal
     this.closeDeleteModal = function() {
         STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
+    };
+
+    // closes the delete modal
+    this.closeMoveModal = function() {
+        STORAGE_CONSTANTS.moveModalEl.style.display = "none";
     };
 
     
@@ -235,6 +265,21 @@ var STORAGE_EVENT_HANDLERS = new function() {
         document.getElementById(itemId).addEventListener(
                 "click", function(event) {
         
+            if (STORAGE_EVENT_HANDLERS.moveIds) {
+                var storagePageName = 
+                    STORAGE_EVENT_HANDLERS.getStoragePageName();
+                var destinationId = 
+                    FILE_MANAGER.getIdForDirOrParentIdForFile(this.id);
+                var fileIdsToMove = STORAGE_EVENT_HANDLERS.moveIds;
+                
+                STORAGE_EVENT_HANDLERS.moveIds = null;
+                
+                STORAGE_EVENT_HANDLERS.moveFilesCallback(storagePageName, 
+                    fileIdsToMove, destinationId);
+                
+                return;
+            }
+
             if (event.ctrlKey) {
                 this.classList.toggle(STORAGE_CONSTANTS.selectedClass);
                
@@ -407,6 +452,23 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
 
+    // moves a selected file or list of files
+    this.moveFilesHandler = function() {
+        var fileIdsToMove = STORAGE_EVENT_HANDLERS.getIdsOfClickedElements();
+        fileIdsToMove = FILE_MANAGER.removeRedundantFiles(
+            fileIdsToMove);
+            
+        if (fileIdsToMove.length > 0) {
+            STORAGE_EVENT_HANDLERS.moveIds = fileIdsToMove;
+        }
+        else {
+            console.log("No files selected!");
+            // error 1 or more files must be selected
+        }
+        STORAGE_EVENT_HANDLERS.closeMoveModal();
+    };
+
+
     this.parseElementIdsFromString = function(s) {
         var elIds = [];
         var liStr = "<li id=\"";
@@ -431,11 +493,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
         }
 
         for (var i = 0; i < idClickedList.length; i ++) {
-            var clickedFile = FILE_MANAGER.idToFileMap.get(idClickedList[i]);
-
-            if (clickedFile.getUploadPath) {
-                idClickedList[i] = clickedFile.getParentDirectoryId;
-            }
+            idClickedList[i] = 
+                FILE_MANAGER.getIdForDirOrParentIdForFile(idClickedList[i]);
         }
         
         return idClickedList;

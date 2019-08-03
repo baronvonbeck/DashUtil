@@ -36,6 +36,13 @@ class FileObject {
     get getParentDirectoryId() {
         return this.parentDirectoryId;
     }
+    
+    /**
+     * @param {String} newParentDirectoryId
+     */
+    set setParentDirectoryId(newParentDirectoryId) {
+        this.parentDirectoryId = newParentDirectoryId;
+    }
 
     get getFilename() {
         return this.filename;

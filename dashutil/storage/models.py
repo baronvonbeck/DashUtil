@@ -70,33 +70,6 @@ class File_DataManager(models.Manager):
         new_directory_data = File_Data.file_datamanager.create_file_data(new_directory)
 
         return new_directory_data
-
-    # moves a list of files to a given directoy
-    def move_files(self, new_parent_directory, file_ids_to_move):
-        bulk_parent_update_list = []
-        bulk_size_update_list = {new_parent_directory: 0}
-
-        for file_id in file_ids_to_move:
-
-            file_to_move = File_Data.file_datamanager.get_file_data(file_id)
-            current_parent = file_to_move.parent_directory
-            file_to_move.parent_directory = new_parent_directory
-
-            bulk_parent_update_list.append(file_to_move)
-
-            if (current_parent.id in bulk_size_update_list):
-                bulk_size_update_list[current_parent] -= file_to_move.size
-            else:
-                bulk_size_update_list[current_parent] = file_to_move.size * -1
-
-            bulk_size_update_list[new_parent_directory] += file_to_move.size
-            
-        self.bulk_update(bulk_parent_update_list, ['parent_directory'])
-
-        File_Data.file_datamanager.update_list_of_file_id_sizes(
-            bulk_size_update_list)
-
-        return bulk_parent_update_list
     
     # renames a file to the given filename. automatically append correct extension
     # if necessary
@@ -153,6 +126,33 @@ class File_DataManager(models.Manager):
 
         return bulk_delete_list
     
+    # moves a list of files to a given directoy
+    def move_files(self, new_parent_directory, file_ids_to_move):
+        bulk_parent_update_list = []
+        bulk_size_update_list = {str(new_parent_directory.id): 0}
+
+        for file_id in file_ids_to_move:
+
+            file_to_move = File_Data.file_datamanager.get_file_data(file_id)
+            current_parent = file_to_move.parent_directory
+            file_to_move.parent_directory = new_parent_directory
+
+            bulk_parent_update_list.append(file_to_move)
+
+            if (current_parent.id in bulk_size_update_list):
+                bulk_size_update_list[str(current_parent.id)] -= file_to_move.size
+            else:
+                bulk_size_update_list[str(current_parent.id)] = file_to_move.size * -1
+
+            bulk_size_update_list[str(new_parent_directory.id)] += file_to_move.size
+            
+        self.bulk_update(bulk_parent_update_list, ['parent_directory'])
+
+        File_Data.file_datamanager.update_list_of_file_id_sizes(
+            bulk_size_update_list)
+
+        return bulk_parent_update_list
+    
     # returns a list of all of the urls of all subchildren for a directory
     def _get_urls_of_all_subchildren(self, bulk_url_delete_list, child_list):
         for child in child_list:
@@ -165,7 +165,7 @@ class File_DataManager(models.Manager):
         
         return bulk_url_delete_list
 
-    # compiles a list of files to update by a given size, and performs
+    # given a dict of file ids to update by a given size, performs
     # a bulk update on that list
     def update_list_of_file_id_sizes(self, files_to_update):
         for next_parent_id, size_change in files_to_update.items():

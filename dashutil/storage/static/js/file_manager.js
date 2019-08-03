@@ -180,47 +180,33 @@ var FILE_MANAGER = new function() {
 
 
     /**
-     * @description moves files, directories, and their contents from one
-     *      directory to another
-     * @param {string} parentId the directory id to move the file to
-     * @param {array} fileIdList the list of ids of files to move
-     * @param {boolean} initial whether or not the file is top level selected;
-            true if yes, false if no
+     * @description moves existing files to a new destination 
+     * @param {array} fileJSONList the list of existing files to move
      * @return {none}
      */
-    this.moveFilesToDirectory = function(parentId, fileJSONList, initial) {
-        newParent = FILE_MANAGER.idToFileMap.get(parentId);
+    this.moveExistingFilesOnPage = function(fileJSONList) {
         var sizeChange = 0;
-
+        
         for (var i = 0; i < fileJSONList.length; i ++) {
-            var fileToMove = FILE_MANAGER.idToFileMap.get(fileJSONList[i].pk);
-            var subIdList = FILE_MANAGER.parentToChildMap.get(fileJSONList[i].pk);
+            sizeChange += FILE_MANAGER.idToFileMap.get(
+                fileJSONList[i].pk).getSize;
             
-            // we assume all file sizes up to this point have been maintained 
-            // correctly, so subtract the initially selected sizes. subfile sizes 
-            // don't matter with this assumption
-            if (initial && fileToMove.getSize > 0) {
-                sizeChange += fileToMove.getSize;
-                FILE_MANAGER.iterativelyUpdateDirectorySizes(
-                    FILE_MANAGER.idToFileMap.get(
-                        fileToMove.getParentDirectoryId), 
-                    fileToMove.getSize * -1);
-            }
-
-             // if the file to remove is a directory, and it has contents that have
-            // been previously expanded, move the files. we don't care about
-            // sizes for these, as they are tracked by the parent (current) dir
-            if (subIdList != undefined) {
-                this.moveFilesToDirectory(fileToMove.getId, subIdList, false);
-            }
-
-            FILE_MANAGER.moveFileRecord(destinationId, fileToMove.getId, false);
+            FILE_MANAGER.moveFileRecord(fileJSONList[i].pk, 
+                fileJSONList[i].fields.parent_directory);
         }
-
-        if (initial && sizeChange > 0) { 
+        
+        if (sizeChange > 0) {
             FILE_MANAGER.iterativelyUpdateDirectorySizes(
-                newParent, sizeChange);
+                FILE_MANAGER.idToFileMap.get(
+                    fileJSONList[0].fields.parent_directory), sizeChange);
         }
+        
+        if (!FILE_MANAGER.currentSortType.includes("size")) {
+            FILE_MANAGER.resortListOfDirectories(
+                [fileJSONList[0].fields.parent_directory]);
+        }
+
+        
     };
 
     
@@ -347,23 +333,28 @@ var FILE_MANAGER = new function() {
 
 
     /**
-     * @description moves an existing file record
-     * @param {string} parentId the directory id to move the file to
-     * @param {string} fileId the id of the file or directory to move
+     * @description moves existing file on the page to a new destination
+     * @param {String} fileId the file id to move
+     * @param {String} destinationId the id of the directory to move file to
      * @return {none}
      */
-    this.moveFileRecord = function(parentId, fileId, initial) {
+    this.moveFileRecord = function(fileId, destinationId) {
+        var fileToMove = FILE_MANAGER.idToFileMap.get(fileId);
+        var sizeChange = fileToMove.getSize * -1;
+        var oldParentId = fileToMove.getParentDirectoryId;
 
-        if (initial) {
-            FILE_MANAGER.removeParentToChildMapEntry(parentId, fileId);
-            FILE_MANAGER.createParentToChildMapEntry(parentId, fileId);
-        }
+        FILE_MANAGER.iterativelyUpdateDirectorySizes(
+            FILE_MANAGER.idToFileMap.get(oldParentId), sizeChange);
+        
+        FILE_MANAGER.removeParentToChildMapEntry(oldParentId, fileId);
+        FILE_MANAGER.createParentToChildMapEntry(destinationId, fileId);
 
-        fileToMove = FILE_MANAGER.idToFileMap.get(fileId);
-        // fileToMove.updateLevel();
-        // update html so that parent element now contains fileId
-        // document.getElementById(destinationId).innerHTML = 
-        //         directory.getHTMLRepresentation;
+        fileToMove.setParentDirectoryId = destinationId;
+            
+        document.getElementById(destinationId + 
+            STORAGE_CONSTANTS.ulIDAppend).appendChild(
+                document.getElementById(fileId + 
+                    STORAGE_CONSTANTS.liIDAppend));
     };
 
 
@@ -375,7 +366,6 @@ var FILE_MANAGER = new function() {
     this.iterativelyGetListOfParents = function(directory) {
         var parentIdList = [];
         
-
         while (directory != undefined && directory != null) {
             parentIdList.push(directory.getId);
             directory = FILE_MANAGER.idToFileMap.get(
@@ -579,6 +569,28 @@ var FILE_MANAGER = new function() {
             return searchList.indexOf(v) >= 0;
         });
     };
+
+
+    this.getIdForDirOrParentIdForFile = function(fileId) {
+        var f = FILE_MANAGER.idToFileMap.get(fileId);
+
+        if (f.getUploadPath) return f.getParentDirectoryId;
+    
+        return fileId;
+    }
+
+
+    this.getFullPathOfFile = function(fileId) {
+        var f = FILE_MANAGER.idToFileMap.get(fileId);
+        var path = "/" + f.getFilename;
+        
+        while (f.getParentDirectoryId != null) {
+            f = FILE_MANAGER.idToFileMap.get(f.getParentDirectoryId);
+            path = "/" + f.getFilename + path;
+        }
+        
+        return path;
+    }
 
 
     this.updateSortOrder = function(newSortType, newSortOrder) {

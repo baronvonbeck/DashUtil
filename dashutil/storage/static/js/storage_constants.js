@@ -43,6 +43,12 @@ const STORAGE_CONSTANTS = new function() {
     this.deleteOkButtonEl =         document.getElementById("delete-ok-id");
     this.deleteCloseButtonEl =      document.getElementById("delete-cancel-id");
 
+    this.moveModalButtonEl =      document.getElementById("move-button-id");
+    this.moveModalEl =            document.getElementById("move-modal-id");
+    this.moveModalContentEl =     document.getElementById("move-modal-content-id");
+    this.moveOkButtonEl =         document.getElementById("move-ok-id");
+    this.moveCloseButtonEl =      document.getElementById("move-cancel-id");
+
 
     this.nameSortId =               "name-sort-id";
     this.modifySortId =             "modify-sort-id";

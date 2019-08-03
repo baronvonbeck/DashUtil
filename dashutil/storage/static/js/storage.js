@@ -6,7 +6,8 @@ $(document).ready(function() {
 
     // Set up event handlers
     STORAGE_EVENT_HANDLERS.addAllEventListeners(uploadNewFilesToDirectory, 
-        createNewDirectory, renameFiles, deleteFiles, getFilesWithinDirectory);
+        createNewDirectory, renameFiles, deleteFiles, 
+        getFilesWithinDirectory, moveFiles);
 
     FILE_MANAGER.initializeSelf();
 
@@ -72,6 +73,16 @@ function deleteFiles(storageName, fileIdsToDelete) {
 }
 
 
+// Moves a file or list of files
+// This method is called back from STORAGE_EVENT_HANDLERS
+function moveFiles(storageName, fileIdsToMove, destinationId) {
+
+    moveFilesToDirectoryDB(moveExistingFiles, moveFailedError,
+        storageName, fileIdsToMove, destinationId);
+}  
+
+
+
 // Adds files/directories to the storage page
 function addNewFilesToPage(files) {
     FILE_MANAGER.addNewFileListToPage(files);
@@ -93,6 +104,11 @@ function renameExistingFiles(files) {
 // deletes existing files on the page
 function deleteExistingFiles(files) {
     FILE_MANAGER.deleteExistingFilesOnPage(files);
+}
+
+// moves existing files on the page
+function moveExistingFiles(files) {
+    FILE_MANAGER.moveExistingFilesOnPage(files);
 }
 
 
@@ -126,6 +142,13 @@ function renameFailedError(errorMessage, parentDirectoryId) {
 // Displays error after file(s) failed to be renamed
 // This method is called back after file(s) failed to be renamed
 function deleteFailedError(errorMessage, parentDirectoryId) {
+    // TODO: handle this
+}
+
+
+// Displays error after file(s) failed to be renamed
+// This method is called back after file(s) failed to be renamed
+function moveFailedError(errorMessage, parentDirectoryId) {
     // TODO: handle this
 }
 
