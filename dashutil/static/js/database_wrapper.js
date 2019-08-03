@@ -235,7 +235,6 @@ function moveFilesToDirectoryDB(successCallback, errorCallback, storageName,
 
 
 function getJsonFromDataString(dataString) {
-    console.log(dataString);
     return JSON.parse(dataString.replace(/'upload_path': None/g, 
                 '\'upload_path\': null').replace(/[']+/g, '"')
                 // .replace(/\"\]\[\"/g, "\"],[\"")

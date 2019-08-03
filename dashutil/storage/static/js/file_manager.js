@@ -90,13 +90,51 @@ var FILE_MANAGER = new function() {
      * @description downloads the file list as a zipped archive
      * @param {array} filePathUrlList the list of file paths/names and urls
      * @return {none}
+     * 
+     * Following the wonderfully helpful work of 
+     * https://github.com/jimmywarting/StreamSaver.js/blob/master/examples/saving-multiple-files.html
      */
     this.downloadFileList = function(filePathUrlList) {
-        console.log(filePathUrlList);
+        const fileStream = streamSaver.createWriteStream(
+            "dashutil_" + STORAGE_EVENT_HANDLERS.getStoragePageName() + 
+            ".zip");
 
-        for (var i = 0; i < filePathUrlList.length; i ++) {
-            console.log(filePathUrlList[i][0] + "  " + filePathUrlList[i][1]);
+        const readableZipStream = new ZIP({
+            start (ctrl) {},
+            async pull (ctrl) {
+                for (var i = 0; i < filePathUrlList.length; i ++) {
+                    if (!filePathUrlList[i][1]) {
+                        ctrl.enqueue({name: filePathUrlList[i][0],
+                            directory: true});
+                    }
+                    else {
+                        const url = filePathUrlList[i][1];
+                        const res = await fetch(url);
+                        const stream = () => res.body;
+                        const name = filePathUrlList[i][0];
+
+                        ctrl.enqueue({name, stream});
+                    }
+                }
+                ctrl.close();
+            }
+        });
+
+        // more optimized
+        if (window.WritableStream && readableZipStream.pipeTo) {
+            return readableZipStream.pipeTo(fileStream)
+                .then(() => console.log('done writing'));
         }
+
+        // less optimized
+        window.writer = fileStream.getWriter();
+        const reader = readableZipStream.getReader();
+        const pump = () => reader.read().then(res => res.done 
+            ? writer.close() 
+            : writer.write(res.value).then(pump));
+
+        pump();
+            
     };
 
 
@@ -104,6 +142,9 @@ var FILE_MANAGER = new function() {
      * @description downloads a singular file
      * @param {array} fileId the id of the file to download
      * @return {none}
+     * 
+     * Once again, following the wonderfully helpful work of 
+     * https://github.com/jimmywarting/StreamSaver.js/blob/master/examples/fetch.html
      */
     this.downloadFile = function(fileId) {
         var f = FILE_MANAGER.idToFileMap.get(fileId);
