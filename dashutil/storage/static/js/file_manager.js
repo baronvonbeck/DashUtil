@@ -616,6 +616,23 @@ var FILE_MANAGER = new function() {
     };
 
 
+    this.destinationIsAChildOfFilesToMove = function(
+            destinationId, fileIdList) {
+        
+        var destinationFile = FILE_MANAGER.idToFileMap.get(destinationId);
+        for (var i = 0; i < fileIdList.length; i ++) {
+            var f = destinationFile;
+            while (f.getParentDirectoryId != null) {
+                if (fileIdList[i] == f.getId)
+                    return true;
+                f = FILE_MANAGER.idToFileMap.get(f.getParentDirectoryId);
+            }
+            if (fileIdList[i] == f.getId)
+                return true;
+        }
+    }
+
+
     this.getIdForDirOrParentIdForFile = function(fileId) {
         var f = FILE_MANAGER.idToFileMap.get(fileId);
 

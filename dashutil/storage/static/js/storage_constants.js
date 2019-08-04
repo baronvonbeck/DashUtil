@@ -9,6 +9,9 @@ const STORAGE_CONSTANTS = new function() {
     this.fileListEl =               document.getElementById("file-list-id");
     this.listIdEl =                 document.getElementById("file-list-temp-id");
 
+    this.buttonListEl =             document.getElementById("button-list-id");
+    this.modalListEl =              document.getElementById("modal-list-id");
+
     this.uploadModalButtonEl =      document.getElementById("upload-modal-button-id");
     this.uploadModalEl =            document.getElementById("upload-modal-id");
     this.uploadModalContentEl =     document.getElementById("upload-modal-content-id");
@@ -48,6 +51,24 @@ const STORAGE_CONSTANTS = new function() {
     this.moveModalContentEl =     document.getElementById("move-modal-content-id");
     this.moveOkButtonEl =         document.getElementById("move-ok-id");
     this.moveCloseButtonEl =      document.getElementById("move-cancel-id");
+
+    this.numFunctions =             6;
+
+    this.modalButtonEls =           [this.uploadModalButtonEl, this.downloadModalButtonEl,
+                                     this.directoryModalButtonEl, this.renameModalButtonEl,
+                                     this.deleteModalButtonEl, this.moveModalButtonEl];
+    
+    this.modalEls =                 [this.uploadModalEl, this.downloadModalEl,
+                                     this.directoryModalEl, this.renameModalEl,
+                                     this.deleteModalEl, this.moveModalEl];
+
+    this.modalCloseEls =            [this.uploadCloseButtonEl, this.downloadCloseButtonEl,
+                                     this.directoryCloseButtonEl, this.renameCloseButtonEl,
+                                     this.deleteCloseButtonEl, this.moveCloseButtonEl];
+    
+    this.modalOkEls =               [this.uploadButtonEl, this.downloadButtonEl,
+                                     this.directoryOkButtonEl, this.renameOkButtonEl,
+                                     this.deleteOkButtonEl, this.moveOkButtonEl];
 
 
     this.nameSortId =               "name-sort-id";

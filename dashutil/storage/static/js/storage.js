@@ -4,10 +4,7 @@
 
 $(document).ready(function() {
 
-    // Set up event handlers
-    STORAGE_EVENT_HANDLERS.addAllEventListeners(uploadNewFilesToDirectory, 
-        createNewDirectory, renameFiles, deleteFiles, 
-        getFilesWithinDirectory, moveFiles, getFilePathsAndUrls);
+    
 
     FILE_MANAGER.initializeSelf();
 
@@ -21,6 +18,11 @@ $(document).ready(function() {
 
     document.getElementById("storageFiles").remove();
     document.getElementById("storagePage").remove();
+
+    // Set up event handlers
+    STORAGE_EVENT_HANDLERS.addAllEventListeners(uploadNewFilesToDirectory, 
+        createNewDirectory, renameFiles, deleteFiles, 
+        getFilesWithinDirectory, moveFiles, getFilePathsAndUrls);
 }); 
 
 

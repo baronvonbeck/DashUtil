@@ -39,6 +39,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.storagePageId = null;
     this.storagePageName = null;
     this.storagePageFields = null;
+
+
+    this.handlerFunctions = null;
+
+        
 	
 	// Handler to set up event listeners. 1 callback passed in from storage.js
     this.addAllEventListeners = function(newUploadNewFilesToDirectoryCallback, 
@@ -55,105 +60,30 @@ var STORAGE_EVENT_HANDLERS = new function() {
         this.moveFilesCallback = newMoveFilesCallback;
         this.downloadFileListCallback = newDownloadFileListCallback;
 
-        // upload new files modal button
-        STORAGE_CONSTANTS.uploadModalButtonEl.addEventListener(
-            "click", this.openUploadModal, false);
+        this.handlerFunctions = [
+            STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler, 
+            STORAGE_EVENT_HANDLERS.downloadFilesToDirectoryHandler,
+            STORAGE_EVENT_HANDLERS.createNewDirectoryHandler,
+            STORAGE_EVENT_HANDLERS.renameFilesHandler,
+            STORAGE_EVENT_HANDLERS.deleteFilesHandler,
+            STORAGE_EVENT_HANDLERS.moveFilesHandler
+        ];
 
-        // close upload files modal by clicking cancel
-        STORAGE_CONSTANTS.uploadCloseButtonEl.addEventListener(
-            "click", this.closeUploadModal, false);
-
-	    // click upload to upload new file(s)
-	    STORAGE_CONSTANTS.uploadButtonEl.addEventListener(
-            "click", this.uploadNewFilesToDirectoryHandler, false);
-
-
-        // download new files modal button
-        STORAGE_CONSTANTS.downloadModalButtonEl.addEventListener(
-            "click", this.openDownloadModal, false);
-
-        // close download files modal by clicking cancel
-        STORAGE_CONSTANTS.downloadCloseButtonEl.addEventListener(
-            "click", this.closeDownloadModal, false);
-
-	    // click download to download new file(s)
-	    STORAGE_CONSTANTS.downloadButtonEl.addEventListener(
-            "click", this.downloadFilesToDirectoryHandler, false);
-            
-
-        // create new directory modal button
-        STORAGE_CONSTANTS.directoryModalButtonEl.addEventListener(
-            "click", this.openDirectoryModal, false);
-
-        // close new directory modal by clicking cancel
-        STORAGE_CONSTANTS.directoryCloseButtonEl.addEventListener(
-            "click", this.closeDirectoryModal, false);
-
-        // click ok to create a new directory
-        STORAGE_CONSTANTS.directoryOkButtonEl.addEventListener(
-            "click", this.createNewDirectoryHandler, false);
-
-
-        // rename modal button
-        STORAGE_CONSTANTS.renameModalButtonEl.addEventListener(
-            "click", this.openRenameModal, false);
-
-        // close rename modal by clicking cancel
-        STORAGE_CONSTANTS.renameCloseButtonEl.addEventListener(
-            "click", this.closeRenameModal, false);
-
-        // click ok to rename file(s)
-        STORAGE_CONSTANTS.renameOkButtonEl.addEventListener(
-            "click", this.renameFilesHandler, false);
-
-
-        // delete modal button
-        STORAGE_CONSTANTS.deleteModalButtonEl.addEventListener(
-            "click", this.openDeleteModal, false);
-
-        // close delete modal by clicking cancel
-        STORAGE_CONSTANTS.deleteCloseButtonEl.addEventListener(
-            "click", this.closeDeleteModal, false);
-
-        // click ok to delete file(s)
-        STORAGE_CONSTANTS.deleteOkButtonEl.addEventListener(
-            "click", this.deleteFilesHandler, false);
-
+        STORAGE_CONSTANTS.buttonListEl.addEventListener(
+            "click", function(event) {
+                STORAGE_EVENT_HANDLERS.modalOpenButtonHandler(event);
+        }, false);
         
-        // move modal button
-        STORAGE_CONSTANTS.moveModalButtonEl.addEventListener(
-            "click", this.openMoveModal, false);
-
-        // close move modal by clicking cancel
-        STORAGE_CONSTANTS.moveCloseButtonEl.addEventListener(
-            "click", this.closeMoveModal, false);
-
-        // click ok to move file(s)
-        STORAGE_CONSTANTS.moveOkButtonEl.addEventListener(
-            "click", this.moveFilesHandler, false);
-
+        STORAGE_CONSTANTS.modalListEl.addEventListener(
+            "click", function(event) {
+                STORAGE_EVENT_HANDLERS.modalInteriorButtonHandler(event);
+        }, false);
         
-        // click off of modals to close
+        // click off of modals to close, or off to side to deselect
         window.addEventListener(
             "click", function(event) {
-                if (event.target == STORAGE_CONSTANTS.uploadModalEl)
-                    STORAGE_EVENT_HANDLERS.closeUploadModal();
-                else if (event.target == STORAGE_CONSTANTS.downloadModalEl)
-                    STORAGE_EVENT_HANDLERS.closeDownloadModal();
-                else if (event.target == STORAGE_CONSTANTS.directoryModalEl)
-                    STORAGE_EVENT_HANDLERS.closeDirectoryModal();
-                else if (event.target == STORAGE_CONSTANTS.renameModalEl)
-                    STORAGE_EVENT_HANDLERS.closeRenameModal();
-                else if (event.target == STORAGE_CONSTANTS.deleteModalEl)
-                    STORAGE_EVENT_HANDLERS.closeDeleteModal();
-                else if (event.target == STORAGE_CONSTANTS.deleteModalEl)
-                    STORAGE_EVENT_HANDLERS.moveDeleteModal();
-                else if (!event.ctrlKey && !event.shiftKey && 
-                        !STORAGE_CONSTANTS.mainEl.contains(event.target)) {
-                    STORAGE_EVENT_HANDLERS.clearClass(
-                        STORAGE_CONSTANTS.selectedClass);
-                }
-            }, false);
+                STORAGE_EVENT_HANDLERS.windowClickHandler(event);
+        }, false);
 
 
         [STORAGE_CONSTANTS.nameSortEl, STORAGE_CONSTANTS.modifySortEl, 
@@ -165,68 +95,47 @@ var STORAGE_EVENT_HANDLERS = new function() {
             });
     };
 
-        
-    // opens the upload new file modal
-    this.openUploadModal = function() {
-        STORAGE_CONSTANTS.uploadModalEl.style.display = "block";
-    };
 
-    // opens the download file modal
-    this.openDownloadModal = function() {
-        STORAGE_CONSTANTS.downloadModalEl.style.display = "block";
-    };
+    this.modalOpenButtonHandler = function(e) {
+        for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
+            if (e.target === STORAGE_CONSTANTS.modalButtonEls[i]){
+                STORAGE_CONSTANTS.modalEls[i].style.display = "block";
+                e.stopPropagation();
+                return;
+            }
+        }
+    }
 
-    // opens the new directory modal
-    this.openDirectoryModal = function() {
-        STORAGE_CONSTANTS.directoryModalEl.style.display = "block";
-    };
+    this.modalInteriorButtonHandler = function(e) {
+        for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
+            if (e.target === STORAGE_CONSTANTS.modalCloseEls[i]){
+                STORAGE_CONSTANTS.modalEls[i].style.display = "none";
+                e.stopPropagation();
+                return;
+            }
+            else if (e.target === STORAGE_CONSTANTS.modalOkEls[i]) {
+                STORAGE_EVENT_HANDLERS.handlerFunctions[i]();
+                e.stopPropagation();
+                return;
+            }
+        }
+    }
 
-    // opens the rename modal
-    this.openRenameModal = function() {
-        STORAGE_CONSTANTS.renameModalEl.style.display = "block";
-    };
+    this.windowClickHandler = function(e) {
+        for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
+            if (e.target === STORAGE_CONSTANTS.modalEls[i]){
+                STORAGE_CONSTANTS.modalEls[i].style.display = "none";
+                e.stopPropagation();
+                return;
+            }
+        }
 
-    // opens the delete modal
-    this.openDeleteModal = function() {
-        STORAGE_CONSTANTS.deleteModalEl.style.display = "block";
-    };
-    // opens the move modal
-    this.openMoveModal = function() {
-        STORAGE_CONSTANTS.moveModalEl.style.display = "block";
-    };
-
-
-
-    // closes the upload new file modal
-    this.closeUploadModal = function() {
-        STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
-    };
-
-    // closes the download file modal
-    this.closeDownloadModal = function() {
-        STORAGE_CONSTANTS.downloadModalEl.style.display = "none";
-    };
-
-    // closes the new directory modal
-    this.closeDirectoryModal = function() {
-        STORAGE_CONSTANTS.directoryModalEl.style.display = "none";
-    };
-
-    // closes the rename modal
-    this.closeRenameModal = function() {
-        STORAGE_CONSTANTS.renameModalEl.style.display = "none";
-    };
-
-    // closes the delete modal
-    this.closeDeleteModal = function() {
-        STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
-    };
-
-    // closes the delete modal
-    this.closeMoveModal = function() {
-        STORAGE_CONSTANTS.moveModalEl.style.display = "none";
-    };
-
+        if (!event.ctrlKey && !event.shiftKey && 
+                !STORAGE_CONSTANTS.mainEl.contains(event.target)) {
+            STORAGE_EVENT_HANDLERS.clearClass(
+                STORAGE_CONSTANTS.selectedClass);
+        }
+    }
     
 
     this.changeSortOrder = function(newSort) {
@@ -286,7 +195,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 
                 STORAGE_EVENT_HANDLERS.moveIds = null;
                 
-
                 STORAGE_EVENT_HANDLERS.moveFilesCallback(storagePageName, 
                     fileIdsToMove, destinationId);
                 
@@ -435,6 +343,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
             STORAGE_CONSTANTS.uploadFieldEl.value = '';
         }
+        STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
     };
 
 
@@ -458,6 +367,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
         else {
             console.log("must have 1 or more files selected to download");
         }
+
+        STORAGE_CONSTANTS.downloadModalEl.style.display = "none";
     };
 
 
@@ -479,7 +390,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             console.log("Please select only 1 parent to create a new directory in");
         }
 
-        STORAGE_EVENT_HANDLERS.closeDirectoryModal();
+        STORAGE_CONSTANTS.directoryModalEl.style.display = "none";
     };
 
 
@@ -503,7 +414,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             // and that 1 or more files must be selected
         }
 
-        STORAGE_EVENT_HANDLERS.closeRenameModal();
+        STORAGE_CONSTANTS.renameModalEl.style.display = "none";
     };
 
     
@@ -526,7 +437,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             // and that 1 or more files must be selected
         }
 
-        STORAGE_EVENT_HANDLERS.closeDeleteModal();
+        STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
     };
 
 
@@ -543,7 +454,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             console.log("No files selected!");
             // error 1 or more files must be selected
         }
-        STORAGE_EVENT_HANDLERS.closeMoveModal();
+        STORAGE_CONSTANTS.moveModalEl.style.display = "none";
     };
 
 
