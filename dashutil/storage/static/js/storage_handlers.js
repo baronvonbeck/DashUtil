@@ -31,18 +31,30 @@ var STORAGE_EVENT_HANDLERS = new function() {
         STORAGE_CONSTANTS.buttonListEl.addEventListener(
             "click", function(event) {
                 STORAGE_EVENT_HANDLERS.modalOpenButtonHandler(event);
-        }, false);
+            }, false);
         
         STORAGE_CONSTANTS.modalListEl.addEventListener(
             "click", function(event) {
                 STORAGE_EVENT_HANDLERS.modalInteriorButtonHandler(event);
-        }, false);
+            }, false);
         
         // click off of modals to close, or off to side to deselect
         window.addEventListener(
             "click", function(event) {
                 STORAGE_EVENT_HANDLERS.windowClickHandler(event);
-        }, false);
+            }, false);
+
+        STORAGE_CONSTANTS.fileListEl.addEventListener(
+            "click", function(event) {
+                var el = event.target;
+                while (!el.classList.contains(STORAGE_CONSTANTS.fileClass)) {
+                    el = el.parentNode;
+                }
+                
+                STORAGE_EVENT_HANDLERS.fileClickHandler(el, event.ctrlKey, 
+                    event.shiftKey);
+                event.stopPropagation();
+            }, false);
 
 
         [STORAGE_CONSTANTS.nameSortEl, STORAGE_CONSTANTS.modifySortEl, 
@@ -51,7 +63,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 el.addEventListener("click", function(event) {
                     STORAGE_EVENT_HANDLERS.changeSortOrder(this);
                 }, false);
-            });
+            }
+        );
     };
 
 
@@ -132,103 +145,95 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 
     // adds click callbacks to see selected files, expand/contract directories
-    this.activateSelectableElementCallbacks = function(itemId) {
-        var el = document.getElementById(itemId);
-        el.addEventListener(
-                "click", function(event) {
-        
-            if (STORAGE_EVENT_HANDLERS.moveIds) {
-                var destinationId = 
-                    FILE_MANAGER.getIdForDirOrParentIdForFile(this.id);
-                    var fileIdsToMove = STORAGE_EVENT_HANDLERS.moveIds;
-                
-                if (FILE_MANAGER.destinationIsAChildOfFilesToMove(
-                    destinationId, fileIdsToMove)) {
-                        console.log("Can not move a file to itself or one of its children.");
-                        console.log("Please choose another directory to move the file to.");
-                        return;
-                }
-
-                var storagePageName = 
-                    STORAGE_EVENT_HANDLERS.getStoragePageName();
-                
-                STORAGE_EVENT_HANDLERS.moveIds = null;
-                
-                STORAGE_DB.moveFiles(storagePageName, fileIdsToMove, 
-                    destinationId);
-                
-                return;
+    this.fileClickHandler = function(el, ctrl, shift) {
+        if (STORAGE_EVENT_HANDLERS.moveIds) {
+            var destinationId = 
+                FILE_MANAGER.getIdForDirOrParentIdForFile(el.id);
+                var fileIdsToMove = STORAGE_EVENT_HANDLERS.moveIds;
+            
+            if (FILE_MANAGER.destinationIsAChildOfFilesToMove(
+                destinationId, fileIdsToMove)) {
+                    console.log("Can not move a file to itself or one of its children.");
+                    console.log("Please choose another directory to move the file to.");
+                    return;
             }
 
-            if (event.ctrlKey) {
-                this.classList.toggle(STORAGE_CONSTANTS.selectedClass);
-               
-            }
-            else if (event.shiftKey && STORAGE_EVENT_HANDLERS.prevClickedId) {
+            var storagePageName = 
+                STORAGE_EVENT_HANDLERS.getStoragePageName();
+            
+            STORAGE_EVENT_HANDLERS.moveIds = null;
+            
+            STORAGE_DB.moveFiles(storagePageName, fileIdsToMove, 
+                destinationId);
+            
+            return;
+        }
 
-                var allFiles = 
-                    STORAGE_CONSTANTS.fileListEl.innerHTML.toString();
-                var startEl = document.getElementById(
-                    STORAGE_EVENT_HANDLERS.prevClickedId);
-                var endEl = this;
-               
-                if (allFiles.indexOf("\"" + endEl.id + "\"") > 
-                        allFiles.indexOf("\"" + startEl.id + "\"")) {
-                    endEl = startEl;
-                    startEl = this;
-                }
-               
-                STORAGE_EVENT_HANDLERS.clearClass(
+        if (ctrl) {
+            el.classList.toggle(STORAGE_CONSTANTS.selectedClass);
+            
+        }
+        else if (shift && STORAGE_EVENT_HANDLERS.prevClickedId) {
+
+            var allFiles = 
+                STORAGE_CONSTANTS.fileListEl.innerHTML.toString();
+            var startEl = document.getElementById(
+                STORAGE_EVENT_HANDLERS.prevClickedId);
+            var endEl = el;
+            
+            if (allFiles.indexOf("\"" + endEl.id + "\"") > 
+                    allFiles.indexOf("\"" + startEl.id + "\"")) {
+                endEl = startEl;
+                startEl = el;
+            }
+            
+            STORAGE_EVENT_HANDLERS.clearClass(
+                STORAGE_CONSTANTS.selectedClass);
+            startEl.classList.add(STORAGE_CONSTANTS.selectedClass);
+            if (startEl.id == endEl.id) return;
+            
+            endEl.classList.add(STORAGE_CONSTANTS.selectedClass);
+            
+            allFiles = allFiles.substring(
+                allFiles.indexOf("\"" + startEl.id + "\"") + startEl.id.length + 1,
+                allFiles.indexOf("\"" + endEl.id + "\"") - 1);
+            
+            var elIdsToSelect =
+                STORAGE_EVENT_HANDLERS.parseElementIdsFromString(allFiles);
+                
+            for (var i = 0; i < elIdsToSelect.length; i ++) {
+                document.getElementById(elIdsToSelect[i]).classList.add(
                     STORAGE_CONSTANTS.selectedClass);
-                startEl.classList.add(STORAGE_CONSTANTS.selectedClass);
-                if (startEl.id == endEl.id) return;
-               
-                endEl.classList.add(STORAGE_CONSTANTS.selectedClass);
-               
-                allFiles = allFiles.substring(
-                    allFiles.indexOf("\"" + startEl.id + "\"") + startEl.id.length + 1,
-                    allFiles.indexOf("\"" + endEl.id + "\"") - 1);
-               
-                var elIdsToSelect =
-                    STORAGE_EVENT_HANDLERS.parseElementIdsFromString(allFiles);
-                    
-                for (var i = 0; i < elIdsToSelect.length; i ++) {
-                    document.getElementById(elIdsToSelect[i]).classList.add(
-                        STORAGE_CONSTANTS.selectedClass);
-                } 
-            }
-            else {
-                STORAGE_EVENT_HANDLERS.clearClass(
-                    STORAGE_CONSTANTS.selectedClass);
-                this.classList.add(STORAGE_CONSTANTS.selectedClass);
-               
-                if (FILE_MANAGER.checkIfFileIsDirectory(this.id)) {
-                    var directoryFileList = document.getElementById(
-                        this.id + STORAGE_CONSTANTS.ulIDAppend);
- 
-                    if (directoryFileList.style.display === "none") {
-                        directoryFileList.style.display = "block";
-                        STORAGE_DB.getFilesWithinDirectory(
-                            STORAGE_EVENT_HANDLERS.getStoragePageName(),
-                            this.id);
-                       
-                        this.getElementsByTagName("img")[0].src =
-                            STORAGE_CONSTANTS.directoryOpenLightIcon;
-                    }
-                    else {
-                        directoryFileList.style.display = "none";
- 
-                        this.getElementsByTagName("img")[0].src =
-                            STORAGE_CONSTANTS.directoryCloseLightIcon;
-                    }
-                }
             } 
+        }
+        else {
+            STORAGE_EVENT_HANDLERS.clearClass(
+                STORAGE_CONSTANTS.selectedClass);
+            el.classList.add(STORAGE_CONSTANTS.selectedClass);
+            
+            if (FILE_MANAGER.checkIfFileIsDirectory(el.id)) {
+                var directoryFileList = document.getElementById(
+                    el.id + STORAGE_CONSTANTS.ulIDAppend);
 
-            STORAGE_EVENT_HANDLERS.prevClickedId = this.id;
+                if (directoryFileList.style.display === "none") {
+                    directoryFileList.style.display = "block";
+                    STORAGE_DB.getFilesWithinDirectory(
+                        STORAGE_EVENT_HANDLERS.getStoragePageName(),
+                        el.id);
+                    
+                    el.getElementsByTagName("img")[0].src =
+                        STORAGE_CONSTANTS.directoryOpenLightIcon;
+                }
+                else {
+                    directoryFileList.style.display = "none";
 
-        }, false);
+                    el.getElementsByTagName("img")[0].src =
+                        STORAGE_CONSTANTS.directoryCloseLightIcon;
+                }
+            }
+        } 
 
-        STORAGE_EVENT_HANDLERS.addDragEventHandlers(el);
+        STORAGE_EVENT_HANDLERS.prevClickedId = el.id;
     };
 
 
