@@ -96,8 +96,8 @@ var FILE_MANAGER = new function() {
      */
     this.downloadFileList = function(filePathUrlList) {
         const fileStream = streamSaver.createWriteStream(
-            "dashutil_" + STORAGE_EVENT_HANDLERS.getStoragePageName() + 
-            ".zip");
+            "dashutil_" + STORAGE_EVENT_HANDLERS.getStoragePageName() + "_" + 
+            Date.now().toString() + ".zip");
 
         const readableZipStream = new ZIP({
             start (ctrl) {},

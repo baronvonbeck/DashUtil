@@ -6,32 +6,6 @@
 // keyboard, click, hover, focus, etc event handlers for the storage page
 var STORAGE_EVENT_HANDLERS = new function() {
 
-	// Method to call back to upload a new file. Takes storage page name, 
-	// file uploaded, and parent directory id as parameters
-    this.uploadNewFilesToDirectoryCallback = null;
-    
-    // Method to call back to create a new directory. Takes storage page name, 
-	// file uploaded, and parent directory id as parameters
-    this.createNewDirectoryCallback = null;
-
-    // Method to call back to rename a file or file(s). Takes storage page name, 
-	// a list of file ids to rename, and the new name as parameters
-    this.renameFilesCallback = null;
-
-    // Method to call back to delete a file. Takes storage page name and
-    // list of file ids to delete as parameters
-    this.deleteFilesCallback = null;
-
-    // Method to call back to move files. Takes storage page name, 
-    // list of file ids, and destinationId as parameters
-    this.moveFilesCallback = null;
-
-    // Method to call back to delete a file. Takes storage page name and
-    // list of file ids to delete as parameters
-    this.expandDirectoryCallback = null;
-
-    this.downloadFileListCallback = null;
-
     this.prevClickedId = null;
     this.moveIds = null;
     
@@ -40,25 +14,10 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.storagePageName = null;
     this.storagePageFields = null;
 
-
-    this.handlerFunctions = null;
-
-        
+    this.handlerFunctions = null;  
 	
-	// Handler to set up event listeners. 1 callback passed in from storage.js
-    this.addAllEventListeners = function(newUploadNewFilesToDirectoryCallback, 
-        newCreateNewDirectoryCallback, newRenameFilesCallback, 
-        newDeleteFilesCallback, newExpandDirectoryCallback,
-        newMoveFilesCallback, newDownloadFileListCallback) {
-
-        this.uploadNewFilesToDirectoryCallback = 
-            newUploadNewFilesToDirectoryCallback;
-        this.createNewDirectoryCallback = newCreateNewDirectoryCallback;
-        this.renameFilesCallback = newRenameFilesCallback;
-        this.deleteFilesCallback = newDeleteFilesCallback;
-        this.expandDirectoryCallback = newExpandDirectoryCallback;
-        this.moveFilesCallback = newMoveFilesCallback;
-        this.downloadFileListCallback = newDownloadFileListCallback;
+	// Handler to set up event listeners
+    this.addAllEventListeners = function() {
 
         this.handlerFunctions = [
             STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler, 
@@ -104,7 +63,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 return;
             }
         }
-    }
+    };
 
     this.modalInteriorButtonHandler = function(e) {
         for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
@@ -119,7 +78,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 return;
             }
         }
-    }
+    };
 
     this.windowClickHandler = function(e) {
         for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
@@ -135,7 +94,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_EVENT_HANDLERS.clearClass(
                 STORAGE_CONSTANTS.selectedClass);
         }
-    }
+    };
     
 
     this.changeSortOrder = function(newSort) {
@@ -169,7 +128,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         }
 
         FILE_MANAGER.updateSortOrder(sortType, sortOrder);
-    }
+    };
 
 
     // adds click callbacks to see selected files, expand/contract directories
@@ -195,8 +154,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 
                 STORAGE_EVENT_HANDLERS.moveIds = null;
                 
-                STORAGE_EVENT_HANDLERS.moveFilesCallback(storagePageName, 
-                    fileIdsToMove, destinationId);
+                STORAGE_DB.moveFiles(storagePageName, fileIdsToMove, 
+                    destinationId);
                 
                 return;
             }
@@ -207,13 +166,14 @@ var STORAGE_EVENT_HANDLERS = new function() {
             }
             else if (event.shiftKey && STORAGE_EVENT_HANDLERS.prevClickedId) {
 
-                var allFiles = STORAGE_CONSTANTS.fileListEl.innerHTML.toString();
+                var allFiles = 
+                    STORAGE_CONSTANTS.fileListEl.innerHTML.toString();
                 var startEl = document.getElementById(
                     STORAGE_EVENT_HANDLERS.prevClickedId);
                 var endEl = this;
                
-                if (allFiles.indexOf("\"" + endEl.id + "\"") > allFiles.indexOf(
-                        "\"" + startEl.id + "\"")) {
+                if (allFiles.indexOf("\"" + endEl.id + "\"") > 
+                        allFiles.indexOf("\"" + startEl.id + "\"")) {
                     endEl = startEl;
                     startEl = this;
                 }
@@ -236,7 +196,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
                     document.getElementById(elIdsToSelect[i]).classList.add(
                         STORAGE_CONSTANTS.selectedClass);
                 } 
-                
             }
             else {
                 STORAGE_EVENT_HANDLERS.clearClass(
@@ -249,7 +208,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
  
                     if (directoryFileList.style.display === "none") {
                         directoryFileList.style.display = "block";
-                        STORAGE_EVENT_HANDLERS.expandDirectoryCallback(
+                        STORAGE_DB.getFilesWithinDirectory(
                             STORAGE_EVENT_HANDLERS.getStoragePageName(),
                             this.id);
                        
@@ -324,13 +283,10 @@ var STORAGE_EVENT_HANDLERS = new function() {
         el.addEventListener("drop", function(event) {
             console.log(event.target.id);
         }, false);
-        
-        
-    }
+    };
     
     
     // handles uploading of the file to the storage room or a subdirectory
-    // using the callback provided
 	this.uploadNewFilesToDirectoryHandler = function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
         var filesToUpload = STORAGE_CONSTANTS.uploadFieldEl.files;
@@ -338,7 +294,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_EVENT_HANDLERS.getParentDirectoriesForAction();
 
         if (filesToUpload.length > 0 && parentDirectoryId.length == 1) {
-            STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryCallback(
+            STORAGE_DB.uploadNewFilesToDirectory(
                 storagePageName, filesToUpload, parentDirectoryId[0]);
 
             STORAGE_CONSTANTS.uploadFieldEl.value = '';
@@ -360,7 +316,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             FILE_MANAGER.downloadFile(fileIdsToDownload[0]);
         }
         else if (fileIdsToDownload.length > 0) {
-            STORAGE_EVENT_HANDLERS.downloadFileListCallback(
+            STORAGE_DB.getFilePathsAndUrls(
                 STORAGE_EVENT_HANDLERS.getStoragePageName(), 
                 fileIdsToDownload);
         }
@@ -382,7 +338,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_EVENT_HANDLERS.getParentDirectoriesForAction();
 
         if (newDirectoryName.length > 0 && parentDirectoryId.length == 1) {
-            STORAGE_EVENT_HANDLERS.createNewDirectoryCallback(
+            STORAGE_DB.createNewDirectory(
                 storagePageName, newDirectoryName, parentDirectoryId[0]);
         }
         else {
@@ -404,8 +360,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_CONSTANTS.selectedClass);
 
         if (renameName.length > 0 && fileIdsToRename.length > 0) {
-            STORAGE_EVENT_HANDLERS.renameFilesCallback(
-                storagePageName, fileIdsToRename, renameName);
+            STORAGE_DB.renameFiles(storagePageName, fileIdsToRename, 
+                renameName);
         }
         else {
             console.log("No files selected or length of new name is less than 0!");
@@ -427,8 +383,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             fileIdsToDelete);
 
         if (fileIdsToDelete.length > 0) {
-            STORAGE_EVENT_HANDLERS.deleteFilesCallback(
-                storagePageName, fileIdsToDelete);
+            STORAGE_DB.deleteFiles(storagePageName, fileIdsToDelete);
         }
         else {
             console.log("No files selected!");
@@ -470,7 +425,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
           }
        
         return elIds;
-    }
+    };
 
 
     // returns the parent directories an action corresponds too, based on 
@@ -511,7 +466,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         var ids = STORAGE_EVENT_HANDLERS.getIdsOfElementsByClassName(c);
         for (var i = 0; i < ids.length; i ++)
             document.getElementById(ids[i]).classList.remove(c);
-    }
+    };
 
 
     // returns the storage page id, formatted to remove all single and 
@@ -561,7 +516,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 pathToIcon = STORAGE_CONSTANTS.genericFileLightIcon;
         }
         return pathToIcon;
-    }
+    };
 
     
     // formats a string to remove all single and double quotes ['"]

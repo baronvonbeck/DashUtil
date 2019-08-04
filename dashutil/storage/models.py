@@ -61,21 +61,40 @@ class File_DataManager(models.Manager):
     # gets full path and url info for file downloading on client
     def get_download_information(self, files_to_download, prepend):
         file_path_url_list = []
+        unique_names = {}
+        c = 1
 
         for f in files_to_download:
+            fname = f.filename
 
             if (f.upload_path):
+                print(f.filename)
+                temp = f.filename.rsplit('.')
+                
+                if fname in unique_names:
+                    fname = temp[0] + " (" + str(unique_names[f.filename]) + \
+                        ")." + temp[1] 
+                    unique_names[f.filename] += 1
+                    
+                unique_names[fname] = 1
+
                 file_path_url_list.append(
-                    [prepend + f.filename, f.upload_path])
+                    [prepend + fname, f.upload_path])
             else:
+                if fname in unique_names:
+                    fname = fname + " (" + str(unique_names[f.filename]) + ")"
+                    unique_names[f.filename] += 1
+                    
+                unique_names[fname] = 1
+
                 sub_dir_file_path_url_list = \
                     File_Data.file_datamanager.get_download_information(
                         File_Data.file_datamanager.get_children_of_directory(f),
-                        prepend + f.filename + "/")
+                        prepend + fname + "/")
                 
                 if (not len(sub_dir_file_path_url_list)):
                     file_path_url_list.append(
-                        [prepend + f.filename + "/", None])
+                        [prepend + fname + "/", None])
                 else:
                     for sub in sub_dir_file_path_url_list:
                         file_path_url_list.append(sub)
