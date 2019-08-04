@@ -251,7 +251,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             var el = e.target;
             while (el != STORAGE_CONSTANTS.mainEl) {
                 if (el.classList != undefined && 
-                        !el.classList.contains(STORAGE_CONSTANTS.fileClass))
+                        el.classList.contains(STORAGE_CONSTANTS.fileClass))
                     break;
                 el = el.parentNode;
             }
