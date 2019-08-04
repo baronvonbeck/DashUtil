@@ -40,6 +40,15 @@ ul, li {
     background-color: #bdbdbd;
 }
 
+.fileobj.dragging, .fileobj.selected.dragging {
+    opacity: 0.4;
+}
+
+.fileobj.dragto, .fileobj.selected.dragto, .fileobj.selected.dragging.dragto {
+    opacity: 1;
+    background-color: #bdbdbd;
+}
+
 .fileobj:hover {
     background-color: #e2e2e2;
 }

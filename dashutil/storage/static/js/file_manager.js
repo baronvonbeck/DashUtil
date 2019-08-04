@@ -319,7 +319,7 @@ var FILE_MANAGER = new function() {
 
         parentEl.insertBefore(newEl, compareEl);
 
-        STORAGE_EVENT_HANDLERS.activateClickToSelectItemCallback(fileId);
+        STORAGE_EVENT_HANDLERS.activateSelectableElementCallbacks(fileId);
     };
 
 
