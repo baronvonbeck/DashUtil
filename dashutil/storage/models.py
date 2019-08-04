@@ -62,7 +62,6 @@ class File_DataManager(models.Manager):
     def get_download_information(self, files_to_download, prepend):
         file_path_url_list = []
         unique_names = {}
-        c = 1
 
         for f in files_to_download:
             fname = f.filename

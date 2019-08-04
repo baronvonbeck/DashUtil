@@ -46,15 +46,22 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
         STORAGE_CONSTANTS.fileListEl.addEventListener(
             "click", function(event) {
+                
                 var el = event.target;
-                while (!el.classList.contains(STORAGE_CONSTANTS.fileClass)) {
+                while (el != STORAGE_CONSTANTS.fileListEl) {
+                    if (el.classList != undefined && 
+                            el.classList.contains(STORAGE_CONSTANTS.fileClass))
+                        break;
                     el = el.parentNode;
                 }
+                if (el == STORAGE_CONSTANTS.fileListEl) return;
                 
                 STORAGE_EVENT_HANDLERS.fileClickHandler(el, event.ctrlKey, 
                     event.shiftKey);
                 event.stopPropagation();
             }, false);
+        
+        STORAGE_EVENT_HANDLERS.addDragEventHandlers();
 
 
         [STORAGE_CONSTANTS.nameSortEl, STORAGE_CONSTANTS.modifySortEl, 
@@ -102,10 +109,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
             }
         }
 
-        if (!event.ctrlKey && !event.shiftKey && 
-                !STORAGE_CONSTANTS.mainEl.contains(event.target)) {
+        if (!e.ctrlKey && !e.shiftKey && 
+                !STORAGE_CONSTANTS.mainEl.contains(e.target)) {
             STORAGE_EVENT_HANDLERS.clearClass(
                 STORAGE_CONSTANTS.selectedClass);
+            STORAGE_EVENT_HANDLERS.moveIds = null;
         }
     };
     
@@ -149,7 +157,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         if (STORAGE_EVENT_HANDLERS.moveIds) {
             var destinationId = 
                 FILE_MANAGER.getIdForDirOrParentIdForFile(el.id);
-                var fileIdsToMove = STORAGE_EVENT_HANDLERS.moveIds;
+            var fileIdsToMove = STORAGE_EVENT_HANDLERS.moveIds;
             
             if (FILE_MANAGER.destinationIsAChildOfFilesToMove(
                 destinationId, fileIdsToMove)) {
@@ -237,11 +245,20 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
 
-    this.addDragEventHandlers = function(el) {
+    this.addDragEventHandlers = function() {
 
-        el.addEventListener("dragstart", function(event) {
-            this.classList.add(STORAGE_CONSTANTS.draggingClass);
-            this.classList.add(STORAGE_CONSTANTS.selectedClass);
+        STORAGE_CONSTANTS.mainEl.addEventListener("dragstart", function(e) {
+            var el = e.target;
+            while (el != STORAGE_CONSTANTS.mainEl) {
+                if (el.classList != undefined && 
+                        !el.classList.contains(STORAGE_CONSTANTS.fileClass))
+                    break;
+                el = el.parentNode;
+            }
+            if (el == STORAGE_CONSTANTS.mainEl) return;
+
+            el.classList.add(STORAGE_CONSTANTS.draggingClass);
+            el.classList.add(STORAGE_CONSTANTS.selectedClass);
 
             var selectedEls = document.getElementsByClassName(
                 STORAGE_CONSTANTS.selectedClass);
@@ -251,42 +268,70 @@ var STORAGE_EVENT_HANDLERS = new function() {
                     STORAGE_CONSTANTS.draggingClass);
             }
         }, false);
-        el.addEventListener("drag", function(event) {
+        STORAGE_CONSTANTS.mainEl.addEventListener("drag", function(e) {
 
         }, false);
-        // el.addEventListener("drag", function(event) {
+        // el.addEventListener("drag", function(e) {
 
         // }, false);
-        el.addEventListener("dragend", function(event) {
-            this.classList.remove(STORAGE_CONSTANTS.draggingClass);
-
+        STORAGE_CONSTANTS.mainEl.addEventListener("dragend", function(e) {
             STORAGE_EVENT_HANDLERS.clearClass(
                 STORAGE_CONSTANTS.draggingClass);
             STORAGE_EVENT_HANDLERS.clearClass(
                 STORAGE_CONSTANTS.dragToClass);
         }, false);
 
-        el.addEventListener("dragenter", function(event) {
-            // var prevDragTo = document.getElementsByClassName(
-            //     STORAGE_CONSTANTS.dragToClass);
-            
-            // if (prevDragTo.length)    
-            //     prevDragTo[0].classList.remove(STORAGE_CONSTANTS.dragToClass);
+        STORAGE_CONSTANTS.mainEl.addEventListener("dragenter", function(e) {
+            var el = e.target;
+            while (el != STORAGE_CONSTANTS.mainEl) {
+                if (el.classList != undefined && 
+                        el.classList.contains(STORAGE_CONSTANTS.fileClass))
+                    break;
+                el = el.parentNode;
+            }
+            if (el == STORAGE_CONSTANTS.fileListEl) return;
 
             STORAGE_EVENT_HANDLERS.clearClass(
                 STORAGE_CONSTANTS.dragToClass);
 
-            this.classList.add(STORAGE_CONSTANTS.dragToClass);
-            console.log('here');
-
+            el.classList.add(STORAGE_CONSTANTS.dragToClass);
         }, false);
         
-        el.addEventListener("dragover", function(event) {
-            event.preventDefault();
+        STORAGE_CONSTANTS.mainEl.addEventListener("dragover", function(e) {
+            e.preventDefault();
         }, false);
 
-        el.addEventListener("drop", function(event) {
-            console.log(event.target.id);
+        STORAGE_CONSTANTS.mainEl.addEventListener("drop", function(e) {
+            var el = e.target;
+            while (el != STORAGE_CONSTANTS.mainEl) {
+                if (el.classList != undefined && 
+                        el.classList.contains(STORAGE_CONSTANTS.fileClass))
+                    break;
+                el = el.parentNode;
+            }
+            if (el == STORAGE_CONSTANTS.fileListEl) return;
+
+            STORAGE_EVENT_HANDLERS.moveFilesHandler();
+
+            var destinationId = 
+                FILE_MANAGER.getIdForDirOrParentIdForFile(el.id);
+            var fileIdsToMove = STORAGE_EVENT_HANDLERS.moveIds;
+            
+            if (FILE_MANAGER.destinationIsAChildOfFilesToMove(
+                destinationId, fileIdsToMove)) {
+                    console.log("Can not move a file to itself or one of its children.");
+                    console.log("Please choose another directory to move the file to.");
+                    return;
+            }
+
+            var storagePageName = 
+                STORAGE_EVENT_HANDLERS.getStoragePageName();
+            
+            STORAGE_EVENT_HANDLERS.moveIds = null;
+            
+            STORAGE_DB.moveFiles(storagePageName, fileIdsToMove, 
+                destinationId);
+            
         }, false);
     };
     
@@ -403,7 +448,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
     // moves a selected file or list of files
     this.moveFilesHandler = function() {
-        var fileIdsToMove = STORAGE_EVENT_HANDLERS.getIdsOfElementsByClassName(STORAGE_CONSTANTS.selectedClass);
+        var fileIdsToMove = STORAGE_EVENT_HANDLERS
+            .getIdsOfElementsByClassName(STORAGE_CONSTANTS.selectedClass);
         fileIdsToMove = FILE_MANAGER.removeRedundantFiles(
             fileIdsToMove);
             
