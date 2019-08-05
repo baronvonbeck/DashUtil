@@ -599,6 +599,16 @@ var FILE_MANAGER = new function() {
     }
 
 
+    this.removeFilesMovingToSameParent = function(destinationId, 
+            fileIdsToMove) {
+        
+        return fileIdsToMove.filter(function(v) {
+            return FILE_MANAGER.idToFileMap.get(v).getParentDirectoryId != 
+                destinationId;
+        });
+    }
+
+
     /**
      * @description determine if an array contains one or more items from 
      *      another array

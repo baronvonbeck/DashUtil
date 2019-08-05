@@ -49,10 +49,13 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
                 event.target, this);
-            if (el == undefined || el == this) return;
+            var moveId = el.id;
+            if (el == undefined) return;
+            else if (el == this)
+                moveId = STORAGE_EVENT_HANDLERS.getStoragePageId();
 
-            STORAGE_EVENT_HANDLERS.fileClickHandler(el, event.ctrlKey, 
-                event.shiftKey);
+            STORAGE_EVENT_HANDLERS.fileClickHandler(el, moveId, 
+                event.ctrlKey, event.shiftKey);
             event.stopPropagation();
         }, false);
         
@@ -148,9 +151,9 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 
     // adds click callbacks to see selected files, expand/contract directories
-    this.fileClickHandler = function(el, ctrl, shift) {
-        if (STORAGE_EVENT_HANDLERS.moveIds) {
-            STORAGE_EVENT_HANDLERS.moveFilesHandler(el.id);
+    this.fileClickHandler = function(el, moveId, ctrl, shift) {
+        if (STORAGE_EVENT_HANDLERS.moveIds && moveId) {
+            STORAGE_EVENT_HANDLERS.moveFilesHandler(moveId);
             return;
         }
 
@@ -267,12 +270,13 @@ var STORAGE_EVENT_HANDLERS = new function() {
         STORAGE_CONSTANTS.fileListEl.addEventListener("drop", function(e) {
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
                 e.target, this);
-            if (el == undefined || el == this) return;
-
-            console.log(el);
+            var elId = el.id;
+            if (el == undefined) return;
+            else if (el == this)
+                elId = STORAGE_EVENT_HANDLERS.getStoragePageId();
 
             STORAGE_EVENT_HANDLERS.moveFilesHandlerInit();
-            STORAGE_EVENT_HANDLERS.moveFilesHandler(el.id);
+            STORAGE_EVENT_HANDLERS.moveFilesHandler(elId);
 
         }, false);
     };
@@ -410,19 +414,22 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.moveFilesHandler = function(elId) {
         var destinationId = 
                 FILE_MANAGER.getIdForDirOrParentIdForFile(elId);
-        var fileIdsToMove = STORAGE_EVENT_HANDLERS.moveIds;
-        
-        if (FILE_MANAGER.destinationIsAChildOfFilesToMove(
-            destinationId, fileIdsToMove)) {
-                console.log("Can not move a file to itself or one of its children.");
-                console.log("Please choose another directory to move the file to.");
-                return;
-        }
-
-        var storagePageName = 
-            STORAGE_EVENT_HANDLERS.getStoragePageName();
+        var fileIdsToMove = FILE_MANAGER.removeFilesMovingToSameParent(
+            destinationId, STORAGE_EVENT_HANDLERS.moveIds);
         
         STORAGE_EVENT_HANDLERS.moveIds = null;
+        
+        if (FILE_MANAGER.destinationIsAChildOfFilesToMove(
+                destinationId, fileIdsToMove)) {
+            console.log("Can not move a file to itself or one of its children.");
+            return;
+        }
+        else if (!fileIdsToMove.length) {
+            console.log("Files are only being moved to their current folder...");
+            return;
+        }
+
+        var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
         
         STORAGE_DB.moveFiles(storagePageName, fileIdsToMove, 
             destinationId);
@@ -486,6 +493,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 
     this.traverseUpDOMToFileElement = function(startEl, endEl) {
+        console.log("---------------------");
         while (startEl != undefined && startEl != endEl) {
             console.log(startEl);
             if (startEl.classList != undefined && 
@@ -494,7 +502,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             }
             startEl = startEl.parentNode;
         }
-        return undefined;
+        return startEl;
     }
 
 
