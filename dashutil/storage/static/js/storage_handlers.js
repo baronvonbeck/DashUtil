@@ -255,7 +255,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
                 e.target, STORAGE_CONSTANTS.fileListEl);
             
-            
             if (el == STORAGE_CONSTANTS.fileListEl || el == null || 
                     el == undefined) {
                 STORAGE_EVENT_HANDLERS.clearClass(
@@ -274,8 +273,26 @@ var STORAGE_EVENT_HANDLERS = new function() {
         }, false);
 
         STORAGE_CONSTANTS.mainEl.addEventListener("drop", function(e) {
+            e.preventDefault();
+
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
                 e.target, STORAGE_CONSTANTS.fileListEl);
+
+            if (el != null && el != undefined && e.dataTransfer.files.length) {
+                STORAGE_CONSTANTS.uploadFieldEl.files = e.dataTransfer.files;
+                STORAGE_EVENT_HANDLERS.clearClass(
+                    STORAGE_CONSTANTS.selectedClass);
+                if (el != STORAGE_CONSTANTS.fileListEl) {
+                    el.classList.add(STORAGE_CONSTANTS.selectedClass);
+                }
+                STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler();
+                STORAGE_EVENT_HANDLERS.clearClass(
+                    STORAGE_CONSTANTS.draggingClass);
+                STORAGE_EVENT_HANDLERS.clearClass(
+                    STORAGE_CONSTANTS.dragToClass);
+                return;
+            }
+            
             if (e.target.parentNode == STORAGE_CONSTANTS.buttonListEl) {
                 
                 STORAGE_EVENT_HANDLERS.modalOpenButtonHandler(e);
@@ -290,6 +307,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 STORAGE_EVENT_HANDLERS.moveFilesHandlerInit();
                 STORAGE_EVENT_HANDLERS.moveFilesHandler(el.id);
             }
+            
         }, false);
     };
     

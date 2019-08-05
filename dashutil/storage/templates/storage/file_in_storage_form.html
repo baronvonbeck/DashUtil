@@ -38,12 +38,8 @@
                 <div id="download-modal-content-id" class="modal-content">
                     <p>Download selected files from DashUtil to the specified directory 
                         on your computer.</p>
-                    <div>
-                        {% csrf_token %}
-                        {{ form }}
-                        <input type="file" id="download-file-id" multiple>
-                        <button type="submit" id="download-button-id">Download</button>
-                    </div>
+                    
+                    <button id="download-button-id">Download</button>
                     <button id="download-cancel-id">Cancel</button>
                 </div>
             </div>

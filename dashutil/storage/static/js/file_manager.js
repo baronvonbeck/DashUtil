@@ -57,6 +57,10 @@ var FILE_MANAGER = new function() {
                 FILE_MANAGER.createNewFileRecord(fileJSONList[i].pk, 
                     fileJSONList[i].fields);
             }
+            else {
+                FILE_MANAGER.updateExistingFileRecord(fileJSONList[i].pk, 
+                    fileJSONList[i].fields) 
+            }
         }
     };
 
@@ -319,6 +323,18 @@ var FILE_MANAGER = new function() {
 
         parentEl.insertBefore(newEl, compareEl);
     };
+
+
+    this.updateExistingFileRecord = function(fileId, fileJSONObject) {
+        FILE_MANAGER.idToFileMap.get(fileId).updateFilenameAndTimestamps(
+            fileJSONObject.filename, fileJSONObject.create_timestamp,
+            fileJSONObject.modify_timestamp);
+        
+        document.getElementById(fileId + 
+            STORAGE_CONSTANTS.infoIDAppend).innerHTML = 
+                FILE_MANAGER.idToFileMap.get(
+                    fileId).getInfoHTMLRepresentation;
+    }
 
 
     /**
