@@ -178,15 +178,22 @@ class File_DataManager(models.Manager):
             file_to_move = File_Data.file_datamanager.get_file_data(file_id)
             current_parent = file_to_move.parent_directory
             file_to_move.parent_directory = new_parent_directory
+            print(file_to_move.filename)
+            print(file_to_move.size)
+            print(bulk_size_update_list)
+            print("---------------------------------------")
 
             bulk_parent_update_list.append(file_to_move)
 
-            if (current_parent.id in bulk_size_update_list):
+            if (str(current_parent.id) in bulk_size_update_list):
                 bulk_size_update_list[str(current_parent.id)] -= file_to_move.size
             else:
                 bulk_size_update_list[str(current_parent.id)] = file_to_move.size * -1
 
             bulk_size_update_list[str(new_parent_directory.id)] += file_to_move.size
+
+            print(bulk_size_update_list)
+            print("---------------------------------------")
             
         self.bulk_update(bulk_parent_update_list, ['parent_directory'])
 
