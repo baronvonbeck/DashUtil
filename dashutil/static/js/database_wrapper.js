@@ -238,7 +238,7 @@ function getJsonFromDataString(dataString) {
     return JSON.parse(dataString.replace(/'upload_path': None/g, 
                 '\'upload_path\': null').replace(/[']+/g, '"')
                 // .replace(/\"\]\[\"/g, "\"],[\"")
-                .replace(/\"\, None\]\,/g, "\"\, null\]\,"));
+                .replace(/\"\, None\]/g, "\"\, null\]"));
 }
 
 /*****************************************************************************

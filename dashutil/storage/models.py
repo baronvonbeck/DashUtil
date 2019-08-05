@@ -67,7 +67,6 @@ class File_DataManager(models.Manager):
             fname = f.filename
 
             if (f.upload_path):
-                print(f.filename)
                 temp = f.filename.rsplit('.')
                 
                 if fname in unique_names:
@@ -178,10 +177,6 @@ class File_DataManager(models.Manager):
             file_to_move = File_Data.file_datamanager.get_file_data(file_id)
             current_parent = file_to_move.parent_directory
             file_to_move.parent_directory = new_parent_directory
-            print(file_to_move.filename)
-            print(file_to_move.size)
-            print(bulk_size_update_list)
-            print("---------------------------------------")
 
             bulk_parent_update_list.append(file_to_move)
 
@@ -191,9 +186,6 @@ class File_DataManager(models.Manager):
                 bulk_size_update_list[str(current_parent.id)] = file_to_move.size * -1
 
             bulk_size_update_list[str(new_parent_directory.id)] += file_to_move.size
-
-            print(bulk_size_update_list)
-            print("---------------------------------------")
             
         self.bulk_update(bulk_parent_update_list, ['parent_directory'])
 
@@ -276,7 +268,7 @@ class StorageManager(models.Manager):
             storage = self.get(storage_name=storage_page_name)
 
             # object exists, return it and created = false
-            print("Retrieved storage: " + storage_page_name)
+            # print("Retrieved storage: " + storage_page_name)
             return storage, False
 
         except (MultipleObjectsReturned, ObjectDoesNotExist):
@@ -286,7 +278,7 @@ class StorageManager(models.Manager):
 
             # object not found, so we create it. return created = true
 
-            print("Created storage: " + storage_page_name)
+            # print("Created storage: " + storage_page_name)
         
             storage_data = File_Data.file_datamanager.create_storage_data(storage_page_name)
             storage = self.create(storage_name=storage_page_name, id=storage_data)

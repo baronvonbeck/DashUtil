@@ -227,10 +227,10 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
     this.addDragEventHandlers = function() {
 
-        STORAGE_CONSTANTS.fileListEl.addEventListener("dragstart", function(e) {
+        STORAGE_CONSTANTS.mainEl.addEventListener("dragstart", function(e) {
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
-                e.target, this);
-            if (el == undefined || el == this) return;
+                e.target, STORAGE_CONSTANTS.fileListEl);
+            if (el == undefined || el == STORAGE_CONSTANTS.fileListEl) return;
 
             el.classList.add(STORAGE_CONSTANTS.draggingClass);
             el.classList.add(STORAGE_CONSTANTS.selectedClass);
@@ -244,18 +244,24 @@ var STORAGE_EVENT_HANDLERS = new function() {
             }
         }, false);
 
-        STORAGE_CONSTANTS.fileListEl.addEventListener("dragend", function(e) {
+        STORAGE_CONSTANTS.mainEl.addEventListener("dragend", function(e) {
             STORAGE_EVENT_HANDLERS.clearClass(
                 STORAGE_CONSTANTS.draggingClass);
             STORAGE_EVENT_HANDLERS.clearClass(
                 STORAGE_CONSTANTS.dragToClass);
         }, false);
 
-        STORAGE_CONSTANTS.fileListEl.addEventListener("dragenter", function(e) {
+        STORAGE_CONSTANTS.mainEl.addEventListener("dragenter", function(e) {
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
-                e.target, this);
+                e.target, STORAGE_CONSTANTS.fileListEl);
             
-            if (el == undefined || el == this) return;
+            
+            if (el == STORAGE_CONSTANTS.fileListEl || el == null || 
+                    el == undefined) {
+                STORAGE_EVENT_HANDLERS.clearClass(
+                    STORAGE_CONSTANTS.dragToClass);
+                return;
+            }
 
             STORAGE_EVENT_HANDLERS.clearClass(
                 STORAGE_CONSTANTS.dragToClass);
@@ -263,21 +269,27 @@ var STORAGE_EVENT_HANDLERS = new function() {
             el.classList.add(STORAGE_CONSTANTS.dragToClass);
         }, false);
         
-        STORAGE_CONSTANTS.fileListEl.addEventListener("dragover", function(e) {
+        STORAGE_CONSTANTS.mainEl.addEventListener("dragover", function(e) {
             e.preventDefault();
         }, false);
 
-        STORAGE_CONSTANTS.fileListEl.addEventListener("drop", function(e) {
+        STORAGE_CONSTANTS.mainEl.addEventListener("drop", function(e) {
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
-                e.target, this);
-            var elId = el.id;
-            if (el == undefined) return;
-            else if (el == this)
-                elId = STORAGE_EVENT_HANDLERS.getStoragePageId();
-
-            STORAGE_EVENT_HANDLERS.moveFilesHandlerInit();
-            STORAGE_EVENT_HANDLERS.moveFilesHandler(elId);
-
+                e.target, STORAGE_CONSTANTS.fileListEl);
+            if (e.target.parentNode == STORAGE_CONSTANTS.buttonListEl) {
+                
+                STORAGE_EVENT_HANDLERS.modalOpenButtonHandler(e);
+            }
+            if (el == undefined || el == null) return;
+            else if (el == STORAGE_CONSTANTS.fileListEl) {
+                STORAGE_EVENT_HANDLERS.moveFilesHandlerInit();
+                STORAGE_EVENT_HANDLERS.moveFilesHandler(
+                    STORAGE_EVENT_HANDLERS.getStoragePageId());
+            }
+            else {
+                STORAGE_EVENT_HANDLERS.moveFilesHandlerInit();
+                STORAGE_EVENT_HANDLERS.moveFilesHandler(el.id);
+            }
         }, false);
     };
     
@@ -294,6 +306,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 storagePageName, filesToUpload, parentDirectoryId[0]);
 
             STORAGE_CONSTANTS.uploadFieldEl.value = '';
+        }
+        else {
+            if (!filesToUpload.length)
+                console.log("Must choose a file to upload");
+            if (parentDirectoryId.length != 1)
+                console.log("Please only select one folder to upload to at a time! I am poor");
         }
         STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
     };
@@ -493,9 +511,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 
     this.traverseUpDOMToFileElement = function(startEl, endEl) {
-        console.log("---------------------");
-        while (startEl != undefined && startEl != endEl) {
-            console.log(startEl);
+        while (startEl && startEl != undefined && startEl != endEl) {
             if (startEl.classList != undefined && 
                     startEl.classList.contains(STORAGE_CONSTANTS.fileClass)) {
                 return startEl;
