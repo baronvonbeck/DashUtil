@@ -48,7 +48,8 @@ class File_DataManager(models.Manager):
         for f in files_to_post:
             # upload file to s3
             uploaded_file_url = s3_multi_part_upload(f, storage_name)
-            new_files.append(File_Data(filename=f.name, 
+            new_files.append(File_Data(
+                filename=File_Data.file_datamanager._convert_string(f.name), 
                 upload_path=uploaded_file_url, 
                 size=f.size, 
                 parent_directory=new_parent_directory)
@@ -57,6 +58,9 @@ class File_DataManager(models.Manager):
         new_file_data = File_Data.file_datamanager.create_file_data(new_files)
 
         return size_increase, new_file_data
+
+    def upload_new_directory(self, parent, remaining_path):
+        print ("here")
 
     # gets full path and url info for file downloading on client
     def get_download_information(self, files_to_download, prepend):
@@ -102,7 +106,8 @@ class File_DataManager(models.Manager):
     # creates a new directory, returns the data
     def create_new_directory(self, new_parent_directory, new_directory_name):
         new_directory = []
-        new_directory.append(File_Data(filename=new_directory_name, 
+        new_directory.append(File_Data(
+            filename=File_Data.file_datamanager._convert_string(new_directory_name), 
             upload_path=None, 
             size=0, 
             parent_directory=new_parent_directory)
@@ -118,6 +123,7 @@ class File_DataManager(models.Manager):
         bulk_rename_list = []
         new_extension = new_name.split(".")[-1]
         new_timestamp = timezone.now()
+        new_name = File_Data.file_datamanager._convert_string(new_name)
         for file_id in files_ids_to_rename:
             file_to_rename = File_Data.file_datamanager.get_file_data(file_id)
             extension = file_to_rename.filename.split(".")[-1]
@@ -248,6 +254,9 @@ class File_DataManager(models.Manager):
             bulk_size_update_list.append(next_parent)
             File_Data.file_datamanager.update_parent_directory_sizes_recursively(
                 size_change, next_parent.parent_directory, bulk_size_update_list)
+
+    def _convert_string(self, s):
+        return s.replace('\\','').replace('/', '').replace('\'', '').replace('\"', '')
 
     # merges sizes on 2 lists into 1 list
     # def _merge_file_size_update_lists(file_list, merge_list): 

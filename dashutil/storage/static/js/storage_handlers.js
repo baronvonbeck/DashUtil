@@ -21,7 +21,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
         this.handlerFunctions = [
             STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler, 
-            STORAGE_EVENT_HANDLERS.downloadFilesToDirectoryHandler,
+            STORAGE_EVENT_HANDLERS.uploadDirectoryWrapper,
+            STORAGE_EVENT_HANDLERS.downloadFilesHandler,
             STORAGE_EVENT_HANDLERS.createNewDirectoryHandler,
             STORAGE_EVENT_HANDLERS.renameFilesHandler,
             STORAGE_EVENT_HANDLERS.deleteFilesHandler,
@@ -272,14 +273,18 @@ var STORAGE_EVENT_HANDLERS = new function() {
             e.preventDefault();
         }, false);
 
-        STORAGE_CONSTANTS.mainEl.addEventListener("drop", function(e) {
+        STORAGE_CONSTANTS.mainEl.addEventListener("drop", async function(e) {
             e.preventDefault();
 
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
                 e.target, STORAGE_CONSTANTS.fileListEl);
 
             if (el != null && el != undefined && e.dataTransfer.files.length) {
-                STORAGE_CONSTANTS.uploadFieldEl.files = e.dataTransfer.files;
+
+                let droppedFiles = await STORAGE_EVENT_HANDLERS.getAllFileEntries(
+                    e.dataTransfer.items);
+                STORAGE_CONSTANTS.uploadFileFieldEl.files = droppedFiles.files;
+
                 STORAGE_EVENT_HANDLERS.clearClass(
                     STORAGE_CONSTANTS.selectedClass);
                 if (el != STORAGE_CONSTANTS.fileListEl) {
@@ -315,23 +320,47 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // handles uploading of the file to the storage room or a subdirectory
 	this.uploadNewFilesToDirectoryHandler = function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
-        var filesToUpload = STORAGE_CONSTANTS.uploadFieldEl.files;
+        var filesToUpload = STORAGE_EVENT_HANDLERS.getCompleteFileList(
+            STORAGE_CONSTANTS.uploadFileFieldEl.files);
+
         var parentDirectoryId = 
             STORAGE_EVENT_HANDLERS.getParentDirectoriesForAction();
 
-        if (filesToUpload.length > 0 && parentDirectoryId.length == 1) {
-            STORAGE_DB.uploadNewFilesToDirectory(
-                storagePageName, filesToUpload, parentDirectoryId[0]);
+        STORAGE_CONSTANTS.uploadFileFieldEl.value = '';
+        STORAGE_CONSTANTS.uploadDirFieldEl.value = '';
 
-            STORAGE_CONSTANTS.uploadFieldEl.value = '';
-        }
-        else {
-            if (!filesToUpload.length)
-                console.log("Must choose a file to upload");
-            if (parentDirectoryId.length != 1)
-                console.log("Please only select one folder to upload to at a time! I am poor");
-        }
+        // if (filesToUpload.length > 0 && parentDirectoryId.length == 1) {
+        //     STORAGE_CONSTANTS.uploadFileFieldEl.value = '';
+        //     STORAGE_CONSTANTS.uploadDirFieldEl.value = '';
+
+        //     STORAGE_DB.uploadNewFilesToDirectory(
+        //         storagePageName, filesToUpload, parentDirectoryId[0]);
+
+        // }
+        // else {
+        //     if (!filesToUpload.length)
+        //         console.log("Must choose a file to upload");
+        //     if (parentDirectoryId.length != 1)
+        //         console.log("Please only select one folder to upload to at a time! I am poor");
+        // }
+        
         STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
+    };
+
+
+    this.uploadDirectoryWrapper = function() {
+        STORAGE_CONSTANTS.uploadFileFieldEl.files = STORAGE_CONSTANTS.uploadDirFieldEl.files;
+        STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler();
+    }
+
+
+    this.getCompleteFileList = function(fileList) {
+        console.log(fileList);
+
+        for (var i = 0; i < fileList.length; i ++) {
+            console.log(fileList[i]);
+        }
+        return fileList;
     };
 
 
@@ -540,6 +569,89 @@ var STORAGE_EVENT_HANDLERS = new function() {
     }
 
 
+    // Drop handler function to get all files
+    // https://codepen.io/anon/pen/gBJrOP?editors=0010#0
+    this.getAllFileEntries = async function(dataTransferItemList) {
+        let fileEntries = [];
+        // Use BFS to traverse entire directory/file structure
+        let queue = [];
+        // Unfortunately dataTransferItemList is not iterable i.e. no forEach
+        for (let i = 0; i < dataTransferItemList.length; i ++) {
+            queue.push(dataTransferItemList[i].webkitGetAsEntry());
+        }
+        while (queue.length > 0) {
+            let entry = queue.shift();
+            if (entry.isFile) 
+                fileEntries.push(await STORAGE_EVENT_HANDLERS.getFile(entry));
+            else if (entry.isDirectory) {
+                let reader = entry.createReader();
+                queue.push(...await 
+                    STORAGE_EVENT_HANDLERS.readAllDirectoryEntries(reader));
+            }
+        }
+        fileEntries.sort( function(a, b) {
+            return a.webkitRelativePath.localeCompare(b.webkitRelativePath);
+        });
+
+        var droppedFiles = new DataTransfer();
+        for (let i = 0; i < fileEntries.length; i ++) {
+            droppedFiles.items.add(fileEntries[i]);
+        }
+        return droppedFiles;
+    }
+
+    // https://codepen.io/anon/pen/gBJrOP?editors=0010#0
+
+
+    // Get all the entries (files or sub-directories) in a directory by calling readEntries until it returns empty array
+    // https://codepen.io/anon/pen/gBJrOP?editors=0010#0  
+    this.readAllDirectoryEntries = async function(directoryReader) {
+        let entries = [];
+        let readEntries = await STORAGE_EVENT_HANDLERS.readEntriesPromise(
+            directoryReader);
+        while (readEntries.length > 0) {
+            entries.push(...readEntries);
+            readEntries = await STORAGE_EVENT_HANDLERS.readEntriesPromise(
+                directoryReader);
+        }
+        return entries;
+    }
+
+
+    // https://stackoverflow.com/questions/45052875/how-to-convert-fileentry-to-standard-javascript-file-object-using-chrome-apps-fi
+    this.getFile = async function(fileEntry) {
+        try {
+            var f = await new Promise((resolve, reject) => fileEntry.file(resolve, reject));
+            
+            Object.defineProperty(f, 'webkitRelativePath', {
+                writable: true,
+                value: fileEntry.fullPath.replace("/", "")
+            });
+
+            return f;
+        } 
+        catch (err) {
+            console.log(err);
+        }
+    }
+      
+    
+
+
+    // Wrap readEntries in a promise to make working with readEntries easier
+    // https://codepen.io/anon/pen/gBJrOP?editors=0010#0 
+    this.readEntriesPromise = async function(directoryReader) {
+        try {
+            return await new Promise((resolve, reject) => {
+                directoryReader.readEntries(resolve, reject);
+            });
+        } 
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+
     // returns the storage page id, formatted to remove all single and 
     // double quotes ['"]
     this.getStoragePageId = function() {
@@ -590,9 +702,9 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
     
-    // formats a string to remove all single and double quotes ['"]
+    // formats a string to remove all single and double quotes ['"] and slashes
     this.formatString = function(text) {
-        return text.replace(/['"]+/g, '');
+        return text.replace(/['"\\\/]+/g, '');
     };
 
 

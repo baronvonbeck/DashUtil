@@ -15,16 +15,18 @@ const STORAGE_CONSTANTS = new function() {
     this.uploadModalButtonEl =      document.getElementById("upload-modal-button-id");
     this.uploadModalEl =            document.getElementById("upload-modal-id");
     this.uploadModalContentEl =     document.getElementById("upload-modal-content-id");
-    this.uploadFieldEl =            document.getElementById("upload-file-id");
-    this.uploadButtonEl =           document.getElementById("upload-button-id");
+    this.uploadFileFieldEl =        document.getElementById("upload-file-id");
+    this.uploadFileButtonEl =       document.getElementById("upload-file-button-id");
+    this.uploadDirFieldEl =         document.getElementById("upload-dir-id");
+    this.uploadDirButtonEl =        document.getElementById("upload-dir-button-id");
     this.uploadCloseButtonEl =      document.getElementById("upload-cancel-id");
 
-    this.downloadModalButtonEl =      document.getElementById("download-modal-button-id");
-    this.downloadModalEl =            document.getElementById("download-modal-id");
-    this.downloadModalContentEl =     document.getElementById("download-modal-content-id");
-    this.downloadFieldEl =            document.getElementById("download-file-id");
-    this.downloadButtonEl =           document.getElementById("download-button-id");
-    this.downloadCloseButtonEl =      document.getElementById("download-cancel-id");
+    this.downloadModalButtonEl =    document.getElementById("download-modal-button-id");
+    this.downloadModalEl =          document.getElementById("download-modal-id");
+    this.downloadModalContentEl =   document.getElementById("download-modal-content-id");
+    this.downloadFieldEl =          document.getElementById("download-file-id");
+    this.downloadButtonEl =         document.getElementById("download-button-id");
+    this.downloadCloseButtonEl =    document.getElementById("download-cancel-id");
 
     this.directoryModalButtonEl =   document.getElementById("directory-modal-button-id");
     this.directoryModalEl =         document.getElementById("directory-modal-id");
@@ -46,27 +48,27 @@ const STORAGE_CONSTANTS = new function() {
     this.deleteOkButtonEl =         document.getElementById("delete-ok-id");
     this.deleteCloseButtonEl =      document.getElementById("delete-cancel-id");
 
-    this.moveModalButtonEl =      document.getElementById("move-button-id");
-    this.moveModalEl =            document.getElementById("move-modal-id");
-    this.moveModalContentEl =     document.getElementById("move-modal-content-id");
-    this.moveOkButtonEl =         document.getElementById("move-ok-id");
-    this.moveCloseButtonEl =      document.getElementById("move-cancel-id");
+    this.moveModalButtonEl =        document.getElementById("move-button-id");
+    this.moveModalEl =              document.getElementById("move-modal-id");
+    this.moveModalContentEl =       document.getElementById("move-modal-content-id");
+    this.moveOkButtonEl =           document.getElementById("move-ok-id");
+    this.moveCloseButtonEl =        document.getElementById("move-cancel-id");
 
-    this.numFunctions =             6;
+    this.numFunctions =             7;
 
-    this.modalButtonEls =           [this.uploadModalButtonEl, this.downloadModalButtonEl,
+    this.modalButtonEls =           [this.uploadModalButtonEl, this.uploadModalButtonEl, this.downloadModalButtonEl,
                                      this.directoryModalButtonEl, this.renameModalButtonEl,
                                      this.deleteModalButtonEl, this.moveModalButtonEl];
     
-    this.modalEls =                 [this.uploadModalEl, this.downloadModalEl,
+    this.modalEls =                 [this.uploadModalEl, this.uploadModalEl, this.downloadModalEl,
                                      this.directoryModalEl, this.renameModalEl,
                                      this.deleteModalEl, this.moveModalEl];
 
-    this.modalCloseEls =            [this.uploadCloseButtonEl, this.downloadCloseButtonEl,
+    this.modalCloseEls =            [this.uploadCloseButtonEl, this.uploadCloseButtonEl, this.downloadCloseButtonEl,
                                      this.directoryCloseButtonEl, this.renameCloseButtonEl,
                                      this.deleteCloseButtonEl, this.moveCloseButtonEl];
     
-    this.modalOkEls =               [this.uploadButtonEl, this.downloadButtonEl,
+    this.modalOkEls =               [this.uploadFileButtonEl, this.uploadDirButtonEl, this.downloadButtonEl,
                                      this.directoryOkButtonEl, this.renameOkButtonEl,
                                      this.deleteOkButtonEl, this.moveOkButtonEl];
 

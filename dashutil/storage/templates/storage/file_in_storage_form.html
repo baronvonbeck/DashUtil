@@ -19,17 +19,40 @@
                 <div id="upload-modal-content-id" class="modal-content">
                     <p>Upload files to the specified DashUtil directory from 
                         your computer.</p>
-                    <p>If no directory is chosen, files will be uploaded to the
+                    <p>If no directory is specified, files will be uploaded to the
                         top level.</p>
-                    <p>If a non-directory file is chosen, the file will be uploaded 
+                    <p>If a non-directory file is specified, the file will be uploaded 
                         to that file's parent directory.</p>
-                    <p>Please choose only one destination, I am poor</p>
+                    <p>Please choose only one destination, I am poor.</p>
+                    <br>
+                    <p>You can choose multiple file(s) to upload.</p>
                     <div>
                         {% csrf_token %}
                         {{ form }}
                         <input type="file" id="upload-file-id" multiple>
-                        <button type="submit" id="upload-button-id">Upload</button>
+                        <button type="submit" id="upload-file-button-id">Upload File(s)</button>
                     </div>
+                    <br>
+                    <p>Or, you can choose a directory. It and all of its contents
+                        will be uploaded. As a warning, this feature is currently 
+                        supported only in select browsers (Chrome, Firefox, Edge, 
+                        Android webview), and may not function as intended outside
+                        of them... </p>
+                    <div>
+                        {% csrf_token %}
+                        {{ form }}
+                        <input type="file" id="upload-dir-id" webkitdirectory mozdirectory 
+                        msdirectory odirectory directory multiple>
+                        <button type="submit" id="upload-dir-button-id">Upload Directories</button>
+                    </div>
+                    <br><br>
+                    <p>Currently, only one directory can be uploaded via the directory
+                        picker, and it has to be done separately from actual files. This 
+                        is, as far as I can tell, a limitation of the file choosing system.
+                        If you want to upload more than one directory/file at 
+                        a time, you can do so from your file system by choosing multiple files 
+                        and directories, and then dragging and dropping
+                        to the directory of your choice.</p>
                     <button id="upload-cancel-id">Cancel</button>
                 </div>
             </div>
