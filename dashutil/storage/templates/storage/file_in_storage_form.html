@@ -37,7 +37,10 @@
                         will be uploaded. As a warning, this feature is currently 
                         supported only in select browsers (Chrome, Firefox, Edge, 
                         Android webview), and may not function as intended outside
-                        of them... </p>
+                        of them. Also, empty directories will not be copied. This is
+                        due to the way the inbuilt API handles directory uploads; it
+                        attaches relative paths to specific files, so empty directories
+                        are skipped over.</p>
                     <div>
                         {% csrf_token %}
                         {{ form }}
@@ -52,7 +55,7 @@
                         If you want to upload more than one directory/file at 
                         a time, you can do so from your file system by choosing multiple files 
                         and directories, and then dragging and dropping
-                        to the directory of your choice.</p>
+                        to the directory of your choice. Again, empty directories won't be copied over.</p>
                     <button id="upload-cancel-id">Cancel</button>
                 </div>
             </div>

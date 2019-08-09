@@ -322,27 +322,26 @@ var STORAGE_EVENT_HANDLERS = new function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
         var filesToUpload = STORAGE_EVENT_HANDLERS.getCompleteFileList(
             STORAGE_CONSTANTS.uploadFileFieldEl.files);
-
+        
+        console.log(filesToUpload);
         var parentDirectoryId = 
             STORAGE_EVENT_HANDLERS.getParentDirectoriesForAction();
 
-        STORAGE_CONSTANTS.uploadFileFieldEl.value = '';
-        STORAGE_CONSTANTS.uploadDirFieldEl.value = '';
+        if (filesToUpload.length > 0 && parentDirectoryId.length == 1) {
+            
+            STORAGE_DB.uploadNewFilesToDirectory(
+                storagePageName, filesToUpload, parentDirectoryId[0]);
 
-        // if (filesToUpload.length > 0 && parentDirectoryId.length == 1) {
-        //     STORAGE_CONSTANTS.uploadFileFieldEl.value = '';
-        //     STORAGE_CONSTANTS.uploadDirFieldEl.value = '';
+            STORAGE_CONSTANTS.uploadFileFieldEl.value = '';
+            STORAGE_CONSTANTS.uploadDirFieldEl.value = '';
 
-        //     STORAGE_DB.uploadNewFilesToDirectory(
-        //         storagePageName, filesToUpload, parentDirectoryId[0]);
-
-        // }
-        // else {
-        //     if (!filesToUpload.length)
-        //         console.log("Must choose a file to upload");
-        //     if (parentDirectoryId.length != 1)
-        //         console.log("Please only select one folder to upload to at a time! I am poor");
-        // }
+        }
+        else {
+            if (!filesToUpload.length)
+                console.log("Must choose a file to upload");
+            if (parentDirectoryId.length != 1)
+                console.log("Please only select one folder to upload to at a time! I am poor");
+        }
         
         STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
     };
@@ -365,7 +364,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 
     // handles downloading of files
-	this.downloadFilesToDirectoryHandler = function() {
+	this.downloadFilesHandler = function() {
         var fileIdsToDownload = 
             STORAGE_EVENT_HANDLERS.getIdsOfElementsByClassName(
                 STORAGE_CONSTANTS.selectedClass);
@@ -635,8 +634,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
         }
     }
       
-    
-
 
     // Wrap readEntries in a promise to make working with readEntries easier
     // https://codepen.io/anon/pen/gBJrOP?editors=0010#0 

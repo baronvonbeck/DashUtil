@@ -4,6 +4,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.edit import CreateView
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import timezone
 
 from .models import Storage, File_Data
 import json
@@ -81,14 +82,20 @@ def storage_page(request, storage_page_name):
 
         else:
             files_to_post = request.FILES.getlist('file')
+            paths = request.POST.getlist('path')
+
+            ts = timezone.now()
             parent_directory = File_Data.file_datamanager.get_file_data(
                 data['parent_directory_id'])
             
-            size_increase, return_data = File_Data.file_datamanager.upload_new_files(
-                parent_directory, storage_page_name, files_to_post)
+            size_increase = File_Data.file_datamanager.upload_new_files_wrapper(
+                parent_directory, storage_page_name, files_to_post, paths)
             
             File_Data.file_datamanager.update_parent_directory_sizes_iteratively(
                 size_increase, parent_directory)
+                
+            return_data = File_Data.file_datamanager.get_children_of_directory_created_after(
+                parent_directory, ts)
 
         return HttpResponse([_serialize_data_as_json(return_data)])
 

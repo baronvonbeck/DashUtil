@@ -33,34 +33,77 @@ class File_DataManager(models.Manager):
     # return the child files of the storage
     def get_children_of_directory(self, directory):
         
-        # TODO: default filter for return (directories first, 
-        # first created, last updated, first updated, etc)
         return self.filter(parent_directory=directory)
+        
+    # return the child files of the storage
+    def get_children_of_directory_created_after(self, directory, ts):
+        
+        return self.filter(parent_directory=directory, create_timestamp__gte=ts)
 
     # gets a file data object by primary key
     def get_file_data(self, file_data_id):
         return self.get(id=file_data_id)
 
-    # uploads a new file, returns the data
-    def upload_new_files(self, new_parent_directory, storage_name, files_to_post):
-        new_files = []
+    # wrapper for uploading new files/directories. returns the size increase
+# for the parent files are uploaded to
+    def upload_new_files_wrapper(self, new_parent_directory, storage_name, 
+            files_to_post, paths):
+            
+        size_increase, new_files = File_Data.file_datamanager.upload_new_files(
+            new_parent_directory, storage_name, files_to_post, paths)
+        
+        File_Data.file_datamanager.create_file_data(new_files)
+
+        return size_increase
+
+    # parses directory uploads and uploads all new files/handles new directory creations   
+    def upload_new_files(self, new_parent_directory, storage_name, files_to_post, paths):
         size_increase = 0
-        for f in files_to_post:
-            # upload file to s3
-            uploaded_file_url = s3_multi_part_upload(f, storage_name)
-            new_files.append(File_Data(
-                filename=File_Data.file_datamanager._convert_string(f.name), 
-                upload_path=uploaded_file_url, 
-                size=f.size, 
+        new_files = []
+        subdir_map = {}
+        path_map = {}
+        
+        for i in range(0, len(files_to_post)):
+            f = files_to_post[i]
+
+            full_path = paths[i].split("/")
+            
+            if (paths[i] == "" or len(full_path) == 1):
+                # upload file to s3
+                uploaded_file_url = s3_multi_part_upload(f, storage_name)
+                
+                new_files.append(File_Data(
+                    filename=File_Data.file_datamanager._convert_string(f.name), 
+                    upload_path=uploaded_file_url, 
+                    size=f.size, 
+                    parent_directory=new_parent_directory)
+                )
+                size_increase += f.size
+            else:
+                cut_path = paths[i][paths[i].index("/") + 1:]
+                if (full_path[0] not in subdir_map):
+                    subdir_map[full_path[0]] = [f]
+                    path_map[full_path[0]] = [cut_path]
+                else:
+                    subdir_map[full_path[0]].append(f)
+                    path_map[full_path[0]].append(cut_path)
+        
+        for new_subdir, child_files in subdir_map.items():
+            new_dir = File_Data(
+                filename=File_Data.file_datamanager._convert_string(new_subdir), 
+                upload_path=None, 
+                size=0, 
                 parent_directory=new_parent_directory)
-            )
-            size_increase += f.size
-        new_file_data = File_Data.file_datamanager.create_file_data(new_files)
-
-        return size_increase, new_file_data
-
-    def upload_new_directory(self, parent, remaining_path):
-        print ("here")
+                
+            s, sub_files = File_Data.file_datamanager.upload_new_files(
+                new_dir, storage_name, child_files, path_map[new_subdir])
+                
+            new_dir.size = s
+            new_files.append(new_dir)
+            new_files.extend(sub_files)
+            size_increase += s
+            
+        return size_increase, new_files
 
     # gets full path and url info for file downloading on client
     def get_download_information(self, files_to_download, prepend):

@@ -74,11 +74,20 @@ var FILE_MANAGER = new function() {
         var sizeChange = 0;
 
         for (var i = 0; i < fileJSONList.length; i ++) {
-
-            sizeChange += fileJSONList[i].fields.size;
-            
-            FILE_MANAGER.createNewFileRecord(fileJSONList[i].pk, 
-                fileJSONList[i].fields);
+            var existing = FILE_MANAGER.idToFileMap.get(fileJSONList[i].pk);
+        
+            if (existing && existing.getParentDirectoryId == 
+                    fileJSONList[i].fields.parent_directory) {
+                
+                FILE_MANAGER.updateExistingFileRecord(fileJSONList[i].pk, 
+                    fileJSONList[i].fields);               
+            }
+            else {
+                sizeChange += fileJSONList[i].fields.size;
+                
+                FILE_MANAGER.createNewFileRecord(fileJSONList[i].pk, 
+                    fileJSONList[i].fields);
+            }
         }
 
         if (sizeChange > 0) {
@@ -86,6 +95,10 @@ var FILE_MANAGER = new function() {
                 FILE_MANAGER.idToFileMap.get(
                     fileJSONList[0].fields.parent_directory), 
                 sizeChange);
+        }
+        if (!FILE_MANAGER.currentSortType.includes("size")) {
+            FILE_MANAGER.resortListOfDirectories(
+                [fileJSONList[0].fields.parent_directory]);
         }
     };
 

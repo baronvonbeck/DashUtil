@@ -69,6 +69,7 @@ function uploadFileToStorageDB(successCallback, errorCallback, storageName,
     fileData.append("parent_directory_id", parentDirectoryId);
     for (var i = 0; i < filesToUpload.length; i ++) {
         fileData.append("file", filesToUpload[i]);
+        fileData.append("path", filesToUpload[i].webkitRelativePath);
     }
 
     $.ajax({
