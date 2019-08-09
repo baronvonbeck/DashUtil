@@ -39,6 +39,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 STORAGE_EVENT_HANDLERS.modalInteriorButtonHandler(event);
             }, false);
         
+        STORAGE_CONSTANTS.progressOkButtonEl.addEventListener(
+            "click", function(event) {
+                STORAGE_EVENT_HANDLERS.closeProgressModalHandler();
+            }, false);
+        
         // click off of modals to close, or off to side to deselect
         window.addEventListener(
             "click", function(event) {
@@ -315,15 +320,24 @@ var STORAGE_EVENT_HANDLERS = new function() {
             
         }, false);
     };
+
+
+    this.closeProgressModalHandler = function() {
+        STORAGE_CONSTANTS.progressModalEl.style.display = "none";
+    }
+
+    this.openProgressModalHandler = function(textToDisplay) {
+        STORAGE_CONSTANTS.progressModalTextEl.innerHTML = textToDisplay;
+        STORAGE_CONSTANTS.progressModalEl.style.display = "block";
+    }
     
     
     // handles uploading of the file to the storage room or a subdirectory
 	this.uploadNewFilesToDirectoryHandler = function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
-        var filesToUpload = STORAGE_EVENT_HANDLERS.getCompleteFileList(
-            STORAGE_CONSTANTS.uploadFileFieldEl.files);
+        var filesToUpload =
+            STORAGE_CONSTANTS.uploadFileFieldEl.files;
         
-        console.log(filesToUpload);
         var parentDirectoryId = 
             STORAGE_EVENT_HANDLERS.getParentDirectoriesForAction();
 
@@ -331,6 +345,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
             
             STORAGE_DB.uploadNewFilesToDirectory(
                 storagePageName, filesToUpload, parentDirectoryId[0]);
+                
+            STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
+
+            STORAGE_EVENT_HANDLERS.openProgressModalHandler(
+                STORAGE_CONSTANTS.uploadInProgressMessage);
 
             STORAGE_CONSTANTS.uploadFileFieldEl.value = '';
             STORAGE_CONSTANTS.uploadDirFieldEl.value = '';
@@ -342,8 +361,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
             if (parentDirectoryId.length != 1)
                 console.log("Please only select one folder to upload to at a time! I am poor");
         }
-        
-        STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
     };
 
 
@@ -351,16 +368,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
         STORAGE_CONSTANTS.uploadFileFieldEl.files = STORAGE_CONSTANTS.uploadDirFieldEl.files;
         STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler();
     }
-
-
-    this.getCompleteFileList = function(fileList) {
-        console.log(fileList);
-
-        for (var i = 0; i < fileList.length; i ++) {
-            console.log(fileList[i]);
-        }
-        return fileList;
-    };
 
 
     // handles downloading of files
@@ -374,11 +381,21 @@ var STORAGE_EVENT_HANDLERS = new function() {
         if (fileIdsToDownload.length == 1 && 
                 !FILE_MANAGER.checkIfFileIsDirectory(fileIdsToDownload[0])) {
             FILE_MANAGER.downloadFile(fileIdsToDownload[0]);
+
+            STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
+
+            STORAGE_EVENT_HANDLERS.openProgressModalHandler(
+                STORAGE_CONSTANTS.downloadInProgressMessage);
         }
         else if (fileIdsToDownload.length > 0) {
             STORAGE_DB.getFilePathsAndUrls(
                 STORAGE_EVENT_HANDLERS.getStoragePageName(), 
                 fileIdsToDownload);
+            
+            STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
+
+            STORAGE_EVENT_HANDLERS.openProgressModalHandler(
+                STORAGE_CONSTANTS.downloadInProgressMessage);
         }
         else {
             console.log("must have 1 or more files selected to download");

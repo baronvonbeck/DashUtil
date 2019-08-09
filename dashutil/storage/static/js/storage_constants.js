@@ -54,6 +54,12 @@ const STORAGE_CONSTANTS = new function() {
     this.moveOkButtonEl =           document.getElementById("move-ok-id");
     this.moveCloseButtonEl =        document.getElementById("move-cancel-id");
 
+    this.progressModalEl =          document.getElementById("progress-modal-id");
+    this.moveModalContentEl =       document.getElementById("progress-modal-content-id");
+    this.progressModalTextEl =      document.getElementById("progress-modal-text-id");
+    this.progressOkButtonEl =       document.getElementById("progress-ok-id");
+    
+
     this.numFunctions =             7;
 
     this.modalButtonEls =           [this.uploadModalButtonEl, this.uploadModalButtonEl, this.downloadModalButtonEl,
@@ -105,4 +111,7 @@ const STORAGE_CONSTANTS = new function() {
     this.directoryOpenLightIcon =   this.fileIconPath + "directory-open-light.png";
     this.genericFileLightIcon =     this.fileIconPath + "generic-file-light.png";
 
+
+    this.uploadInProgressMessage =      "Uploading files. This may take a few minutes, depending on file sizes...";
+    this.downloadInProgressMessage =    "Downloading files. This may take a few minutes, depending on file sizes...";
 };

@@ -70,6 +70,7 @@ const STORAGE_DB = new function() {
     // Adds files/directories to the storage page
     this.addNewFilesToPage = function(files) {
         FILE_MANAGER.addNewFileListToPage(files);
+        STORAGE_EVENT_HANDLERS.closeProgressModalHandler();
     }
 
     // Adds files/directories to the storage page
@@ -80,6 +81,7 @@ const STORAGE_DB = new function() {
     // downloads selected fiels from the storage page
     this.downloadSelectedFiles = function(files) { 
         FILE_MANAGER.downloadFileList(files);
+        STORAGE_EVENT_HANDLERS.closeProgressModalHandler();
     }
 
     // rename existing files on the page with new information
