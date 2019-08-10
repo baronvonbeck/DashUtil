@@ -59,6 +59,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         // click off of modals to close, or off to side to deselect
         window.addEventListener(
             "click", function(event) {
+                STORAGE_CONSTANTS.errorModalEl.style.display = "none";
                 STORAGE_CONSTANTS.menuEl.style.display = "none";
                 STORAGE_EVENT_HANDLERS.windowClickHandler(event);
             }, false);
@@ -105,6 +106,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 }, false);
             }
         );
+
+        STORAGE_CONSTANTS.errorOkButtonEl.addEventListener(
+            "click", function(event) {
+                event.stopPropagation();
+                STORAGE_CONSTANTS.errorModalEl.style.display = "none";
+            }, false);
     };
 
 
@@ -405,9 +412,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
         }
         else {
             if (!filesToUpload.length)
-                console.log("Must choose a file to upload");
-            if (parentDirectoryId.length != 1)
-                console.log("Please only select one folder to upload to at a time! I am poor");
+                STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorChooseAFile);
+            if (parentDirectoryId.length != 1) {
+                STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorUpload1Folder);
+                STORAGE_CONSTANTS.uploadModalEl.style.display = "none";
+            }
         }
     };
 
@@ -417,9 +426,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_CONSTANTS.uploadFileFieldEl.files = STORAGE_CONSTANTS.uploadDirFieldEl.files;
             STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler();
         }
-        else {
-            console.log("Must choose a folder to upload!");
-        }
+        else 
+            STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorChooseAFolder);
     }
 
 
@@ -435,7 +443,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 !FILE_MANAGER.checkIfFileIsDirectory(fileIdsToDownload[0])) {
             FILE_MANAGER.downloadFile(fileIdsToDownload[0]);
 
-            STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
+            STORAGE_CONSTANTS.downloadModalEl.style.display = "none";
 
             STORAGE_EVENT_HANDLERS.openProgressModalHandler(
                 STORAGE_CONSTANTS.downloadInProgressMessage);
@@ -445,14 +453,13 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 STORAGE_EVENT_HANDLERS.getStoragePageName(), 
                 fileIdsToDownload);
             
-            STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
+            STORAGE_CONSTANTS.downloadModalEl.style.display = "none";
 
             STORAGE_EVENT_HANDLERS.openProgressModalHandler(
                 STORAGE_CONSTANTS.downloadInProgressMessage);
         }
-        else {
-            console.log("must have 1 or more files selected to download");
-        }
+        else 
+            STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorChooseAFileDownload);
 
         STORAGE_CONSTANTS.downloadModalEl.style.display = "none";
     };
@@ -470,13 +477,16 @@ var STORAGE_EVENT_HANDLERS = new function() {
         if (newDirectoryName.length > 0 && parentDirectoryId.length == 1) {
             STORAGE_DB.createNewDirectory(
                 storagePageName, newDirectoryName, parentDirectoryId[0]);
+            STORAGE_CONSTANTS.directoryModalEl.style.display = "none";
         }
         else {
-            console.log("Directory must have name length greater than 0");
-            console.log("Please select only 1 parent to create a new directory in");
-        }
-
-        STORAGE_CONSTANTS.directoryModalEl.style.display = "none";
+            if (!newDirectoryName.length)
+                STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorNewDirNameLength);
+            else if (parentDirectoryId.length != 1) {
+                STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorNewDir1Parent);
+                STORAGE_CONSTANTS.directoryModalEl.style.display = "none";
+            }
+        }        
     };
 
 
@@ -492,15 +502,16 @@ var STORAGE_EVENT_HANDLERS = new function() {
         if (renameName.length > 0 && fileIdsToRename.length > 0) {
             STORAGE_DB.renameFiles(storagePageName, fileIdsToRename, 
                 renameName);
+            STORAGE_CONSTANTS.renameModalEl.style.display = "none";
         }
         else {
-            console.log("No files selected or length of new name is less than 0!");
-            // error
-            // say that files renamed must be > length 0
-            // and that 1 or more files must be selected
-        }
-
-        STORAGE_CONSTANTS.renameModalEl.style.display = "none";
+            if (!renameName.length)
+                STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorRenameNameLength);
+            else if (!fileIdsToRename.length) {
+                STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorChooseAFileRename);
+                STORAGE_CONSTANTS.renameModalEl.style.display = "none";
+            }
+        }        
     };
 
     
@@ -512,15 +523,10 @@ var STORAGE_EVENT_HANDLERS = new function() {
         fileIdsToDelete = FILE_MANAGER.removeRedundantFiles(
             fileIdsToDelete);
 
-        if (fileIdsToDelete.length > 0) {
+        if (fileIdsToDelete.length > 0) 
             STORAGE_DB.deleteFiles(storagePageName, fileIdsToDelete);
-        }
-        else {
-            console.log("No files selected!");
-            // error
-            // say that files renamed must be > length 0
-            // and that 1 or more files must be selected
-        }
+        else 
+            STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorChooseAFileDelete);
 
         STORAGE_CONSTANTS.deleteModalEl.style.display = "none";
     };
@@ -533,13 +539,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
         fileIdsToMove = FILE_MANAGER.removeRedundantFiles(
             fileIdsToMove);
             
-        if (fileIdsToMove.length > 0) {
+        if (fileIdsToMove.length > 0) 
             STORAGE_EVENT_HANDLERS.moveIds = fileIdsToMove;
-        }
-        else {
-            console.log("No files selected!");
-            // error 1 or more files must be selected
-        }
+        else 
+            STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorChooseAFileMove);
+
+
         STORAGE_CONSTANTS.moveModalEl.style.display = "none";
     };
 
@@ -555,11 +560,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
         
         if (FILE_MANAGER.destinationIsAChildOfFilesToMove(
                 destinationId, fileIdsToMove)) {
-            console.log("Can not move a file to itself or one of its children.");
+            STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorMoveParentToChild);
             return;
         }
         else if (!fileIdsToMove.length) {
-            console.log("Files are only being moved to their current folder...");
+            STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorMoveAFile);
             return;
         }
 
@@ -702,6 +707,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
         catch (err) {
             console.log(err);
         }
+    }
+
+
+    this.displayError = function(errorMessage) {
+        STORAGE_CONSTANTS.errorModalTextEl.innerHTML = errorMessage;
+        STORAGE_CONSTANTS.errorModalEl.style.display = "block";
     }
       
 

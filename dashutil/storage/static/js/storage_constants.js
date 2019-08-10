@@ -55,9 +55,14 @@ const STORAGE_CONSTANTS = new function() {
     this.moveCloseButtonEl =        document.getElementById("move-cancel-id");
 
     this.progressModalEl =          document.getElementById("progress-modal-id");
-    this.moveModalContentEl =       document.getElementById("progress-modal-content-id");
+    this.progressModalContentEl =   document.getElementById("progress-modal-content-id");
     this.progressModalTextEl =      document.getElementById("progress-modal-text-id");
     this.progressOkButtonEl =       document.getElementById("progress-ok-id");
+    
+    this.errorModalEl =             document.getElementById("error-modal-id");
+    this.errorModalContentEl =      document.getElementById("error-modal-content-id");
+    this.errorModalTextEl =         document.getElementById("error-modal-text-id");
+    this.errorOkButtonEl =          document.getElementById("error-ok-id");
 
     this.menuEl =                   document.getElementById("menu-id");
     this.menuEls =                  [
@@ -120,8 +125,21 @@ const STORAGE_CONSTANTS = new function() {
     this.directoryCloseLightIcon =  this.fileIconPath + "directory-close-light.png";
     this.directoryOpenLightIcon =   this.fileIconPath + "directory-open-light.png";
     this.genericFileLightIcon =     this.fileIconPath + "generic-file-light.png";
-
-
+    
     this.uploadInProgressMessage =      "Uploading files. This may take a few minutes, depending on file sizes...";
     this.downloadInProgressMessage =    "Downloading files. This may take a few minutes, depending on file sizes...";
+
+    this.errorChooseAFile =             "Please select at least one file to upload.";
+    this.errorUpload1Folder =           "Please select only one folder to upload to at a time.";
+    this.errorChooseAFolder =           "Please select a folder to upload.";
+    this.errorChooseAFileDownload =     "Please select at least one file or folder to download.";
+    this.errorNewDirNameLength =        "New folder name's must contain at least one or more valid characters.";
+    this.errorNewDir1Parent =           "Please select only one parent to create a new folder in.";
+    this.errorRenameNameLength =        "New name for files and folders must contain at least one or more valid characters.";
+    this.errorChooseAFileRename =       "Please select at least one file or folder to rename.";
+    this.errorChooseAFileDelete =       "Please select at least one file or folder to delete.";
+    this.errorChooseAFileMove =         "Please select at least one file or folder to move.";
+    this.errorMoveParentToChild =       "A parent folder cannot be moved to itself or one of its own subfolders.";
+    this.errorMoveAFile =               "At least one file or folder must be being moved to a different folder than the one it is currently in.";
+    
 };
