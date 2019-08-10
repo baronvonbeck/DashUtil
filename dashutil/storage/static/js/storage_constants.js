@@ -58,7 +58,17 @@ const STORAGE_CONSTANTS = new function() {
     this.moveModalContentEl =       document.getElementById("progress-modal-content-id");
     this.progressModalTextEl =      document.getElementById("progress-modal-text-id");
     this.progressOkButtonEl =       document.getElementById("progress-ok-id");
-    
+
+    this.menuEl =                   document.getElementById("menu-id");
+    this.menuEls =                  [
+                                        document.getElementById("menu-upload-id"),
+                                        document.getElementById("menu-upload-id"),
+                                        document.getElementById("menu-download-id"),
+                                        document.getElementById("menu-folder-id"),
+                                        document.getElementById("menu-rename-id"),
+                                        document.getElementById("menu-delete-id"),
+                                        document.getElementById("menu-move-id")
+                                    ];
 
     this.numFunctions =             7;
 

@@ -15,6 +15,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.storagePageFields = null;
 
     this.handlerFunctions = null;  
+    this.menuHandlerFunctions = null;
 	
 	// Handler to set up event listeners
     this.addAllEventListeners = function() {
@@ -29,8 +30,19 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_EVENT_HANDLERS.moveFilesHandlerInit
         ];
 
+        this.menuHandlerFunctions = [
+            function(i) {STORAGE_CONSTANTS.modalEls[i].style.display = "block";},
+            function(i) {STORAGE_CONSTANTS.modalEls[i].style.display = "block";},
+            function(i) {STORAGE_EVENT_HANDLERS.handlerFunctions[i]();},
+            function(i) {STORAGE_CONSTANTS.modalEls[i].style.display = "block";},
+            function(i) {STORAGE_CONSTANTS.modalEls[i].style.display = "block";},
+            function(i) {STORAGE_EVENT_HANDLERS.handlerFunctions[i]();},
+            function(i) {STORAGE_CONSTANTS.modalEls[i].style.display = "block";}
+        ]
+
         STORAGE_CONSTANTS.buttonListEl.addEventListener(
             "click", function(event) {
+                STORAGE_CONSTANTS.menuEl.style.display = "none";
                 STORAGE_EVENT_HANDLERS.modalOpenButtonHandler(event);
             }, false);
         
@@ -47,12 +59,13 @@ var STORAGE_EVENT_HANDLERS = new function() {
         // click off of modals to close, or off to side to deselect
         window.addEventListener(
             "click", function(event) {
+                STORAGE_CONSTANTS.menuEl.style.display = "none";
                 STORAGE_EVENT_HANDLERS.windowClickHandler(event);
             }, false);
 
         STORAGE_CONSTANTS.fileListEl.addEventListener(
                 "click", function(event) {
-                
+            STORAGE_CONSTANTS.menuEl.style.display = "none";
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
                 event.target, this);
             var moveId = el.id;
@@ -63,7 +76,23 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_EVENT_HANDLERS.fileClickHandler(el, moveId, 
                 event.ctrlKey, event.shiftKey);
             event.stopPropagation();
-        }, false);
+            }, false);
+
+        STORAGE_CONSTANTS.fileListEl.addEventListener(
+            "contextmenu", function(event) {
+                event.preventDefault();
+                STORAGE_CONSTANTS.menuEl.style.display = "block";
+                STORAGE_CONSTANTS.menuEl.style.top = event.pageY + "px";
+                STORAGE_CONSTANTS.menuEl.style.left = event.pageX + "px";
+            }, false);
+        
+        STORAGE_CONSTANTS.menuEl.addEventListener(
+            "click", function(event) {
+                event.stopPropagation();
+                STORAGE_EVENT_HANDLERS.contextMenuHandler(event);
+            }, false);
+
+        
         
         STORAGE_EVENT_HANDLERS.addDragEventHandlers();
 
@@ -120,6 +149,26 @@ var STORAGE_EVENT_HANDLERS = new function() {
             STORAGE_EVENT_HANDLERS.moveIds = null;
         }
     };
+
+    
+    this.contextMenuHandler = function(e) {
+        for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
+            if (e.target === STORAGE_CONSTANTS.menuEls[i]) {
+                STORAGE_CONSTANTS.menuEl.style.display = "none";
+                STORAGE_EVENT_HANDLERS.menuHandlerFunctions[i](i);
+                return;
+            }
+        }
+    }
+
+    this.buttonDropHandler = function(e) {
+        for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
+            if (e.target === STORAGE_CONSTANTS.modalButtonEls[i]) {
+                STORAGE_EVENT_HANDLERS.menuHandlerFunctions[i](i);
+                return;
+            }
+        }
+    }
     
 
     this.changeSortOrder = function(newSort) {
@@ -304,8 +353,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
             }
             
             if (e.target.parentNode == STORAGE_CONSTANTS.buttonListEl) {
-                
-                STORAGE_EVENT_HANDLERS.modalOpenButtonHandler(e);
+                STORAGE_EVENT_HANDLERS.buttonDropHandler(e);
+                return;
             }
             if (el == undefined || el == null) return;
             else if (el == STORAGE_CONSTANTS.fileListEl) {
@@ -335,8 +384,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // handles uploading of the file to the storage room or a subdirectory
 	this.uploadNewFilesToDirectoryHandler = function() {
         var storagePageName = STORAGE_EVENT_HANDLERS.getStoragePageName();
-        var filesToUpload =
-            STORAGE_CONSTANTS.uploadFileFieldEl.files;
+        var filesToUpload = STORAGE_CONSTANTS.uploadFileFieldEl.files;
         
         var parentDirectoryId = 
             STORAGE_EVENT_HANDLERS.getParentDirectoriesForAction();
@@ -365,8 +413,13 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 
     this.uploadDirectoryWrapper = function() {
-        STORAGE_CONSTANTS.uploadFileFieldEl.files = STORAGE_CONSTANTS.uploadDirFieldEl.files;
-        STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler();
+        if (STORAGE_CONSTANTS.uploadDirFieldEl.files.length) {
+            STORAGE_CONSTANTS.uploadFileFieldEl.files = STORAGE_CONSTANTS.uploadDirFieldEl.files;
+            STORAGE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler();
+        }
+        else {
+            console.log("Must choose a folder to upload!");
+        }
     }
 
 

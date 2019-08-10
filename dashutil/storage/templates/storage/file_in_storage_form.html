@@ -4,14 +4,35 @@
     <h2>Public Uploads</h2>
     <h3>Upload to Amazon S3</h3>
 
+    <div id="menu-id" class="menu">
+        <div id="menu-upload-id" class="menu-item">
+            Upload
+        </div>
+        <div id="menu-download-id" class="menu-item">
+            Download
+        </div>
+        <div id="menu-folder-id" class="menu-item">
+            New Folder
+        </div>
+        <div id="menu-rename-id" class="menu-item">
+            Rename
+        </div>
+        <div id="menu-delete-id" class="menu-item">
+            Delete
+        </div>
+        <div id="menu-move-id" class="menu-item">
+            Move
+        </div>
+    </div>
+
     <div id="main-id">
         <div id="button-list-id">
-            <button id="upload-modal-button-id" class="modal-button">Upload File(s)</button>
-            <button id="download-modal-button-id" class="modal-button">Download File(s)</button>
-            <button id="directory-modal-button-id" class="modal-button">Create New Folder</button>
-            <button id="rename-modal-button-id" class="modal-button">Rename File(s)</button>
-            <button id="delete-button-id" class="modal-button">Delete File(s)</button>
-            <button id="move-button-id" class="modal-button">Move File(s)</button>
+            <button id="upload-modal-button-id" class="modal-button">Upload</button>
+            <button id="download-modal-button-id" class="modal-button">Download</button>
+            <button id="directory-modal-button-id" class="modal-button">New Folder</button>
+            <button id="rename-modal-button-id" class="modal-button">Rename</button>
+            <button id="delete-button-id" class="modal-button">Delete</button>
+            <button id="move-button-id" class="modal-button">Move</button>
         </div>
 
         <div id="modal-list-id">
@@ -72,7 +93,12 @@
 
             <div id="directory-modal-id" class="modal">
                 <div id="directory-modal-content-id" class="modal-content">
-                    <p>Name of New Folder:</p>
+                    <p>A new folder will be created within the selected folder. If a 
+                        file is selected, the new folder will be placed in the same 
+                        folder as the file. If nothing is selected, the folder will
+                        be placed at the highest level. Please select only one location.</p>
+                    <p>Name of new folder:</p>
+                    <br>
                     <input id="directory-text-id" type="text"></input>
                     <button id="directory-ok-id">OK</button>
                     <button id="directory-cancel-id">Cancel</button>
@@ -83,8 +109,9 @@
             
             <div id="rename-modal-id" class="modal">
                 <div id="rename-modal-content-id" class="modal-content">
-                    
-                    <p>Rename To:</p>
+                    <p> All selected files will be renamed.</p>
+                    <br>
+                    <p>Rename selected file(s) to:</p>
                     <input id="rename-text-id" type="text"></input>
                     <button id="rename-ok-id">OK</button>
                     <button id="rename-cancel-id">Cancel</button>
@@ -96,6 +123,7 @@
                 <div id="delete-modal-content-id" class="modal-content">
                     <p>All specified files, directories, and their contents will be deleted.</p>
                     <p>You will not be able to recover them.</p>
+                    <br>
                     <p>Are you sure you want to delete the file(s)?</p>
                     <button id="delete-ok-id">OK</button>
                     <button id="delete-cancel-id">Cancel</button>
@@ -105,9 +133,12 @@
             
             <div id="move-modal-id" class="modal">
                 <div id="move-modal-content-id" class="modal-content">
-                    <p>All specified files, directories, and their contents will be moved</p>
-                    <p>to the next directory clicked. If a file is clicked, all selected</p>
-                    <p>files will be moved to the directory that file is contained in.</p>
+                    <p>All specified files, folders, and their contents will be moved</p>
+                    <p>to the next folder clicked. If a file is clicked, all selected</p>
+                    <p>files will be moved to the folder that file is contained in.</p>
+                    <br>
+                    <p>You can also drag and drop the selected files to your desired destination.</p>
+                    <br>
                     <p>Click OK to continue.</p>
                     <button id="move-ok-id">OK</button>
                     <button id="move-cancel-id">Cancel</button>
@@ -116,12 +147,13 @@
 
             <div id="progress-modal-id" class="modal">
                 <div id="progress-modal-content-id" class="modal-content">
-                    <p id="progress-modal-text-id">Name of New Folder:</p>
+                    <p id="progress-modal-text-id">temporary</p>
 
                     <button id="progress-ok-id">OK</button>
                 </div>
             </div>
         </div>
+        
         
         
         

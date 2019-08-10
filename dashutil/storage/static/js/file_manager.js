@@ -151,7 +151,6 @@ var FILE_MANAGER = new function() {
             : writer.write(res.value).then(pump));
 
         pump();
-            
     };
 
 
