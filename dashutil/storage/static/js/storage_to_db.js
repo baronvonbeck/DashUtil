@@ -104,7 +104,7 @@ const STORAGE_DB = new function() {
 
 
     // Calls error message if ajax call fails
-    this.errorMessageCaller = function(errorMessage, parentDirectoryId) {
-        // TODO: handle this
+    this.errorMessageCaller = function(errorMessage) {
+        STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorDB + errorMesage);
     };
 }

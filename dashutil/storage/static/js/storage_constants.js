@@ -141,5 +141,6 @@ const STORAGE_CONSTANTS = new function() {
     this.errorChooseAFileMove =         "Please select at least one file or folder to move.";
     this.errorMoveParentToChild =       "A parent folder cannot be moved to itself or one of its own subfolders.";
     this.errorMoveAFile =               "At least one file or folder must be being moved to a different folder than the one it is currently in.";
+    this.errorDB =                      "There was an error while doing a database operation.<br><br>";
     
 };

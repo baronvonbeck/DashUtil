@@ -83,7 +83,7 @@ function uploadFileToStorageDB(successCallback, errorCallback, storageName,
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
-            errorCallback(getJsonFromDataString(data), parentDirectoryId);
+            errorCallback(getJsonFromDataString(data));
         }
     });
 }
@@ -106,7 +106,7 @@ function getFilePathsAndUrlsDB(successCallback, errorCallback, storageName,
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
-            errorCallback(getJsonFromDataString(data), null);
+            errorCallback(getJsonFromDataString(data));
         }
     });
 }
@@ -130,7 +130,7 @@ function getFilesWithinDirectoryDB(successCallback, errorCallback, storageName,
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
-            errorCallback(getJsonFromDataString(data), parentDirectoryId);
+            errorCallback(getJsonFromDataString(data));
         }
     });
 }
@@ -155,7 +155,7 @@ function createNewDirectoryDB(successCallback, errorCallback, storageName,
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
-            errorCallback(getJsonFromDataString(data), parentDirectoryId);
+            errorCallback(getJsonFromDataString(data));
         }
     });
 }
@@ -180,7 +180,7 @@ function renameFilesDB(successCallback, errorCallback, storageName,
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
-            errorCallback(getJsonFromDataString(data), parentDirectoryId);
+            errorCallback(getJsonFromDataString(data));
         }
     });
 }
@@ -204,7 +204,7 @@ function deleteFilesDB(successCallback, errorCallback, storageName,
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
-            errorCallback(getJsonFromDataString(data), null);
+            errorCallback(getJsonFromDataString(data));
         }
     });
 }
@@ -229,7 +229,7 @@ function moveFilesToDirectoryDB(successCallback, errorCallback, storageName,
             successCallback(getJsonFromDataString(data));
         },
         error: function(data) {
-            errorCallback(getJsonFromDataString(data), parentDirectoryId);
+            errorCallback(getJsonFromDataString(data));
         }
     });
 } 
