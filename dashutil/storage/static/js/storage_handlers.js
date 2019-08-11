@@ -214,7 +214,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
     
     this.contextMenuHandler = function(e) {
         for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
-            if (e.target === STORAGE_CONSTANTS.menuEls[i]) {
+            if (e.target === STORAGE_CONSTANTS.menuEls[i] || 
+                e.target.parentNode === STORAGE_CONSTANTS.menuEls[i]) {
                 STORAGE_CONSTANTS.menuEl.style.display = "none";
                 STORAGE_EVENT_HANDLERS.menuHandlerFunctions[i](i);
                 return;
