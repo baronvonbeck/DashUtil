@@ -16,6 +16,6 @@ dashutil/dashutil/__pycache__/
 *.env
 env_ignore.py
 
-#VSCode files
+# VSCode files
 .vscode
 .vscode/*
