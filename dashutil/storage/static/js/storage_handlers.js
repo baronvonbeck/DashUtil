@@ -55,6 +55,60 @@ var STORAGE_EVENT_HANDLERS = new function() {
             "click", function(event) {
                 STORAGE_EVENT_HANDLERS.closeProgressModalHandler();
             }, false);
+
+        window.addEventListener(
+            "keyup", function(event) {
+                if (event.keyCode === 13) {
+                    if (STORAGE_CONSTANTS.progressModalEl.style.display == "block") {
+                        STORAGE_CONSTANTS.progressModalEl.style.display = "none";
+                        return;
+                    }
+                    else if (STORAGE_CONSTANTS.errorModalEl.style.display == "block") {
+                        STORAGE_CONSTANTS.errorModalEl.style.display = "none";
+                        return;
+                    }
+                    for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
+                        if (STORAGE_CONSTANTS.modalEls[i].style.display == "block") {
+                            STORAGE_EVENT_HANDLERS.handlerFunctions[i]();
+                            return;
+                        }
+                    }
+                    
+                }
+                else if (event.keyCode === 27) {
+                    if (STORAGE_CONSTANTS.menuEl.style.display == "block") {
+                        STORAGE_CONSTANTS.menuEl.style.display = "none";
+                        return;
+                    }
+                    else if (STORAGE_CONSTANTS.progressModalEl.style.display == "block") {
+                        STORAGE_CONSTANTS.progressModalEl.style.display = "none";
+                        return;
+                    }
+                    else if (STORAGE_CONSTANTS.errorModalEl.style.display == "block") {
+                        STORAGE_CONSTANTS.errorModalEl.style.display = "none";
+                        return;
+                    }
+                    for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
+                        if (STORAGE_CONSTANTS.modalEls[i].style.display == "block") {
+                            STORAGE_CONSTANTS.modalEls[i].style.display = "none";
+                            return;
+                        }
+                    }
+                }
+                else if (event.keyCode === 46) {
+                    if (STORAGE_CONSTANTS.menuEl.style.display == "block" ||
+                        STORAGE_CONSTANTS.progressModalEl.style.display == "block" ||
+                        STORAGE_CONSTANTS.errorModalEl.style.display == "block") {
+                        return;
+                    }
+                    for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
+                        if (STORAGE_CONSTANTS.modalEls[i].style.display == "block")
+                            return;
+                    }
+                    STORAGE_EVENT_HANDLERS.deleteFilesHandler();
+                }
+                
+            }, false);
         
         // click off of modals to close, or off to side to deselect
         window.addEventListener(
