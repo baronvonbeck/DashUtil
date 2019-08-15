@@ -5,7 +5,7 @@
 var FILE_MANAGER = new function() {
 
     const streamSaver = window.streamSaver;
-    //streamSaver.mitm = ALL_CONSTANTS.mitmPath;
+    streamSaver.mitm = ALL_CONSTANTS.mitmPath;
 
     // map of file uuid -> file object
     this.idToFileMap = new Map();
