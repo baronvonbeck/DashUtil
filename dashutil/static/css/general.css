@@ -4,14 +4,7 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
 
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 
-  /* outlines are handled with other visual cues */
-  outline: 0;
-}
 html, body {
   width: 100%;
   height: 100%;
@@ -121,4 +114,29 @@ html, body {
 }
 .navbar-container img:hover {
   cursor: pointer;
+}
+
+
+/* Modal for informational/error messages */
+/* Modal Content/Box */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 20; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
 }

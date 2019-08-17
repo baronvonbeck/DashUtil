@@ -221,7 +221,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 return;
             }
         }
-    }
+    };
 
     this.buttonDropHandler = function(e) {
         for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
@@ -230,7 +230,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 return;
             }
         }
-    }
+    };
     
 
     this.changeSortOrder = function(newSort) {
@@ -440,7 +440,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
     this.openProgressModalHandler = function(textToDisplay) {
         STORAGE_CONSTANTS.progressModalTextEl.innerHTML = textToDisplay;
         STORAGE_CONSTANTS.progressModalEl.style.display = "block";
-    }
+    };
     
     
     // handles uploading of the file to the storage room or a subdirectory
@@ -483,7 +483,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         }
         else 
             STORAGE_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorChooseAFolder);
-    }
+    };
 
 
     // handles downloading of files
@@ -627,7 +627,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         
         STORAGE_DB.moveFiles(storagePageName, fileIdsToMove, 
             destinationId);
-    } 
+    };
 
 
     this.parseElementIdsFromString = function(s) {
@@ -695,7 +695,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             startEl = startEl.parentNode;
         }
         return startEl;
-    }
+    };
 
 
     // Drop handler function to get all files
@@ -727,7 +727,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             droppedFiles.items.add(fileEntries[i]);
         }
         return droppedFiles;
-    }
+    };
 
     // https://codepen.io/anon/pen/gBJrOP?editors=0010#0
 
@@ -744,7 +744,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 directoryReader);
         }
         return entries;
-    }
+    };
 
 
     // https://stackoverflow.com/questions/45052875/how-to-convert-fileentry-to-standard-javascript-file-object-using-chrome-apps-fi
@@ -762,13 +762,13 @@ var STORAGE_EVENT_HANDLERS = new function() {
         catch (err) {
             console.log(err);
         }
-    }
+    };
 
 
     this.displayError = function(errorMessage) {
         STORAGE_CONSTANTS.errorModalTextEl.innerHTML = errorMessage;
         STORAGE_CONSTANTS.errorModalEl.style.display = "block";
-    }
+    };
       
 
     // Wrap readEntries in a promise to make working with readEntries easier
@@ -782,7 +782,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         catch (err) {
             console.log(err);
         }
-    }
+    };
 
 
     // returns the storage page id, formatted to remove all single and 

@@ -8,6 +8,12 @@ const HOME_CONSTANTS = new function() {
     this.searchBoxEl =         	document.getElementById("search-box-id"); 
     this.searchIconEl =         document.getElementById("search-icon-id");
     this.searchButtonEl =       document.getElementById("search-button-id");
+
+    this.errorModalEl =         document.getElementById("error-modal-id");
+    this.errorModalContentEl =  document.getElementById("error-modal-content-id");
+    this.errorModalTextEl =     document.getElementById("error-modal-text-id");
+    this.errorOkButtonEl =      document.getElementById("error-ok-id");
+
     this.oldSearchId = 			"old-search-id";
     this.newSearchId = 			"new-search-id";
     this.oldSearchEl =         	document.getElementById(this.oldSearchId);
@@ -22,6 +28,8 @@ const HOME_CONSTANTS = new function() {
     this.darkThemeClass =      	"dark-theme";
     this.lightThemeClass =     	"light-theme";  
     this.imgPath =             	"/static/img/"; 
+
+    
 };
 
 

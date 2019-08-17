@@ -22,7 +22,7 @@ var HOME_EVENT_HANDLERS = new function() {
 		this.createErrorMessageCallback = newCreateErrorMessageCallback;
 
 	    // general keyboard event handlers
-	    document.addEventListener("keydown", 
+	    document.addEventListener("keyup", 
 	    	function(e) { HOME_EVENT_HANDLERS.handleKeyboardEvents(e); 
 	    }); 
 	    
@@ -41,9 +41,14 @@ var HOME_EVENT_HANDLERS = new function() {
 	    	"click", 
 	    	function(e) { HOME_EVENT_HANDLERS.themeSwitchOnClick(e); }, 
 	    	false);
-	    HOME_CONSTANTS.themeTogglerEl.addEventListener("keydown", 
-	    	function(e) { HOME_EVENT_HANDLERS.themeSwitchKeydownEnter(e); }, 
-	    	false);
+	    HOME_CONSTANTS.themeTogglerEl.addEventListener("keyup", 
+	    	function(e) { 
+                if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
+                    HOME_CONSTANTS.errorModalEl.style.display = "none";
+                    return;
+                }
+                HOME_EVENT_HANDLERS.themeSwitchKeyupEnter(e); 
+            }, false);
 	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
 	    	"focus", this.hoverTheme, false);
 	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
@@ -63,17 +68,56 @@ var HOME_EVENT_HANDLERS = new function() {
 
 	    // input text search on enter
 	    HOME_CONSTANTS.inputTextEl.addEventListener(
-	    	"keydown", 
-	    	function(e) { HOME_EVENT_HANDLERS.inputTextKeydownEnter(e); }, 
-	    	false);
+	    	"keyup", function(e) { 
+                if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
+                    HOME_CONSTANTS.errorModalEl.style.display = "none";
+                    return;
+                }
+                HOME_EVENT_HANDLERS.searchKeyupEnter(e); 
+            }, false);
 
 	    // search button click
 	    HOME_CONSTANTS.searchButtonEl.addEventListener(
-	    	"click", this.findOrCreateRoomHandler, false);
+	    	"click", function(e) { 
+                if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
+                    HOME_CONSTANTS.errorModalEl.style.display = "none";
+                    return;
+                }
+                e.stopPropagation();
+                HOME_EVENT_HANDLERS.findOrCreateRoomHandler(); 
+            }, false); 
 	    HOME_CONSTANTS.searchButtonEl.addEventListener(
-	    	"keydown", 
-	    	function(e) { HOME_EVENT_HANDLERS.searchKeydownEnter(e); }, 
-	    	false);
+	    	"keyup", function(e) { 
+                if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
+                    HOME_CONSTANTS.errorModalEl.style.display = "none";
+                    return;
+                }
+                HOME_EVENT_HANDLERS.searchKeyupEnter(e); 
+            }, false);
+            
+
+        // click off of modals to close, or off to side to deselect
+        window.addEventListener(
+            "click", function(event) {
+                HOME_CONSTANTS.errorModalEl.style.display = "none";
+            }, false);
+
+        // enter or escape on modals to close
+        window.addEventListener(
+            "keyup", function(event) {
+                if (event.keyCode === 13 || event.keyCode == 27) {
+                    if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
+                        HOME_CONSTANTS.errorModalEl.style.display = "none";
+                        return;
+                    }
+                }                    
+            }, false);
+
+        HOME_CONSTANTS.errorOkButtonEl.addEventListener(
+            "click", function(event) {
+                event.stopPropagation();
+                HOME_CONSTANTS.errorModalEl.style.display = "none";              
+            }, false);
 	};
 
 
@@ -202,39 +246,33 @@ var HOME_EVENT_HANDLERS = new function() {
 	};
 
 
-	// handles keydown for theme switching on click
+	// handles keyup for theme switching on click
 	this.themeSwitchOnClick = function(e) {
 	    e.stopPropagation();
 	    this.switchThemes();
 	};
 
 
-	// handles keydown for theme switching on enter
-	this.themeSwitchKeydownEnter = function(e) {
+	// handles keyup for theme switching on enter
+	this.themeSwitchKeyupEnter = function(e) {
 	    var keycode = e.key.toLowerCase();
 
 	    if (keycode == "enter") {
-	        e.preventDefault();
+            e.preventDefault();
+            e.stopPropagation();
 	        HOME_EVENT_HANDLERS.switchThemes();
 	    }
 	};
 
 
-	// handles keydown for searching from search button
-	this.searchKeydownEnter = function(e) {
+	// handles keyup for searching from search button
+	this.searchKeyupEnter = function(e) {
 	    var keycode = e.key.toLowerCase();
 
-	    if (keycode == "enter") 
-        HOME_EVENT_HANDLERS.findOrCreateRoomHandler();
-	};
-
-
-	// handles keydown for searching from input text
-	this.inputTextKeydownEnter = function(e) {
-	    var keycode = e.key.toLowerCase();
-
-	    if (keycode == "enter") 
-        HOME_EVENT_HANDLERS.findOrCreateRoomHandler();
+	    if (keycode == "enter") {
+            event.stopPropagation();
+            HOME_EVENT_HANDLERS.findOrCreateRoomHandler();
+        }
 	};
 
 
@@ -243,15 +281,22 @@ var HOME_EVENT_HANDLERS = new function() {
 	this.findOrCreateRoomHandler = function() {
 		if (HOME_CONSTANTS.searchBoxEl.classList.contains(
 	    	HOME_CONSTANTS.expandedClass)) {
-			var roomToSearchFor = HOME_EVENT_HANDLERS.getStorageToSearchFor();
+            var roomToSearchFor = HOME_EVENT_HANDLERS.getStorageToSearchFor();
+            console.log("HERE");
 
 			if (roomToSearchFor.length > 0) {
 				HOME_EVENT_HANDLERS.findOrCreateRoomCallback(roomToSearchFor);
 		    }
 		    else 
-		        HOME_EVENT_HANDLERS.createErrorMessageCallback(
-		        	MESSAGE_CONSTANTS.errorRoomLength0);
+		        HOME_EVENT_HANDLERS.displayError(
+                    MESSAGE_CONSTANTS.errorRoomLength0);
 		}
+    };
+
+
+    this.displayError = function(errorMessage) {
+        HOME_CONSTANTS.errorModalTextEl.innerHTML = errorMessage;
+        HOME_CONSTANTS.errorModalEl.style.display = "block";
     };
     
     

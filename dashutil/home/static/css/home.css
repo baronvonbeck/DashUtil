@@ -1,6 +1,14 @@
 /* home page specific css stylings goes here */
 /* idea modified from https://codepen.io/AlbertFeynman/pen/BPvzWZ */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  
+    /* outlines are handled with other visual cues */
+    outline: 0;
+  }
 
 .search-box-container {
   position: absolute;
