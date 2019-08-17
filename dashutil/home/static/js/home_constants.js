@@ -3,7 +3,7 @@
 
 
 // General constants
-const GENERAL_CONSTANTS = new function() {
+const HOME_CONSTANTS = new function() {
     this.inputTextEl =         	document.getElementById("input-text-id");
     this.searchBoxEl =         	document.getElementById("search-box-id"); 
     this.searchIconEl =         document.getElementById("search-icon-id");
@@ -28,19 +28,19 @@ const GENERAL_CONSTANTS = new function() {
 // theme variables for hover
 const THEME_CONSTANTS = new function() {
 	this.THEME_CONSTANTS_DARK = {
-	    logo:               GENERAL_CONSTANTS.imgPath + "logo.png",
-	    logoHover:          GENERAL_CONSTANTS.imgPath + "logo-dark-hover.png",
-	    theme:              GENERAL_CONSTANTS.imgPath + "theme-dark.png",
-	    themeHover:         GENERAL_CONSTANTS.imgPath + "theme-dark-hover.png",
+	    logo:               HOME_CONSTANTS.imgPath + "logo.png",
+	    logoHover:          HOME_CONSTANTS.imgPath + "logo-dark-hover.png",
+	    theme:              HOME_CONSTANTS.imgPath + "theme-dark.png",
+	    themeHover:         HOME_CONSTANTS.imgPath + "theme-dark-hover.png",
 	    themeSwitchText:    "Go light!",
 	    textColor:          "white",
 	    textColorHover:     "#d6d6d6"
 	};
 	this.THEME_CONSTANTS_LIGHT = {
-	    logo:               GENERAL_CONSTANTS.imgPath + "logo.png",
-	    logoHover:          GENERAL_CONSTANTS.imgPath + "logo-light-hover.png",
-	    theme:              GENERAL_CONSTANTS.imgPath + "theme-light.png",
-	    themeHover:         GENERAL_CONSTANTS.imgPath + "theme-light-hover.png",
+	    logo:               HOME_CONSTANTS.imgPath + "logo.png",
+	    logoHover:          HOME_CONSTANTS.imgPath + "logo-light-hover.png",
+	    theme:              HOME_CONSTANTS.imgPath + "theme-light.png",
+	    themeHover:         HOME_CONSTANTS.imgPath + "theme-light-hover.png",
 	    themeSwitchText:    "Go dark!",
 	    textColor:          "#252525",
 	    textColorHover:     "#a0a0a0"

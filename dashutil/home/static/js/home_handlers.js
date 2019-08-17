@@ -27,50 +27,50 @@ var HOME_EVENT_HANDLERS = new function() {
 	    }); 
 	    
 	    // navbar logo image and text (dashutil) 
-	    GENERAL_CONSTANTS.navbarLogoEl.addEventListener(
+	    HOME_CONSTANTS.navbarLogoEl.addEventListener(
 	    	"mouseover", this.hoverLogo, false);
-	    GENERAL_CONSTANTS.navbarLogoEl.addEventListener(
+	    HOME_CONSTANTS.navbarLogoEl.addEventListener(
 	    	"mouseout", this.unhoverLogo, false);
-	    GENERAL_CONSTANTS.navbarLogoEl.addEventListener(
+	    HOME_CONSTANTS.navbarLogoEl.addEventListener(
 	    	"focus", this.hoverLogo, false);
-	    GENERAL_CONSTANTS.navbarLogoEl.addEventListener(
+	    HOME_CONSTANTS.navbarLogoEl.addEventListener(
 	    	"blur", this.unhoverLogo, false);
 
 	    // theme toggler image
-	    GENERAL_CONSTANTS.themeTogglerEl.addEventListener(
+	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
 	    	"click", 
 	    	function(e) { HOME_EVENT_HANDLERS.themeSwitchOnClick(e); }, 
 	    	false);
-	    GENERAL_CONSTANTS.themeTogglerEl.addEventListener("keydown", 
+	    HOME_CONSTANTS.themeTogglerEl.addEventListener("keydown", 
 	    	function(e) { HOME_EVENT_HANDLERS.themeSwitchKeydownEnter(e); }, 
 	    	false);
-	    GENERAL_CONSTANTS.themeTogglerEl.addEventListener(
+	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
 	    	"focus", this.hoverTheme, false);
-	    GENERAL_CONSTANTS.themeTogglerEl.addEventListener(
+	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
 	    	"blur", this.unhoverTheme, false);
-	    GENERAL_CONSTANTS.themeTogglerEl.addEventListener(
+	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
 	    	"mouseover", this.hoverTheme, false);
-	    GENERAL_CONSTANTS.themeTogglerEl.addEventListener(
+	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
 	    	"mouseout", this.unhoverTheme, false);
 	    
 	    // search box magnifying glass expand
-	    GENERAL_CONSTANTS.searchBoxEl.addEventListener(
+	    HOME_CONSTANTS.searchBoxEl.addEventListener(
 	    	"click", this.expandSearchBox, false);
 
 	    // search box close contract
-	    GENERAL_CONSTANTS.searchIconEl.addEventListener(
+	    HOME_CONSTANTS.searchIconEl.addEventListener(
 	    	"click", this.contractSearchBox, false);
 
 	    // input text search on enter
-	    GENERAL_CONSTANTS.inputTextEl.addEventListener(
+	    HOME_CONSTANTS.inputTextEl.addEventListener(
 	    	"keydown", 
 	    	function(e) { HOME_EVENT_HANDLERS.inputTextKeydownEnter(e); }, 
 	    	false);
 
 	    // search button click
-	    GENERAL_CONSTANTS.searchButtonEl.addEventListener(
+	    HOME_CONSTANTS.searchButtonEl.addEventListener(
 	    	"click", this.findOrCreateRoomHandler, false);
-	    GENERAL_CONSTANTS.searchButtonEl.addEventListener(
+	    HOME_CONSTANTS.searchButtonEl.addEventListener(
 	    	"keydown", 
 	    	function(e) { HOME_EVENT_HANDLERS.searchKeydownEnter(e); }, 
 	    	false);
@@ -84,8 +84,8 @@ var HOME_EVENT_HANDLERS = new function() {
 	    switch (keycode) {
 	        case "escape": 
 	        case "esc": 
-	            if (GENERAL_CONSTANTS.searchBoxEl.classList.contains(
-	            	GENERAL_CONSTANTS.expandedClass)) { 
+	            if (HOME_CONSTANTS.searchBoxEl.classList.contains(
+	            	HOME_CONSTANTS.expandedClass)) { 
                     HOME_EVENT_HANDLERS.contractSearchBox(); 
 
 	                // no this isnt a mistake
@@ -94,8 +94,8 @@ var HOME_EVENT_HANDLERS = new function() {
 	            break; 
 
 	        case "tab":
-	          	if (!GENERAL_CONSTANTS.searchBoxEl.classList.contains(
-	          		GENERAL_CONSTANTS.expandedClass)) {
+	          	if (!HOME_CONSTANTS.searchBoxEl.classList.contains(
+	          		HOME_CONSTANTS.expandedClass)) {
 	                e.preventDefault();
 	                HOME_EVENT_HANDLERS.expandSearchBox(); 
 	            }
@@ -106,92 +106,92 @@ var HOME_EVENT_HANDLERS = new function() {
 
 	// Handler for expanding the search box
 	this.expandSearchBox = function() { 
-	    if (GENERAL_CONSTANTS.searchBoxEl.classList.contains(
-	    	GENERAL_CONSTANTS.prevClass)) {
+	    if (HOME_CONSTANTS.searchBoxEl.classList.contains(
+	    	HOME_CONSTANTS.prevClass)) {
 
-	        GENERAL_CONSTANTS.searchBoxEl.classList.remove(
-	        	GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.searchIconEl.classList.remove(
-	        	GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.inputTextEl.classList.remove(
-	        	GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.searchButtonEl.classList.remove(
-	        	GENERAL_CONSTANTS.prevClass);
+	        HOME_CONSTANTS.searchBoxEl.classList.remove(
+	        	HOME_CONSTANTS.prevClass);
+	        HOME_CONSTANTS.searchIconEl.classList.remove(
+	        	HOME_CONSTANTS.prevClass);
+	        HOME_CONSTANTS.inputTextEl.classList.remove(
+	        	HOME_CONSTANTS.prevClass);
+	        HOME_CONSTANTS.searchButtonEl.classList.remove(
+	        	HOME_CONSTANTS.prevClass);
 	    }
-	    else if (!GENERAL_CONSTANTS.searchBoxEl.classList.contains(
-	    	GENERAL_CONSTANTS.expandedClass)) {
+	    else if (!HOME_CONSTANTS.searchBoxEl.classList.contains(
+	    	HOME_CONSTANTS.expandedClass)) {
 
-	        GENERAL_CONSTANTS.searchBoxEl.classList.add(
-	        	GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.searchIconEl.classList.add(
-	        	GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.inputTextEl.classList.add(
-	        	GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.searchButtonEl.classList.add(
-	        	GENERAL_CONSTANTS.expandedClass); 
-	        GENERAL_CONSTANTS.oldSearchEl.id = GENERAL_CONSTANTS.newSearchId;
+	        HOME_CONSTANTS.searchBoxEl.classList.add(
+	        	HOME_CONSTANTS.expandedClass);
+	        HOME_CONSTANTS.searchIconEl.classList.add(
+	        	HOME_CONSTANTS.expandedClass);
+	        HOME_CONSTANTS.inputTextEl.classList.add(
+	        	HOME_CONSTANTS.expandedClass);
+	        HOME_CONSTANTS.searchButtonEl.classList.add(
+	        	HOME_CONSTANTS.expandedClass); 
+	        HOME_CONSTANTS.oldSearchEl.id = HOME_CONSTANTS.newSearchId;
 
-	        HOME_EVENT_HANDLERS.moveCaretToEnd(GENERAL_CONSTANTS.inputTextEl);
+	        HOME_EVENT_HANDLERS.moveCaretToEnd(HOME_CONSTANTS.inputTextEl);
 	    }
 	};
 
 
 	// Handler for contracting the search box
 	this.contractSearchBox = function() {
-	    if (GENERAL_CONSTANTS.searchBoxEl.classList.contains(
-	    	GENERAL_CONSTANTS.expandedClass)) {
+	    if (HOME_CONSTANTS.searchBoxEl.classList.contains(
+	    	HOME_CONSTANTS.expandedClass)) {
 
-	        GENERAL_CONSTANTS.searchBoxEl.classList.remove(
-	        	GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.searchIconEl.classList.remove(
-	        	GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.inputTextEl.classList.remove(
-	        	GENERAL_CONSTANTS.expandedClass);
-	        GENERAL_CONSTANTS.searchButtonEl.classList.remove(
-	        	GENERAL_CONSTANTS.expandedClass); 
+	        HOME_CONSTANTS.searchBoxEl.classList.remove(
+	        	HOME_CONSTANTS.expandedClass);
+	        HOME_CONSTANTS.searchIconEl.classList.remove(
+	        	HOME_CONSTANTS.expandedClass);
+	        HOME_CONSTANTS.inputTextEl.classList.remove(
+	        	HOME_CONSTANTS.expandedClass);
+	        HOME_CONSTANTS.searchButtonEl.classList.remove(
+	        	HOME_CONSTANTS.expandedClass); 
 
-	        GENERAL_CONSTANTS.searchBoxEl.classList.add(
-	        	GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.searchIconEl.classList.add(
-	        	GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.inputTextEl.classList.add(
-	        	GENERAL_CONSTANTS.prevClass);
-	        GENERAL_CONSTANTS.searchButtonEl.classList.add(
-	        	GENERAL_CONSTANTS.prevClass); 
-	        document.getElementById(GENERAL_CONSTANTS.newSearchId).id = 
-	        	GENERAL_CONSTANTS.oldSearchId; 
+	        HOME_CONSTANTS.searchBoxEl.classList.add(
+	        	HOME_CONSTANTS.prevClass);
+	        HOME_CONSTANTS.searchIconEl.classList.add(
+	        	HOME_CONSTANTS.prevClass);
+	        HOME_CONSTANTS.inputTextEl.classList.add(
+	        	HOME_CONSTANTS.prevClass);
+	        HOME_CONSTANTS.searchButtonEl.classList.add(
+	        	HOME_CONSTANTS.prevClass); 
+	        document.getElementById(HOME_CONSTANTS.newSearchId).id = 
+	        	HOME_CONSTANTS.oldSearchId; 
 	    }      
 	};
 
 
 	// hover function for logo
 	this.hoverLogo = function() {
-	    GENERAL_CONSTANTS.logoImgEl.setAttribute("src", 
+	    HOME_CONSTANTS.logoImgEl.setAttribute("src", 
 	    	THEME_CONTROLLER.currentTheme.logoHover);
-	    GENERAL_CONSTANTS.logoTextEl.style.color = 
+	    HOME_CONSTANTS.logoTextEl.style.color = 
 	    	THEME_CONTROLLER.currentTheme.textColorHover;
 	};
 
 
 	// unhover function for logo
 	this.unhoverLogo = function() {
-	    GENERAL_CONSTANTS.logoImgEl.setAttribute("src", 
+	    HOME_CONSTANTS.logoImgEl.setAttribute("src", 
 	    	THEME_CONTROLLER.currentTheme.logo);
-	    GENERAL_CONSTANTS.logoTextEl.style.color = 
+	    HOME_CONSTANTS.logoTextEl.style.color = 
 	    	THEME_CONTROLLER.currentTheme.textColor;
 	};
 
 
 	// hover function for theme
 	this.hoverTheme = function() {
-	    GENERAL_CONSTANTS.themeImgEl.setAttribute("src", 
+	    HOME_CONSTANTS.themeImgEl.setAttribute("src", 
 	    	THEME_CONTROLLER.currentTheme.themeHover);
 	};
 
 
 	// unhover function for theme
 	this.unhoverTheme = function() {
-	    GENERAL_CONSTANTS.themeImgEl.setAttribute("src", 
+	    HOME_CONSTANTS.themeImgEl.setAttribute("src", 
 	    	THEME_CONTROLLER.currentTheme.theme);
 	};
 
@@ -241,8 +241,8 @@ var HOME_EVENT_HANDLERS = new function() {
 	// handles finding or creation of new room using callback provided,
 	// including checking if string is valid or not
 	this.findOrCreateRoomHandler = function() {
-		if (GENERAL_CONSTANTS.searchBoxEl.classList.contains(
-	    	GENERAL_CONSTANTS.expandedClass)) {
+		if (HOME_CONSTANTS.searchBoxEl.classList.contains(
+	    	HOME_CONSTANTS.expandedClass)) {
 			var roomToSearchFor = HOME_EVENT_HANDLERS.getStorageToSearchFor();
 
 			if (roomToSearchFor.length > 0) {
@@ -257,7 +257,7 @@ var HOME_EVENT_HANDLERS = new function() {
     
     // trims spaces, removes single and double quotes, and returns storage name
     this.getStorageToSearchFor = function() {
-        return GENERAL_CONSTANTS.inputTextEl.value.toString().trim()
+        return HOME_CONSTANTS.inputTextEl.value.toString().trim()
             .replace(/['"]+/g, '');
     }
 
@@ -282,19 +282,19 @@ var THEME_CONTROLLER = new function() {
 	    if (this.darkTheme) {
 	        this.currentTheme = THEME_CONSTANTS.THEME_CONSTANTS_LIGHT;
 	        document.body.className = document.body.className.replace(
-	        	GENERAL_CONSTANTS.darkThemeClass, 
-	        	GENERAL_CONSTANTS.lightThemeClass);
+	        	HOME_CONSTANTS.darkThemeClass, 
+	        	HOME_CONSTANTS.lightThemeClass);
 	    }
 	    else {
 	        this.currentTheme = THEME_CONSTANTS.THEME_CONSTANTS_DARK;
 	        document.body.className = document.body.className.replace(
-	        	GENERAL_CONSTANTS.lightThemeClass, 
-	        	GENERAL_CONSTANTS.darkThemeClass);
+	        	HOME_CONSTANTS.lightThemeClass, 
+	        	HOME_CONSTANTS.darkThemeClass);
 	    }
 
 	    this.darkTheme = !this.darkTheme;
 	    this.lightTheme = !this.lightTheme;
-	    GENERAL_CONSTANTS.themeImgEl.title = 
+	    HOME_CONSTANTS.themeImgEl.title = 
 	    	this.currentTheme.themeSwitchText;
 
 	    HOME_EVENT_HANDLERS.unhoverLogo();

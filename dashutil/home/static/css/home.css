@@ -60,7 +60,10 @@
 .search-box-container input {
   font-family: 'Fira Sans', sans-serif;
   position: absolute;
-  margin: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: auto;
+  margin-right: 50px;
   top: 0;
   right: 0;
   bottom: 0;
@@ -81,14 +84,16 @@
   cursor: pointer;
 }
 .search-box-container input.expanded {
-  width: 500px;
+  width: 60vw;
+  left: -30vw;
+  margin-left: 50px;
+  
   height: 50px;
-  left: -210px;
   opacity: 1;
   cursor: text;
 }
 .search-box-container input.expanded ~ .search.expanded {
-  right: -450px;
+  left: 30vw;
   z-index: 6;
 }
 /* Left-leaning \ in the X button */
