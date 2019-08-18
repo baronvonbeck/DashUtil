@@ -6,20 +6,9 @@
 // keyboard, click, hover, focus, etc event handlers for the home page
 var HOME_EVENT_HANDLERS = new function() {
 
-	// Method to call back to find or create a room, from home.js
-	// Takes one String as parameter (the room name to find/create)
-	this.findOrCreateRoomCallback = null;
-
-	// Method to display an error message, from home.js
-	// Takes one String as parameter (the error message to display)
-	this.createErrorMessageCallback = null;
 	
 	// Handler to set up event listeners. 2 callbacks passed in from home.js
-	this.addAllEventListeners = function(
-		newFindOrCreateRoomCallback, newCreateErrorMessageCallback) {
-
-		this.findOrCreateRoomCallback = newFindOrCreateRoomCallback;
-		this.createErrorMessageCallback = newCreateErrorMessageCallback;
+	this.addAllEventListeners = function() {
 
 	    // general keyboard event handlers
 	    document.addEventListener("keyup", 
@@ -282,10 +271,9 @@ var HOME_EVENT_HANDLERS = new function() {
 		if (HOME_CONSTANTS.searchBoxEl.classList.contains(
 	    	HOME_CONSTANTS.expandedClass)) {
             var roomToSearchFor = HOME_EVENT_HANDLERS.getStorageToSearchFor();
-            console.log("HERE");
 
 			if (roomToSearchFor.length > 0) {
-				HOME_EVENT_HANDLERS.findOrCreateRoomCallback(roomToSearchFor);
+				HOME_DB.findOrCreateRoom(roomToSearchFor);
 		    }
 		    else 
 		        HOME_EVENT_HANDLERS.displayError(
@@ -302,8 +290,8 @@ var HOME_EVENT_HANDLERS = new function() {
     
     // trims spaces, removes single and double quotes, and returns storage name
     this.getStorageToSearchFor = function() {
-        return HOME_CONSTANTS.inputTextEl.value.toString().trim()
-            .replace(/['"]+/g, '');
+        return HOME_EVENT_HANDLERS.formatString(
+            HOME_CONSTANTS.inputTextEl.value.toString()).trim();
     }
 
 
@@ -313,7 +301,13 @@ var HOME_EVENT_HANDLERS = new function() {
 	    el.value = '';
 	    el.value = temp;
 	    el.focus();
-	};
+    };
+    
+
+    // formats a string to remove all single and double quotes ['"] and slashes
+    this.formatString = function(text) {
+        return text.replace(/['"\\\/]+/g, '');
+    };
 };
 
 

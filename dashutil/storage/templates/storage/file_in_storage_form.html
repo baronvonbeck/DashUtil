@@ -57,7 +57,7 @@
                         {% csrf_token %}
                         {{ form }}
                         <input type="file" id="upload-file-id" multiple>
-                        <button type="submit" id="upload-file-button-id">Upload File(s)</button>
+                        <button type="submit" id="upload-file-button-id" class="modal-button">Upload File(s)</button>
                     </div>
                     <br>
                     <p>Or, you can choose a directory. It and all of its contents
@@ -73,7 +73,7 @@
                         {{ form }}
                         <input type="file" id="upload-dir-id" webkitdirectory mozdirectory 
                         msdirectory odirectory directory multiple>
-                        <button type="submit" id="upload-dir-button-id">Upload Directories</button>
+                        <button type="submit" id="upload-dir-button-id" class="modal-button">Upload Directories</button>
                     </div>
                     <br><br>
                     <p>Currently, only one directory can be uploaded via the directory
@@ -83,7 +83,7 @@
                         a time, you can do so from your file system by choosing multiple files 
                         and directories, and then dragging and dropping
                         to the directory of your choice. Again, empty directories won't be copied over.</p>
-                    <button id="upload-cancel-id">Cancel</button>
+                    <button id="upload-cancel-id" class="modal-button">Cancel</button>
                 </div>
             </div>
         
@@ -92,8 +92,8 @@
                     <p>Download selected files from DashUtil to the specified directory 
                         on your computer.</p>
                     <br>
-                    <button id="download-button-id">Download</button>
-                    <button id="download-cancel-id">Cancel</button>
+                    <button id="download-button-id" class="modal-button">Download</button>
+                    <button id="download-cancel-id" class="modal-button">Cancel</button>
                 </div>
             </div>
 
@@ -106,8 +106,8 @@
                     <p>Name of new folder:</p>
                     <br>
                     <input id="directory-text-id" type="text"></input>
-                    <button id="directory-ok-id">OK</button>
-                    <button id="directory-cancel-id">Cancel</button>
+                    <button id="directory-ok-id" class="modal-button">OK</button>
+                    <button id="directory-cancel-id" class="modal-button">Cancel</button>
                 </div>
             </div>
 
@@ -119,8 +119,8 @@
                     <br>
                     <p>Rename selected file(s) to:</p>
                     <input id="rename-text-id" type="text"></input>
-                    <button id="rename-ok-id">OK</button>
-                    <button id="rename-cancel-id">Cancel</button>
+                    <button id="rename-ok-id" class="modal-button">OK</button>
+                    <button id="rename-cancel-id" class="modal-button">Cancel</button>
                 </div>
             </div>
 
@@ -131,8 +131,8 @@
                     <p>You will not be able to recover them.</p>
                     <br>
                     <p>Are you sure you want to delete the file(s)?</p>
-                    <button id="delete-ok-id">OK</button>
-                    <button id="delete-cancel-id">Cancel</button>
+                    <button id="delete-ok-id" class="modal-button">OK</button>
+                    <button id="delete-cancel-id" class="modal-button">Cancel</button>
                 </div>
             </div>
 
@@ -146,8 +146,8 @@
                     <p>You can also drag and drop the selected files to your desired destination.</p>
                     <br>
                     <p>Click OK to continue.</p>
-                    <button id="move-ok-id">OK</button>
-                    <button id="move-cancel-id">Cancel</button>
+                    <button id="move-ok-id" class="modal-button">OK</button>
+                    <button id="move-cancel-id" class="modal-button">Cancel</button>
                 </div>
             </div>
 
@@ -155,7 +155,7 @@
                 <div id="progress-modal-content-id" class="modal-content">
                     <p id="progress-modal-text-id">temporary</p>
 
-                    <button id="progress-ok-id">OK</button>
+                    <button id="progress-ok-id" class="modal-button">OK</button>
                 </div>
             </div>
 
@@ -165,7 +165,7 @@
                     <br>
                     <p id="error-modal-text-id">temporary</p>
                     <br>
-                    <button id="error-ok-id">OK</button>
+                    <button id="error-ok-id" class="modal-button">OK</button>
                 </div>
             </div>
         </div>

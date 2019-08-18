@@ -43,7 +43,7 @@ $.ajaxSetup({
  *****************************************************************************/
 
 // searches for a storage; if none is found, creates one
-function searchOrCreateAndGoToStorage(storageName, errorCallback) {
+function searchOrCreateAndGoToStorageDB(storageName, errorCallback) {
     window.location.href = ALL_CONSTANTS.storagePath + 
         encodeURIComponent(storageName);
     // $.ajax({

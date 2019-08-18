@@ -1,6 +1,6 @@
 // storage_to_db.js - "interface" methods to call to access database wrapper, 
 // and will do any parsing necessary on return data from ajax calls in the
-// event  that a new backend is used
+// event that a new backend is used
 'use strict';
 
 const STORAGE_DB = new function() {

@@ -58,5 +58,6 @@ const THEME_CONSTANTS = new function() {
 
 // messages
 const MESSAGE_CONSTANTS = new function() {
-	this.errorRoomLength0 = "Room name length must be greater than 0";
+    this.errorRoomLength0 = "Room name length must be greater than 0. \
+        None of the following characters are allowed: \' \" \\ \/ ";
 };
