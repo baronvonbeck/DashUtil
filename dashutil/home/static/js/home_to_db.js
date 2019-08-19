@@ -5,14 +5,11 @@
 
 const HOME_DB = new function() {
 
-    
     // Goes to the storage page for input string 
     // This method is called back from HOME_EVENT_HANDLERS
     this.findOrCreateRoom = function(roomToSearchFor) {
         searchOrCreateAndGoToStorageDB(roomToSearchFor);
     }
-
-
 
 
     // Calls error message if ajax call fails

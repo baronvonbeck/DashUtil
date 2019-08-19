@@ -103,8 +103,6 @@ const STORAGE_CONSTANTS = new function() {
     this.createSortEl =             document.getElementById(this.createSortId);
     this.sizeSortEl =               document.getElementById(this.sizeSortId);
 
-    this.darkThemeClass =      	    "dark-theme";
-    this.lightThemeClass =     	    "light-theme";
     this.fileClass =                "fileobj"
     this.selectedClass =            "selected";
     this.draggingClass =            "dragging";
@@ -126,6 +124,7 @@ const STORAGE_CONSTANTS = new function() {
     this.directoryOpenLightIcon =   this.fileIconPath + "directory-open-light.png";
     this.genericFileLightIcon =     this.fileIconPath + "generic-file-light.png";
     
+
     this.uploadInProgressMessage =      "Uploading files. This may take a few minutes, depending on file sizes...";
     this.downloadInProgressMessage =    "Downloading files. This may take a few minutes, depending on file sizes...";
 
@@ -135,7 +134,8 @@ const STORAGE_CONSTANTS = new function() {
     this.errorChooseAFileDownload =     "Please select at least one file or folder to download.";
     this.errorNewDirNameLength =        "New folder name's must contain at least one or more valid characters.";
     this.errorNewDir1Parent =           "Please select only one parent to create a new folder in.";
-    this.errorRenameNameLength =        "New name for files and folders must contain at least one or more valid characters.";
+    this.errorRenameNameLength =        "New name for files and folders must contain at least one or more valid characters. \
+                                         None of the following characters are allowed: \' \" \\ \/";
     this.errorChooseAFileRename =       "Please select at least one file or folder to rename.";
     this.errorChooseAFileDelete =       "Please select at least one file or folder to delete.";
     this.errorChooseAFileMove =         "Please select at least one file or folder to move.";

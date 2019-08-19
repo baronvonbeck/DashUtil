@@ -728,7 +728,7 @@ var FILE_MANAGER = new function() {
         FILE_MANAGER.currentSortType = newSortType;
         FILE_MANAGER.currentSortOrder = newSortOrder;
 
-        var ulEls = document.getElementsByTagName("ul");
+        var ulEls = STORAGE_CONSTANTS.mainEl.getElementsByTagName("ul");
         for (var i = 0; i < ulEls.length; i ++) {
             FILE_MANAGER.sortDirectory(ulEls[i]);
         }
@@ -745,6 +745,7 @@ var FILE_MANAGER = new function() {
 
 
     this.sortDirectory = function(ulEl) {
+        
         Array.from(ulEl.childNodes).sort(function(a, b) {
             return FILE_MANAGER.compareElementsForInsert(a, b);
         }).forEach(li => ulEl.appendChild(li));

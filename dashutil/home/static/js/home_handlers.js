@@ -1,5 +1,5 @@
-// home_handlers.js - handles input events and calls home.js methods 
-// to deal with page direction and displaying messages to users
+// home_handlers.js - handles input events and displaying ui/messages to users
+// calls home_to_db.js to deal with page direction
 'use strict';
 
 
@@ -10,42 +10,12 @@ var HOME_EVENT_HANDLERS = new function() {
 	// Handler to set up event listeners. 2 callbacks passed in from home.js
 	this.addAllEventListeners = function() {
 
+        NAVBAR_EVENT_HANDLERS.addNavbarEventListeners();
+
 	    // general keyboard event handlers
 	    document.addEventListener("keyup", 
 	    	function(e) { HOME_EVENT_HANDLERS.handleKeyboardEvents(e); 
 	    }); 
-	    
-	    // navbar logo image and text (dashutil) 
-	    HOME_CONSTANTS.navbarLogoEl.addEventListener(
-	    	"mouseover", this.hoverLogo, false);
-	    HOME_CONSTANTS.navbarLogoEl.addEventListener(
-	    	"mouseout", this.unhoverLogo, false);
-	    HOME_CONSTANTS.navbarLogoEl.addEventListener(
-	    	"focus", this.hoverLogo, false);
-	    HOME_CONSTANTS.navbarLogoEl.addEventListener(
-	    	"blur", this.unhoverLogo, false);
-
-	    // theme toggler image
-	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
-	    	"click", 
-	    	function(e) { HOME_EVENT_HANDLERS.themeSwitchOnClick(e); }, 
-	    	false);
-	    HOME_CONSTANTS.themeTogglerEl.addEventListener("keyup", 
-	    	function(e) { 
-                if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
-                    HOME_CONSTANTS.errorModalEl.style.display = "none";
-                    return;
-                }
-                HOME_EVENT_HANDLERS.themeSwitchKeyupEnter(e); 
-            }, false);
-	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
-	    	"focus", this.hoverTheme, false);
-	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
-	    	"blur", this.unhoverTheme, false);
-	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
-	    	"mouseover", this.hoverTheme, false);
-	    HOME_CONSTANTS.themeTogglerEl.addEventListener(
-	    	"mouseout", this.unhoverTheme, false);
 	    
 	    // search box magnifying glass expand
 	    HOME_CONSTANTS.searchBoxEl.addEventListener(
@@ -197,62 +167,7 @@ var HOME_EVENT_HANDLERS = new function() {
 	};
 
 
-	// hover function for logo
-	this.hoverLogo = function() {
-	    HOME_CONSTANTS.logoImgEl.setAttribute("src", 
-	    	THEME_CONTROLLER.currentTheme.logoHover);
-	    HOME_CONSTANTS.logoTextEl.style.color = 
-	    	THEME_CONTROLLER.currentTheme.textColorHover;
-	};
-
-
-	// unhover function for logo
-	this.unhoverLogo = function() {
-	    HOME_CONSTANTS.logoImgEl.setAttribute("src", 
-	    	THEME_CONTROLLER.currentTheme.logo);
-	    HOME_CONSTANTS.logoTextEl.style.color = 
-	    	THEME_CONTROLLER.currentTheme.textColor;
-	};
-
-
-	// hover function for theme
-	this.hoverTheme = function() {
-	    HOME_CONSTANTS.themeImgEl.setAttribute("src", 
-	    	THEME_CONTROLLER.currentTheme.themeHover);
-	};
-
-
-	// unhover function for theme
-	this.unhoverTheme = function() {
-	    HOME_CONSTANTS.themeImgEl.setAttribute("src", 
-	    	THEME_CONTROLLER.currentTheme.theme);
-	};
-
-
-	// switch themes
-	this.switchThemes = function() {
-	    THEME_CONTROLLER.switchThemes();
-	};
-
-
-	// handles keyup for theme switching on click
-	this.themeSwitchOnClick = function(e) {
-	    e.stopPropagation();
-	    this.switchThemes();
-	};
-
-
-	// handles keyup for theme switching on enter
-	this.themeSwitchKeyupEnter = function(e) {
-	    var keycode = e.key.toLowerCase();
-
-	    if (keycode == "enter") {
-            e.preventDefault();
-            e.stopPropagation();
-	        HOME_EVENT_HANDLERS.switchThemes();
-	    }
-	};
-
+	
 
 	// handles keyup for searching from search button
 	this.searchKeyupEnter = function(e) {
@@ -307,36 +222,5 @@ var HOME_EVENT_HANDLERS = new function() {
     // formats a string to remove all single and double quotes ['"] and slashes
     this.formatString = function(text) {
         return text.replace(/['"\\\/]+/g, '');
-    };
-};
-
-
-// theme controller for switching themes
-var THEME_CONTROLLER = new function() {
-    this.darkTheme = 		true;
-    this.lightTheme = 		false;
-    this.currentTheme = 	THEME_CONSTANTS.THEME_CONSTANTS_DARK;
-
-    this.switchThemes = function() {
-	    if (this.darkTheme) {
-	        this.currentTheme = THEME_CONSTANTS.THEME_CONSTANTS_LIGHT;
-	        document.body.className = document.body.className.replace(
-	        	HOME_CONSTANTS.darkThemeClass, 
-	        	HOME_CONSTANTS.lightThemeClass);
-	    }
-	    else {
-	        this.currentTheme = THEME_CONSTANTS.THEME_CONSTANTS_DARK;
-	        document.body.className = document.body.className.replace(
-	        	HOME_CONSTANTS.lightThemeClass, 
-	        	HOME_CONSTANTS.darkThemeClass);
-	    }
-
-	    this.darkTheme = !this.darkTheme;
-	    this.lightTheme = !this.lightTheme;
-	    HOME_CONSTANTS.themeImgEl.title = 
-	    	this.currentTheme.themeSwitchText;
-
-	    HOME_EVENT_HANDLERS.unhoverLogo();
-	    HOME_EVENT_HANDLERS.unhoverTheme();
     };
 };

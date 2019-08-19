@@ -40,6 +40,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
             function(i) {STORAGE_CONSTANTS.modalEls[i].style.display = "block";}
         ]
 
+        NAVBAR_EVENT_HANDLERS.addNavbarEventListeners();
+
         STORAGE_CONSTANTS.buttonListEl.addEventListener(
             "click", function(event) {
                 STORAGE_CONSTANTS.menuEl.style.display = "none";
@@ -113,24 +115,29 @@ var STORAGE_EVENT_HANDLERS = new function() {
         // click off of modals to close, or off to side to deselect
         window.addEventListener(
             "click", function(event) {
-                STORAGE_CONSTANTS.errorModalEl.style.display = "none";
                 STORAGE_CONSTANTS.menuEl.style.display = "none";
+                if (STORAGE_CONSTANTS.errorModalEl.style.display == "block" && 
+                        event.target == STORAGE_CONSTANTS.errorModalEl) {
+                    STORAGE_CONSTANTS.errorModalEl.style.display = "none";
+                    return;
+                }
+                
                 STORAGE_EVENT_HANDLERS.windowClickHandler(event);
             }, false);
 
         STORAGE_CONSTANTS.fileListEl.addEventListener(
                 "click", function(event) {
-            STORAGE_CONSTANTS.menuEl.style.display = "none";
-            var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
-                event.target, this);
-            var moveId = el.id;
-            if (el == undefined) return;
-            else if (el == this)
-                moveId = STORAGE_EVENT_HANDLERS.getStoragePageId();
+                STORAGE_CONSTANTS.menuEl.style.display = "none";
+                var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
+                    event.target, this);
+                var moveId = el.id;
+                if (el == undefined) return;
+                else if (el == this)
+                    moveId = STORAGE_EVENT_HANDLERS.getStoragePageId();
 
-            STORAGE_EVENT_HANDLERS.fileClickHandler(el, moveId, 
-                event.ctrlKey, event.shiftKey);
-            event.stopPropagation();
+                STORAGE_EVENT_HANDLERS.fileClickHandler(el, moveId, 
+                    event.ctrlKey, event.shiftKey);
+                event.stopPropagation();
             }, false);
 
         STORAGE_CONSTANTS.fileListEl.addEventListener(

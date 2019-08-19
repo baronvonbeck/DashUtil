@@ -119,3 +119,7 @@ body.light-theme .modal .modal-content .modal-button:hover {
     color: var(--text-hover-color);
     background-color: var(--modal-button-hover-color);
 }
+body.light-theme .modal .modal-content .modal-button:focus {
+    color: var(--text-hover-color);
+    background-color: var(--modal-button-hover-color);
+}
