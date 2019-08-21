@@ -59,7 +59,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             }, false);
 
         window.addEventListener(
-            "keyup", function(event) {
+            "keydown", function(event) {
                 if (event.keyCode === 13) {
                     if (STORAGE_CONSTANTS.progressModalEl.style.display == "block") {
                         STORAGE_CONSTANTS.progressModalEl.style.display = "none";

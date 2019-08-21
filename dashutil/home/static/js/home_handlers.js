@@ -13,7 +13,7 @@ var HOME_EVENT_HANDLERS = new function() {
         NAVBAR_EVENT_HANDLERS.addNavbarEventListeners();
 
 	    // general keyboard event handlers
-	    document.addEventListener("keyup", 
+	    document.addEventListener("keydown", 
 	    	function(e) { HOME_EVENT_HANDLERS.handleKeyboardEvents(e); 
 	    }); 
 	    
@@ -27,12 +27,12 @@ var HOME_EVENT_HANDLERS = new function() {
 
 	    // input text search on enter
 	    HOME_CONSTANTS.inputTextEl.addEventListener(
-	    	"keyup", function(e) { 
+	    	"keydown", function(e) { 
                 if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
                     HOME_CONSTANTS.errorModalEl.style.display = "none";
                     return;
                 }
-                HOME_EVENT_HANDLERS.searchKeyupEnter(e); 
+                HOME_EVENT_HANDLERS.searchKeydownEnter(e); 
             }, false);
 
 	    // search button click
@@ -46,12 +46,12 @@ var HOME_EVENT_HANDLERS = new function() {
                 HOME_EVENT_HANDLERS.findOrCreateRoomHandler(); 
             }, false); 
 	    HOME_CONSTANTS.searchButtonEl.addEventListener(
-	    	"keyup", function(e) { 
+	    	"keydown", function(e) { 
                 if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
                     HOME_CONSTANTS.errorModalEl.style.display = "none";
                     return;
                 }
-                HOME_EVENT_HANDLERS.searchKeyupEnter(e); 
+                HOME_EVENT_HANDLERS.searchKeydownEnter(e); 
             }, false);
             
 
@@ -63,7 +63,7 @@ var HOME_EVENT_HANDLERS = new function() {
 
         // enter or escape on modals to close
         window.addEventListener(
-            "keyup", function(event) {
+            "keydown", function(event) {
                 if (event.keyCode === 13 || event.keyCode == 27) {
                     if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
                         HOME_CONSTANTS.errorModalEl.style.display = "none";
@@ -169,8 +169,8 @@ var HOME_EVENT_HANDLERS = new function() {
 
 	
 
-	// handles keyup for searching from search button
-	this.searchKeyupEnter = function(e) {
+	// handles keydown for searching from search button
+	this.searchKeydownEnter = function(e) {
 	    var keycode = e.key.toLowerCase();
 
 	    if (keycode == "enter") {
@@ -192,7 +192,7 @@ var HOME_EVENT_HANDLERS = new function() {
 		    }
 		    else 
 		        HOME_EVENT_HANDLERS.displayError(
-                    MESSAGE_CONSTANTS.errorRoomLength0);
+                    HOME_CONSTANTS.errorRoomLength0);
 		}
     };
 
