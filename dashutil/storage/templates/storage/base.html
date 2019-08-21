@@ -26,7 +26,12 @@
 
 
         <!-- Custom styles for this page -->
-        <link rel="stylesheet" type="text/css" href="{% static '/css/storage.css' %}">
+        {% load static %}
+        <link rel="stylesheet" href="{% static '/css/storage.css' %}">
+        {% load static %}
+        <link rel="stylesheet" href="{% static '/css/storage-dark.css' %}">
+        {% load static %}
+        <link rel="stylesheet" href="{% static '/css/storage-light.css' %}">
 
     </head>
     <body class="dark-theme">
