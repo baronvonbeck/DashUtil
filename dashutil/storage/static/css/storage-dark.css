@@ -1,0 +1,106 @@
+/* storage page specific css stylings goes here */
+
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+
+body.dark-theme {
+    --container-background-color: #080808;
+    --container-border: 1px solid #1d1d1d;
+
+    --text-color: white;
+    --text-hover-color: #d6d6d6;
+
+    --fileobj-hover-color: #242424;
+    --toggle-image-color: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    --toggle-image-hover-color: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(214,214,214, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    --dropdown-menu-background-color: #161616;
+    --dropdown-menu-background-hover-color: #848484;
+    --dropdown-menu-shadow: 0px 5px 10px 0px rgba(255, 255, 255, 0.1);
+
+    --modal-background-color: var(--dropdown-menu-background-color);
+    --modal-button-color: var(--dropdown-menu-background-color);
+    --modal-button-hover-color: var(--dropdown-menu-background-hover-color);
+
+    --modal-shadow-background-color: rgb(255, 255, 255); /* Fallback color */
+    --modal-shadow-background-color-backup: rgba(255, 255, 255, 0.1); /* white w/ opacity */
+
+    background: var(--background-color);
+
+}
+
+
+body.dark-theme .container {
+    border: var(--container-border);
+    background-color: var(--container-background-color);
+    box-shadow: var(--dropdown-menu-shadow);
+}
+
+body.dark-theme .fileobj {
+    background-color: var(--container-background-color);
+}
+
+body.dark-theme .headerobj {
+    background-color: var(--container-background-color);
+}
+body.dark-theme .headerobj h4 {
+    color: var(--text-color);
+}
+
+body.dark-theme .fileobj.selected, .fileobj.selected:hover {
+    background-color: var(--fileobj-hover-color);
+}
+
+body.dark-theme .fileobj.dragto, .fileobj.selected.dragto, .fileobj.selected.dragging.dragto {
+    background-color: #bdbdbd;
+}
+
+body.dark-theme .fileobj:hover {
+    background-color: #e2e2e2;
+}
+body.dark-theme .headerobj .file-info-container .file-info-left .file-info-name:hover,
+body.dark-theme .headerobj .file-info-container .file-info-right .file-info-date:hover,
+body.dark-theme .headerobj .file-info-container .file-info-right .file-info-size:hover {
+    background-color: #e2e2e2;
+}
+
+
+
+body.dark-theme .arrow {
+    border: solid black;
+}
+
+.sort-up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+  
+.sort-down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+body.dark-theme .file-info-name .arrow.sort-up,
+body.dark-theme .file-info-name .arrow.sort-down {
+    visibility: hidden;
+    margin-left: 10px;
+    margin-right: 4px;
+}
+body.dark-theme .file-info-date .arrow.sort-up,
+body.dark-theme .file-info-size .arrow.sort-up,
+body.dark-theme .file-info-date .arrow.sort-down,
+body.dark-theme .file-info-size .arrow.sort-down {
+    visibility: hidden;
+    margin-left: 4px;
+    margin-right: 10px;
+}
+
+
+
+body.dark-theme .menu {
+    background-color: #ffffff;
+    box-shadow: 0 0 10px -3px rgba(0, 0, 0, .3);
+    border: 1px solid #ccc;
+}
+
+body.dark-theme .menu-item:hover {
+    background-color: #e2e2e2;
+}

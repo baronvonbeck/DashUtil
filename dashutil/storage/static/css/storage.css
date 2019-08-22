@@ -3,10 +3,8 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
 
 body {
-    margin: 0;
-    background-color: #f1f1f1;
     font-family: 'Fira Sans', sans-serif;
-}
+} 
 
 .container ul, .container li {
     list-style: none;
@@ -14,8 +12,6 @@ body {
 
 .container {
     width: 80%;
-    border: 1px solid #ddd;
-    background-color: #ffffff;
     padding-top: 20px;
     padding-left: 20px;
     margin: 40px auto;
@@ -31,7 +27,6 @@ body {
     flex-direction: row;
     align-items: center;
     cursor: pointer;
-    background-color: #ffffff;
     cursor: pointer;
 }
 
@@ -39,7 +34,6 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background-color: #ffffff;
 }
 .headerobj h4 {
     display: block;
@@ -51,21 +45,12 @@ body {
     font-weight: bold;
 }
 
-.fileobj.selected, .fileobj.selected:hover {
-    background-color: #bdbdbd;
-}
-
 .fileobj.dragging, .fileobj.selected.dragging {
     opacity: 0.4;
 }
 
 .fileobj.dragto, .fileobj.selected.dragto, .fileobj.selected.dragging.dragto {
     opacity: 1;
-    background-color: #bdbdbd;
-}
-
-.fileobj:hover {
-    background-color: #e2e2e2;
 }
 
 .fileobj img.fileico {
@@ -81,8 +66,8 @@ body {
     align-items: center;
 
     -moz-user-select: -moz-none;
-    -moz-user-select:none;
-    -o-user-select:none;
+    -moz-user-select: none;
+    -o-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -143,15 +128,13 @@ body {
 
 .headerobj .file-info-container .file-info-left .file-info-name:hover,
 .headerobj .file-info-container .file-info-right .file-info-date:hover,
-.headerobj .file-info-container .file-info-right .file-info-size:hover {
-    background-color: #e2e2e2;
+.headerobj .file-info-container .file-info-right .file-info-size:hover { 
     cursor: pointer;
 }
 
 
 
 .arrow {
-    border: solid black;
     border-width: 0 3px 3px 0;
     display: inline-block;
     padding: 3px;
@@ -203,11 +186,8 @@ body {
 
 
 .menu {
-    background-color: #ffffff;
     padding-top: 5px;
-    padding-bottom: 5px;
-    box-shadow: 0 0 10px -3px rgba(0, 0, 0, .3);
-    border: 1px solid #ccc;
+    padding-bottom: 5px;    
     display: none;
     position: absolute;
     z-index: 5;
@@ -237,7 +217,4 @@ body {
     text-align: left;
     align-items: center;
     margin-right: 10px;
-}
-.menu-item:hover {
-    background-color: #e2e2e2;
 }

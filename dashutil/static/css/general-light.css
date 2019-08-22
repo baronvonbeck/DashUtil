@@ -3,14 +3,14 @@
 
 /* Establish variables for light theme, background light grey */
 body.light-theme {
-    --background-color: #d3d3d3;
+    --background-color: #dfdfdf;
     --text-color: #252525;
     --text-hover-color: #a0a0a0;
     --toggle-image-color: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(37,37,37, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
     --toggle-image-hover-color: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(191,191,191, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
     --dropdown-menu-background-color: white;
     --dropdown-menu-background-hover-color: #d3d3d3;
-    --dropdown-menu-shadow: 0px 5px 15px 0 rgba(255, 255, 255, 0.8);
+    --dropdown-menu-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
 
     --modal-background-color: var(--dropdown-menu-background-color);
     --modal-button-color: #e9e9e9;

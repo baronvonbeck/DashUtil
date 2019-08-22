@@ -7,13 +7,13 @@ body.dark-theme .search-box-container {
   --main-theme-color-hover: #d1480c;
   --text-color: white;
   --input-text-shadow: 0 0 10px var(--main-theme-color);
-  --large-shadow: 0 0 2px 0 var(--main-theme-color), 0 5px 6px 0 rgba(0, 0, 0, 0.0);
-  --large-shadow-expanded: 0 0 10px 0 var(--main-theme-color), 0 20px 25px 0 rgba(0, 0, 0, 0.3);
+  --large-shadow: 0 0 2px 0 var(--main-theme-color), 0 5px 6px 0 rgba(255, 255, 255, 0.0);
+  --large-shadow-expanded: 0 0 10px 0 var(--main-theme-color), 0 5px 25px 0 rgba(255, 255, 255, 0.2);
 
   --magnifying-glass-color: white;
   --magnifying-glass-circle-border: 2px solid var(--magnifying-glass-color);
   --search-button-expanded-background-color: #151515;
-  --magnifying-glass-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.6);
+  --magnifying-glass-shadow: 0 0 25px 0 rgba(255, 255, 255, 0.2);
 }
 
 
