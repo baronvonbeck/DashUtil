@@ -123,6 +123,9 @@ const STORAGE_CONSTANTS = new function() {
     this.directoryCloseLightIcon =  this.fileIconPath + "directory-close-light.png";
     this.directoryOpenLightIcon =   this.fileIconPath + "directory-open-light.png";
     this.genericFileLightIcon =     this.fileIconPath + "generic-file-light.png";
+    this.directoryCloseDarkIcon =   this.fileIconPath + "directory-close-dark.png";
+    this.directoryOpenDarkIcon =    this.fileIconPath + "directory-open-dark.png";
+    this.genericFileDarkIcon =      this.fileIconPath + "generic-file-dark.png";
     
 
     this.uploadInProgressMessage =      "Uploading files. This may take a few minutes, depending on file sizes...";

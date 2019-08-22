@@ -101,6 +101,8 @@ class FileObject {
         var directoryAddUL = "";
         var classString = "";
         var draggable = "draggable=\"true\"";
+        var useDark = (NAVBAR_THEME_CONTROLLER.currentTheme == 
+            NAVBAR_CONSTANTS.NAVBAR_CONSTANTS_DARK );
 
         if (this.parentDirectoryId != null) {
             classString += STORAGE_CONSTANTS.fileClass;
@@ -117,7 +119,7 @@ class FileObject {
 
             fileTypeRepresentation = "<img class=\"fileico\"src=\"" + 
                 STORAGE_EVENT_HANDLERS.getFileIcon(
-                    this.filename.split("\.").pop()) + "\">";
+                    this.filename.split("\.").pop(), useDark) + "\">";
         }
         else {
             column1_filename_path = "<div class=\"file-info-name\">" + 
@@ -125,7 +127,7 @@ class FileObject {
 
             if (this.level > 0) {
                 fileTypeRepresentation = "<img class=\"fileico\" src=\"" + 
-                    STORAGE_EVENT_HANDLERS.getFileIcon("") + "\">";
+                    STORAGE_EVENT_HANDLERS.getFileIcon("", useDark) + "\">";
 
                 directoryAddUL = "<ul id=\"" + this.id + 
                     STORAGE_CONSTANTS.ulIDAppend + "\" style=\"display: ";

@@ -42,6 +42,22 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
         NAVBAR_EVENT_HANDLERS.addNavbarEventListeners();
 
+        NAVBAR_CONSTANTS.themeTogglerEl.addEventListener(
+            "click", function(e) { 
+                STORAGE_EVENT_HANDLERS.switchThemesForIcons(); 
+            }, false);
+
+        NAVBAR_CONSTANTS.themeTogglerEl.addEventListener(
+            "keydown", function(e) { 
+                var keycode = e.key.toLowerCase();
+
+                if (keycode == "enter") {
+                    e.preventDefault();
+                    STORAGE_EVENT_HANDLERS.switchThemesForIcons();
+                }
+            }, false);
+
+
         STORAGE_CONSTANTS.buttonListEl.addEventListener(
             "click", function(event) {
                 STORAGE_CONSTANTS.menuEl.style.display = "none";
@@ -57,6 +73,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             "click", function(event) {
                 STORAGE_EVENT_HANDLERS.closeProgressModalHandler();
             }, false);
+    
 
         window.addEventListener(
             "keydown", function(event) {
@@ -326,6 +343,9 @@ var STORAGE_EVENT_HANDLERS = new function() {
             if (FILE_MANAGER.checkIfFileIsDirectory(el.id)) {
                 var directoryFileList = document.getElementById(
                     el.id + STORAGE_CONSTANTS.ulIDAppend);
+                
+                var useDark = (NAVBAR_THEME_CONTROLLER.currentTheme == 
+                    NAVBAR_CONSTANTS.NAVBAR_CONSTANTS_DARK );
 
                 if (directoryFileList.style.display === "none") {
                     directoryFileList.style.display = "block";
@@ -334,13 +354,17 @@ var STORAGE_EVENT_HANDLERS = new function() {
                         el.id);
                     
                     el.getElementsByTagName("img")[0].src =
-                        STORAGE_CONSTANTS.directoryOpenLightIcon;
+                    ( useDark ? 
+                        STORAGE_CONSTANTS.directoryOpenDarkIcon :
+                        STORAGE_CONSTANTS.directoryOpenLightIcon);
                 }
                 else {
                     directoryFileList.style.display = "none";
 
                     el.getElementsByTagName("img")[0].src =
-                        STORAGE_CONSTANTS.directoryCloseLightIcon;
+                    ( useDark ? 
+                        STORAGE_CONSTANTS.directoryCloseDarkIcon :
+                        STORAGE_CONSTANTS.directoryCloseLightIcon);
                 }
             }
         } 
@@ -828,15 +852,24 @@ var STORAGE_EVENT_HANDLERS = new function() {
     };
 
 
+    this.switchThemesForIcons = function() {
+        console.log("HERE");
+    }
+
     // https://icons8.com/icons/set/closed-folder
-    this.getFileIcon = function(fileExtension) {
+    this.getFileIcon = function(fileExtension, useDark) {
         var pathToIcon = "";
+        
         switch(fileExtension) {
             case "":
-                pathToIcon = STORAGE_CONSTANTS.directoryCloseLightIcon;
+                pathToIcon = ( useDark ? 
+                    STORAGE_CONSTANTS.directoryCloseDarkIcon :
+                    STORAGE_CONSTANTS.directoryCloseLightIcon);
                 break;
             default:
-                pathToIcon = STORAGE_CONSTANTS.genericFileLightIcon;
+                pathToIcon = ( useDark ? 
+                    STORAGE_CONSTANTS.genericFileDarkIcon :
+                    STORAGE_CONSTANTS.genericFileLightIcon);
         }
         return pathToIcon;
     };

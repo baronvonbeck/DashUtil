@@ -16,16 +16,17 @@ var NAVBAR_EVENT_HANDLERS = new function() {
 	    // theme toggler image
 	    NAVBAR_CONSTANTS.themeTogglerEl.addEventListener(
 	    	"click", function(e) { 
-                NAVBAR_EVENT_HANDLERS.themeSwitchOnClick(e); 
+                NAVBAR_EVENT_HANDLERS.switchThemes(); 
             }, false);
 
-	    NAVBAR_CONSTANTS.themeTogglerEl.addEventListener("keyup", 
-	    	function(e) { 
-                if (NAVBAR_CONSTANTS.errorModalEl.style.display == "block") {
-                    NAVBAR_CONSTANTS.errorModalEl.style.display = "none";
-                    return;
+	    NAVBAR_CONSTANTS.themeTogglerEl.addEventListener(
+            "keydown", function(e) { 
+                var keycode = e.key.toLowerCase();
+
+                if (keycode == "enter") {
+                    e.preventDefault();
+                    NAVBAR_EVENT_HANDLERS.switchThemes();
                 }
-                NAVBAR_EVENT_HANDLERS.themeSwitchKeyupEnter(e); 
             }, false);
 
         NAVBAR_CONSTANTS.themeTogglerEl.addEventListener(
@@ -73,25 +74,6 @@ var NAVBAR_EVENT_HANDLERS = new function() {
 	// switch themes
 	this.switchThemes = function() {
 	    NAVBAR_THEME_CONTROLLER.switchThemes();
-	};
-
-
-	// handles keyup for theme switching on click
-	this.themeSwitchOnClick = function(e) {
-	    e.stopPropagation();
-	    this.switchThemes();
-	};
-
-
-	// handles keyup for theme switching on enter
-	this.themeSwitchKeyupEnter = function(e) {
-	    var keycode = e.key.toLowerCase();
-
-	    if (keycode == "enter") {
-            e.preventDefault();
-            e.stopPropagation();
-	        NAVBAR_EVENT_HANDLERS.switchThemes();
-	    }
 	};
 };
 
