@@ -678,6 +678,16 @@ var FILE_MANAGER = new function() {
     }
 
 
+    this.getFileExtension = function(fileId) {
+        var fname = FILE_MANAGER.idToFileMap.get(
+            fileId).getFilename.split(/\.(?=[^\.]+$)/);
+
+        if (fname.length != 2) return "";
+        else return fname[1];
+        
+    }
+
+
     this.getFullPathOfFile = function(fileId) {
         var f = FILE_MANAGER.idToFileMap.get(fileId);
         var path = "/" + f.getFilename;

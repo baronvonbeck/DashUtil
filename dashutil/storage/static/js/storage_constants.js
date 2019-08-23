@@ -74,6 +74,28 @@ const STORAGE_CONSTANTS = new function() {
                                         document.getElementById("menu-delete-id"),
                                         document.getElementById("menu-move-id")
                                     ];
+    
+    this.menuIconPath =             "/static/img/menuico/";
+    this.menuLightIcons =           [
+                                        this.menuIconPath + "upload-light.png",
+                                        this.menuIconPath + "upload-light.png",
+                                        this.menuIconPath + "download-light.png",
+                                        this.menuIconPath + "new-folder-light.png",
+                                        this.menuIconPath + "rename-light.png",
+                                        this.menuIconPath + "delete-trash-light.png",
+                                        this.menuIconPath + "move-light.png"
+                                    ];
+
+    this.menuDarkIcons =            [
+                                        this.menuIconPath + "upload-dark.png",
+                                        this.menuIconPath + "upload-dark.png",
+                                        this.menuIconPath + "download-dark.png",
+                                        this.menuIconPath + "new-folder-dark.png",
+                                        this.menuIconPath + "rename-dark.png",
+                                        this.menuIconPath + "delete-trash-dark.png",
+                                        this.menuIconPath + "move-dark.png"
+                                    ];
+    
 
     this.numFunctions =             7;
 
@@ -126,6 +148,8 @@ const STORAGE_CONSTANTS = new function() {
     this.directoryCloseDarkIcon =   this.fileIconPath + "directory-close-dark.png";
     this.directoryOpenDarkIcon =    this.fileIconPath + "directory-open-dark.png";
     this.genericFileDarkIcon =      this.fileIconPath + "generic-file-dark.png";
+
+    
     
 
     this.uploadInProgressMessage =      "Uploading files. This may take a few minutes, depending on file sizes...";

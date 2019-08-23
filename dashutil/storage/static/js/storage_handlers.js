@@ -190,6 +190,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 event.stopPropagation();
                 STORAGE_CONSTANTS.errorModalEl.style.display = "none";
             }, false);
+
+        STORAGE_EVENT_HANDLERS.switchThemesForIcons();
     };
 
 
@@ -345,7 +347,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
                     el.id + STORAGE_CONSTANTS.ulIDAppend);
                 
                 var useDark = (NAVBAR_THEME_CONTROLLER.currentTheme == 
-                    NAVBAR_CONSTANTS.NAVBAR_CONSTANTS_DARK );
+                    NAVBAR_CONSTANTS.NAVBAR_CONSTANTS_DARK);
 
                 if (directoryFileList.style.display === "none") {
                     directoryFileList.style.display = "block";
@@ -844,8 +846,9 @@ var STORAGE_EVENT_HANDLERS = new function() {
     // characters and formatted to remove all single and double quotes ['"]
     this.getStoragePageFields = function() {
         if (this.storagePageFields == null) {
-            this.storagePageFields = STORAGE_EVENT_HANDLERS.getJsonFromDataString(
-                storagePage.textContent).fields;
+            this.storagePageFields = 
+                STORAGE_EVENT_HANDLERS.getJsonFromDataString(
+                    storagePage.textContent).fields;
         }
         
         return this.storagePageFields;
@@ -853,8 +856,27 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
 
     this.switchThemesForIcons = function() {
-        console.log("HERE");
-    }
+        var useDark = (NAVBAR_THEME_CONTROLLER.currentTheme == 
+            NAVBAR_CONSTANTS.NAVBAR_CONSTANTS_DARK);
+
+        for (var i = 0; i < STORAGE_CONSTANTS.menuEls.length; i ++) {
+            STORAGE_CONSTANTS.menuEls[i].getElementsByTagName("img")[0].src = 
+                ( useDark ? 
+                    STORAGE_CONSTANTS.menuDarkIcons[i] :
+                    STORAGE_CONSTANTS.menuLightIcons[i]);
+        }
+
+        var allFiles = STORAGE_CONSTANTS.fileListEl.getElementsByClassName(
+            STORAGE_CONSTANTS.fileClass);
+        
+        for (var i = 0; i < allFiles.length; i ++) {
+            var fileExtension = FILE_MANAGER.getFileExtension(allFiles[i].id);
+
+            allFiles[i].getElementsByTagName("img")[0].src = 
+                STORAGE_EVENT_HANDLERS.getFileIcon(fileExtension, useDark);
+        }
+    };
+
 
     // https://icons8.com/icons/set/closed-folder
     this.getFileIcon = function(fileExtension, useDark) {
