@@ -10,15 +10,40 @@
     outline: 0;
 }
 
+.home-info {
+    display: inline-block;
+    position: relative;
+    z-index: 6;
+    width: 60vw;
+    overflow: auto;
+    left: 20vw;
+    right: 0;
+    bottom: 0;
+    
+    text-align: center;
+}
+#storage-page-info-id.home-info {
+    top: 15vh;
+}
+#single-page-info-id.home-info {
+    top: 10vh;
+}
+.home-info p {
+    font-weight: bolder; 
+}
+
 .search-box-container {
-    position: absolute;
-    margin: auto;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 18vh;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     width: 100px;
     height: 100px;
+    align-self: center;
 }
 .search-box-container .search {
     position: absolute;

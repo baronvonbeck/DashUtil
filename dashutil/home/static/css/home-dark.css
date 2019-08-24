@@ -17,6 +17,10 @@ body.dark-theme .search-box-container {
 }
 
 
+body.dark-theme .home-info p {
+    color: var(--text-color);
+}
+
 body.dark-theme .search-box-container .search { 
   background: var(--main-theme-color);
   box-shadow: var(--magnifying-glass-shadow);
@@ -70,3 +74,4 @@ body.dark-theme .search-box-container .search-button.expanded:hover {
 body.dark-theme .search-box-container .search-button.expanded:focus {
   background-color: var(--main-theme-color-hover);
 }
+
