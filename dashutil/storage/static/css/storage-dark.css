@@ -1,6 +1,4 @@
-/* storage page specific css stylings goes here */
-
-@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+/* storage page specific css stylings for dark theme goes here */
 
 body.dark-theme {
     --container-background-color: #080808;
@@ -10,18 +8,17 @@ body.dark-theme {
     --text-hover-color: #d6d6d6;
 
     --fileobj-hover-color: #242424;
-    --fileobj-hover-dragto-color: #303030;
+    --fileobj-hover-dragto-color: var(--fileobj-hover-color);
     
-    --dropdown-menu-background-color: #161616;
-    --dropdown-menu-background-hover-color: #848484;
-    --dropdown-menu-shadow: 0px 5px 10px 0px rgba(255, 255, 255, 0.1);
+    --menu-background-color: #161616;
+    --menu-background-hover-color: #848484;
+    --menu-shadow: 0px 5px 10px 0px rgba(255, 255, 255, 0.1);
 }
-
 
 body.dark-theme .container {
     border: var(--container-border);
     background-color: var(--container-background-color);
-    box-shadow: var(--dropdown-menu-shadow);
+    box-shadow: var(--menu-shadow);
 }
 
 body.dark-theme .fileobj {
@@ -72,12 +69,12 @@ body.dark-theme .arrow {
 
 
 body.dark-theme .menu {
-    background-color: var(--dropdown-menu-background-color);
-    box-shadow: var(--dropdown-menu-shadow);
+    background-color: var(--menu-background-color);
+    box-shadow: var(--menu-shadow);
 }
 
 body.dark-theme .menu-item:hover {
-    background-color: var(--dropdown-menu-background-hover-color);
+    background-color: var(--menu-background-hover-color);
 }
 body.dark-theme .menu-item .menutext {
     color: var(--text-color);

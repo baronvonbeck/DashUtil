@@ -684,7 +684,6 @@ var FILE_MANAGER = new function() {
 
         if (fname.length != 2) return "";
         else return fname[1];
-        
     }
 
 
@@ -755,7 +754,6 @@ var FILE_MANAGER = new function() {
 
 
     this.sortDirectory = function(ulEl) {
-        
         Array.from(ulEl.childNodes).sort(function(a, b) {
             return FILE_MANAGER.compareElementsForInsert(a, b);
         }).forEach(li => ulEl.appendChild(li));

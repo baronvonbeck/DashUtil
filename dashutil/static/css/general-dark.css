@@ -1,4 +1,4 @@
-/* Dark theme stylings go here */
+/* General dark theme stylings go here */
 
 
 /* Establish variables for dark theme, background dark grey */
@@ -8,12 +8,12 @@ body.dark-theme {
     --text-hover-color: #d6d6d6;
     --toggle-image-color: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
     --toggle-image-hover-color: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(214,214,214, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
-    --dropdown-menu-background-color: #161616;
+    --dropdown-menu-background-color: #080808;
     --dropdown-menu-background-hover-color: #848484;
     --dropdown-menu-shadow: 0px 5px 10px 0px rgba(255, 255, 255, 0.1);
 
     --modal-background-color: var(--dropdown-menu-background-color);
-    --modal-button-color: var(--dropdown-menu-background-color);
+    --modal-button-color: #1f1f1f;
     --modal-button-hover-color: var(--dropdown-menu-background-hover-color);
 
     --modal-shadow-background-color: rgb(255, 255, 255); /* Fallback color */
@@ -22,6 +22,11 @@ body.dark-theme {
     background: var(--background-color);
 }
 
+body.dark-theme h1, 
+body.dark-theme h2,
+body.dark-theme h3 {
+    color: var(--text-color);
+}
 
 /* Logo */
 body.dark-theme .navbar-container .navbar-brand .logo-text {
@@ -96,6 +101,7 @@ body.dark-theme .navbar-container .navbar-nav .nav-item .nav-link:focus {
 }
 body.dark-theme .navbar-container .navbar-nav .dropdown-menu.show {
     background-color: var(--dropdown-menu-background-color);
+    border-color: var(--dropdown-menu-background-color);
     box-shadow: var(--dropdown-menu-shadow);
 }
 body.dark-theme .navbar-container .navbar-nav .nav-item.dropdown.show .dropdown-item {
@@ -127,6 +133,7 @@ body.dark-theme .modal {
 }
 body.dark-theme .modal .modal-content {
     background-color: var(--modal-background-color);
+    border-color: var(--modal-background-color);
 }
 body.dark-theme .modal .modal-content p {
     color: var(--text-color);
@@ -136,10 +143,8 @@ body.dark-theme .modal .modal-content .modal-button {
     background-color: var(--modal-button-color);
 }
 body.dark-theme .modal .modal-content .modal-button:hover {
-    color: var(--text-hover-color);
     background-color: var(--modal-button-hover-color);
 }
 body.dark-theme .modal .modal-content .modal-button:focus {
-    color: var(--text-hover-color);
     background-color: var(--modal-button-hover-color);
 }

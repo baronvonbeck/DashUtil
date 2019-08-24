@@ -1,0 +1,81 @@
+/* storage page specific css stylings for light theme goes here */
+
+body.light-theme {
+    --container-background-color: #f3f3f3;
+    --container-border: 1px solid #e9e9e9;
+
+    --text-color: #252525;
+    --text-hover-color: #a0a0a0;
+
+    --fileobj-hover-color: #c4c4c4;
+    --fileobj-hover-dragto-color: var(--fileobj-hover-color);
+    
+    --menu-background-color: white;
+    --menu-background-hover-color: #d3d3d3;
+    --menu-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+body.light-theme .container {
+    border: var(--container-border);
+    background-color: var(--container-background-color);
+    box-shadow: var(--menu-shadow);
+}
+
+body.light-theme .fileobj {
+    background-color: var(--container-background-color);
+}
+
+body.light-theme .headerobj {
+    background-color: var(--container-background-color);
+}
+body.light-theme .headerobj h4 {
+    color: var(--text-color);
+}
+
+body.light-theme .fileobj.selected, .fileobj.selected:hover {
+    background-color: var(--fileobj-hover-color);
+}
+
+body.light-theme .fileobj.dragto, .fileobj.selected.dragto, .fileobj.selected.dragging.dragto {
+    background-color: var(--fileobj-hover-dragto-color);
+}
+
+body.light-theme .fileobj:hover {
+    background-color: var(--fileobj-hover-color);
+}
+body.light-theme .fileobj .file-info-container .file-info-right .file-info-date,
+body.light-theme .fileobj .file-info-container .file-info-left .file-info-name,
+body.light-theme .fileobj .file-info-container .file-info-right .file-info-size {
+    color: var(--text-color);
+}
+body.light-theme .headerobj .file-info-container .file-info-left .file-info-name:hover,
+body.light-theme .headerobj .file-info-container .file-info-right .file-info-date:hover,
+body.light-theme .headerobj .file-info-container .file-info-right .file-info-size:hover {
+    background-color: var(--fileobj-hover-color);
+}
+
+body.light-theme #storage-page-info-id .file-info-container .file-info-right .file-info-date,
+body.light-theme #storage-page-info-id .file-info-container .file-info-left .file-info-name,
+body.light-theme #storage-page-info-id .file-info-container .file-info-right .file-info-size {
+    color: var(--text-color);
+}
+
+
+
+body.light-theme .arrow {
+    border-color: var(--text-color);
+}
+
+
+
+body.light-theme .menu {
+    background-color: var(--menu-background-color);
+    box-shadow: var(--menu-shadow);
+}
+
+body.light-theme .menu-item:hover {
+    background-color: var(--menu-background-hover-color);
+}
+body.light-theme .menu-item .menutext {
+    color: var(--text-color);
+}
