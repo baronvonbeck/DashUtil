@@ -4,6 +4,13 @@
     <h2>Single Uploads</h2>
     <h3>Upload to Amazon S3</h3>
 
+    <div id="menu-id" class="menu">
+        <div id="menu-upload-id" class="menu-item">
+            <img class="menuico" src="/static/img/menuico/upload-dark.png">
+            <div class="menutext">Upload</div>
+        </div>
+    </div>
+
     <div id="button-list-id">
         <button id="upload-modal-button-id" class="modal-open-button">Upload</button>
     </div>
@@ -64,10 +71,15 @@
         </div>
     </div> 
 
-    <div>
-        <h1> Error: page <i>{{ single_file_id }}</i> does not exist! 
-             Please upload a new file above, or search for a new single page.
-        </h1>
+    <div id="file-list-id" class="file-list">
+        <div id="file-id">
+            <div>
+                <h1> Error: page <i>{{ single_file_id }}</i> does not exist! 
+                    Please upload a new file above, or search for a new single page.
+                </h1>
+            </div>
+        </div>
     </div>
+    
     
 {% endblock %}

@@ -38,7 +38,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             function(i) {STORAGE_CONSTANTS.modalEls[i].style.display = "block";},
             function(i) {STORAGE_EVENT_HANDLERS.handlerFunctions[i]();},
             function(i) {STORAGE_CONSTANTS.modalEls[i].style.display = "block";}
-        ]
+        ];
 
         NAVBAR_EVENT_HANDLERS.addNavbarEventListeners();
 

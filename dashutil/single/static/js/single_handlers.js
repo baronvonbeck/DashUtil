@@ -6,20 +6,55 @@
 // keyboard, click, hover, focus, etc event handlers for the storage page
 var SINGLE_EVENT_HANDLERS = new function() {
 
+    this.numFunctions = SINGLE_CONSTANTS.numFunctions;
+
+
     // handles uploading of the file to the storage room or a subdirectory
     // using the callback provided
 	this.addFileToSinglePage = function(fileToAdd) {
+        if (fileToAdd == null || fileToAdd == undefined) {
+            this.numFunctions -= 1;
+            return;
+        }
         var fields = fileToAdd.fields;
-        console.log(fields);
-        SINGLE_CONSTANTS.fileHolderId.innerHTML = 
+        SINGLE_CONSTANTS.fileHolderEl.innerHTML = 
             SINGLE_EVENT_HANDLERS.getHTMLRepresentation(fileToAdd.pk, 
                 fields.filename, fields.create_timestamp, 
                 fields.modify_timestamp, fields.size, fields.upload_path);
     };
 
-    
-	// Handler to set up event listeners. 1 callback passed in from storage.js
-	this.addAllEventListeners = function() {
+    this.handlerFunctions = null;  
+    this.menuHandlerFunctions = null;
+	
+	// Handler to set up event listeners
+    this.addAllEventListeners = function() {
+
+        this.handlerFunctions = [
+            SINGLE_EVENT_HANDLERS.uploadNewFilesToDirectoryHandler, 
+            SINGLE_EVENT_HANDLERS.downloadFilesHandler
+        ];
+
+        this.menuHandlerFunctions = [
+            function(i) {SINGLE_CONSTANTS.modalEls[i].style.display = "block";},
+            function(i) {SINGLE_EVENT_HANDLERS.handlerFunctions[i]();}
+        ];
+
+        NAVBAR_EVENT_HANDLERS.addNavbarEventListeners();
+
+        NAVBAR_CONSTANTS.themeTogglerEl.addEventListener(
+            "click", function(e) { 
+                SINGLE_EVENT_HANDLERS.switchThemesForIcons(); 
+            }, false);
+
+        NAVBAR_CONSTANTS.themeTogglerEl.addEventListener(
+            "keydown", function(e) { 
+                var keycode = e.key.toLowerCase();
+
+                if (keycode == "enter") {
+                    e.preventDefault();
+                    SINGLE_EVENT_HANDLERS.switchThemesForIcons();
+                }
+            }, false);
 
 	    // click off of modals to close, or off to side to deselect
         window.addEventListener(
@@ -39,6 +74,77 @@ var SINGLE_EVENT_HANDLERS = new function() {
                     SINGLE_CONSTANTS.uploadModalEl.style.display = "none";
                     return;
                 }
+            }, false);
+
+        
+        SINGLE_CONSTANTS.fileHolderEl.addEventListener(
+            "contextmenu", function(event) {
+                event.preventDefault();
+                SINGLE_CONSTANTS.menuEl.style.display = "block";
+                SINGLE_CONSTANTS.menuEl.style.top = event.pageY + "px";
+                SINGLE_CONSTANTS.menuEl.style.left = event.pageX + "px";
+            }, false);
+            SINGLE_CONSTANTS.menuEl.addEventListener(
+            "click", function(event) {
+                event.stopPropagation();
+                SINGLE_CONSTANTS.contextMenuHandler(event);
+            }, false);
+
+        window.addEventListener(
+            "keydown", function(event) {
+                if (event.keyCode === 13) {
+                    if (SINGLE_CONSTANTS.progressModalEl.style.display == "block") {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        SINGLE_CONSTANTS.progressModalEl.style.display = "none";
+                        return;
+                    }
+                    else if (SINGLE_CONSTANTS.errorModalEl.style.display == "block") {
+                        SINGLE_CONSTANTS.errorModalEl.style.display = "none";
+                        event.preventDefault();
+                        event.stopPropagation();
+                        return;
+                    }
+                    for (var i = 0; i < SINGLE_EVENT_HANDLERS.numFunctions; i ++) {
+                        if (SINGLE_CONSTANTS.modalEls[i].style.display == "block") {
+                            if (i == 0 && 
+                                    event.target != SINGLE_CONSTANTS.uploadFileFieldEl && 
+                                    event.target != SINGLE_CONSTANTS.uploadCloseButtonEl) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                SINGLE_EVENT_HANDLERS.handlerFunctions[i]();
+                            }
+                            else if (i == 1 && event.target != SINGLE_CONSTANTS.downloadCloseButtonEl) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                SINGLE_EVENT_HANDLERS.handlerFunctions[i]();
+                            }
+                                
+                            return;
+                        }
+                    }
+                }
+                else if (event.keyCode === 27) {
+                    if (SINGLE_CONSTANTS.menuEl.style.display == "block") {
+                        SINGLE_CONSTANTS.menuEl.style.display = "none";
+                        return;
+                    }
+                    else if (SINGLE_CONSTANTS.progressModalEl.style.display == "block") {
+                        SINGLE_CONSTANTS.progressModalEl.style.display = "none";
+                        return;
+                    }
+                    else if (SINGLE_CONSTANTS.errorModalEl.style.display == "block") {
+                        SINGLE_CONSTANTS.errorModalEl.style.display = "none";
+                        return;
+                    }
+                    for (var i = 0; i < SINGLE_EVENT_HANDLERS.numFunctions; i ++) {
+                        if (SINGLE_CONSTANTS.modalEls[i].style.display == "block") {
+                            SINGLE_CONSTANTS.modalEls[i].style.display = "none";
+                            return;
+                        }
+                    }
+                }
+                
             }, false);
 
 
@@ -96,7 +202,16 @@ var SINGLE_EVENT_HANDLERS = new function() {
     };
 
 
-
+    this.contextMenuHandler = function(e) {
+        for (var i = 0; i < SINGLE_EVENT_HANDLERS.numFunctions; i ++) {
+            if (e.target === SINGLE_CONSTANTS.menuEls[i] || 
+                e.target.parentNode === SINGLE_CONSTANTS.menuEls[i]) {
+                SINGLE_CONSTANTS.menuEl.style.display = "none";
+                SINGLE_EVENT_HANDLERS.menuHandlerFunctions[i](i);
+                return;
+            }
+        }
+    };
     
     
     // handles uploading of the file to the storage room or a subdirectory
@@ -113,6 +228,28 @@ var SINGLE_EVENT_HANDLERS = new function() {
         else {
             SINGLE_EVENT_HANDLERS.displayError(
                 SINGLE_CONSTANTS.errorUpload1File);
+        }
+    };
+
+    this.switchThemesForIcons = function() {
+        var useDark = (NAVBAR_THEME_CONTROLLER.currentTheme == 
+            NAVBAR_CONSTANTS.NAVBAR_CONSTANTS_DARK);
+
+        for (var i = 0; i < SINGLE_EVENT_HANDLERS.numFunctions; i ++) {
+            SINGLE_CONSTANTS.menuEls[i].getElementsByTagName("img")[0].src = 
+                ( useDark ? 
+                    SINGLE_CONSTANTS.menuDarkIcons[i] :
+                    SINGLE_CONSTANTS.menuLightIcons[i]);
+        }
+
+        var allFiles = SINGLE_CONSTANTS.fileListEl.getElementsByClassName(
+            SINGLE_CONSTANTS.fileClass);
+        
+        for (var i = 0; i < allFiles.length; i ++) {
+            var fileExtension = FILE_MANAGER.getFileExtension(allFiles[i].id);
+
+            allFiles[i].getElementsByTagName("img")[0].src = 
+                STORAGE_EVENT_HANDLERS.getFileIcon(fileExtension, useDark);
         }
     };
 
@@ -308,7 +445,6 @@ var SINGLE_EVENT_HANDLERS = new function() {
     // converts file size to a human readable format. si determines 
     // whether or not to use si standard, default false
     this.formatFileSizeToString = function(bytes, si=false) {
-        console.log(bytes);
         var thresh = si ? 1000 : 1024;
         if (Math.abs(bytes) < thresh) {
             return bytes + '&nbsp;&nbsp;&nbsp;B';

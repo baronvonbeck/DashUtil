@@ -5,7 +5,7 @@
 // Single constants
 const SINGLE_CONSTANTS = new function() {
 
-    this.fileHolderId =             document.getElementById("file-id");
+    this.fileHolderEl =             document.getElementById("file-id");
 
     this.openUploadModalEl =        document.getElementById("upload-modal-button-id");
     this.uploadModalEl =            document.getElementById("upload-modal-id");
@@ -13,6 +13,13 @@ const SINGLE_CONSTANTS = new function() {
     this.uploadFileButtonEl =       document.getElementById("upload-file-button-id");
     this.uploadFileFieldEl =        document.getElementById("upload-file-id");
     this.uploadCloseButtonEl =      document.getElementById("upload-cancel-id");
+
+    this.downloadModalButtonEl =    document.getElementById("download-modal-button-id");
+    this.downloadModalEl =          document.getElementById("download-modal-id");
+    this.downloadModalContentEl =   document.getElementById("download-modal-content-id");
+    this.downloadFieldEl =          document.getElementById("download-file-id");
+    this.downloadButtonEl =         document.getElementById("download-button-id");
+    this.downloadCloseButtonEl =    document.getElementById("download-cancel-id");
 
     this.errorModalEl =             document.getElementById("error-modal-id");
     this.errorModalContentEl =      document.getElementById("error-modal-content-id");
@@ -26,6 +33,24 @@ const SINGLE_CONSTANTS = new function() {
 
     this.fileClass =                "fileobj";
     this.infoIDAppend =             "__in";
+
+    this.numFunctions =             2;
+    this.menuEl =                   document.getElementById("menu-id");
+    this.menuEls =                  [
+                                        document.getElementById("menu-upload-id"),
+                                        document.getElementById("menu-download-id")
+                                    ];
+    
+    this.menuIconPath =             "/static/img/menuico/";
+    this.menuLightIcons =           [
+                                        this.menuIconPath + "upload-light.png",
+                                        this.menuIconPath + "download-light.png"
+                                    ];
+
+    this.menuDarkIcons =            [
+                                        this.menuIconPath + "upload-dark.png",
+                                        this.menuIconPath + "download-dark.png"
+                                    ];
 
     this.fileIconPath =             "/static/img/fileico/";
     this.directoryCloseLightIcon =  this.fileIconPath + "directory-close-light.png";
