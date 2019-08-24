@@ -162,3 +162,12 @@ html, body {
 .modal .modal-content .modal-button:hover {
     cursor: pointer;
 }
+.modal .modal-content input[type="text"] {
+    outline: none;
+}
+.modal .modal-content input[type="file"] {
+    outline: 0;
+}
+.modal .modal-content input[type="file"]:hover {
+    cursor: pointer;
+}

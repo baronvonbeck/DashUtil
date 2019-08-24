@@ -19,6 +19,9 @@ body.light-theme {
     --modal-shadow-background-color: rgb(0, 0, 0); /* Fallback color */
     --modal-shadow-background-color-backup: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 
+    --modal-input-text-background-color: #d6d6d6;
+    --modal-input-text-background-hover-color: #c0c0c0;
+
     background: var(--background-color);
 }
 
@@ -147,4 +150,24 @@ body.light-theme .modal .modal-content .modal-button:hover {
 }
 body.light-theme .modal .modal-content .modal-button:focus {
     background-color: var(--modal-button-hover-color);
+}
+
+body.light-theme .modal .modal-content input[type="text"] {
+    color: var(--text-color);
+    background-color: var(--modal-input-text-background-color);
+    border-color: var(--modal-input-text-background-color);
+}
+body.light-theme .modal .modal-content input[type="text"]:hover,
+body.light-theme .modal .modal-content input[type="text"]:focus {
+    background-color: var(--modal-input-text-background-hover-color);
+}
+
+body.light-theme .modal .modal-content input[type="file"] {
+    color: var(--text-color);
+    background-color: var(--modal-input-text-background-color);
+    border-color: var(--modal-input-text-background-color);
+}
+body.light-theme .modal .modal-content input[type="file"]:hover,
+body.light-theme .modal .modal-content input[type="file"]:focus {
+    background-color: var(--modal-input-text-background-hover-color);
 }
