@@ -147,27 +147,36 @@ var HOME_EVENT_HANDLERS = new function() {
             }
 	        case 9: {
 	          	if (!HOME_CONSTANTS.searchBoxEl.classList.contains(
-	          		HOME_CONSTANTS.expandedClass)) {
-	                e.preventDefault();
+                      HOME_CONSTANTS.expandedClass) && 
+                      HOME_CONSTANTS.progressModalEl.style.display != "block" && 
+                      HOME_CONSTANTS.errorModalEl.style.display != "block" && 
+                      HOME_CONSTANTS.uploadModalEl.style.display != "block"
+                    ) {
+                    e.preventDefault();
 	                HOME_EVENT_HANDLERS.expandSearchBox(); 
 	            }
                 break;
             }
             case 13: {
-                e.stopPropagation();
                 if (HOME_CONSTANTS.progressModalEl.style.display == "block") {
                     e.preventDefault();
+                    e.stopPropagation();
                     HOME_CONSTANTS.progressModalEl.style.display = "none";
                     return;
                 }
                 else if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
                     e.preventDefault();
+                    e.stopPropagation();
                     HOME_CONSTANTS.errorModalEl.style.display = "none";
                     return;
                 }
                 else if (HOME_CONSTANTS.uploadModalEl.style.display == "block") {
-                    HOME_EVENT_HANDLERS.uploadFileToSingleHandler(
-                        HOME_CONSTANTS.uploadFileFieldEl.files);
+                    if (e.target != HOME_CONSTANTS.uploadFileFieldEl && 
+                        e.target != HOME_CONSTANTS.uploadCloseButtonEl) {
+                        HOME_EVENT_HANDLERS.uploadFileToSingleHandler(
+                            HOME_CONSTANTS.uploadFileFieldEl.files);
+                    }
+                    
                     return;
                 }
             }

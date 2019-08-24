@@ -79,20 +79,38 @@ var STORAGE_EVENT_HANDLERS = new function() {
             "keydown", function(event) {
                 if (event.keyCode === 13) {
                     if (STORAGE_CONSTANTS.progressModalEl.style.display == "block") {
+                        event.preventDefault();
+                        event.stopPropagation();
                         STORAGE_CONSTANTS.progressModalEl.style.display = "none";
                         return;
                     }
                     else if (STORAGE_CONSTANTS.errorModalEl.style.display == "block") {
                         STORAGE_CONSTANTS.errorModalEl.style.display = "none";
+                        event.preventDefault();
+                        event.stopPropagation();
                         return;
                     }
                     for (var i = 0; i < STORAGE_CONSTANTS.numFunctions; i ++) {
                         if (STORAGE_CONSTANTS.modalEls[i].style.display == "block") {
-                            STORAGE_EVENT_HANDLERS.handlerFunctions[i]();
+                            if ((i == 0 || i == 1) && 
+                                    event.target != STORAGE_CONSTANTS.uploadFileFieldEl && 
+                                    event.target != STORAGE_CONSTANTS.uploadCloseButtonEl && 
+                                    event.target != STORAGE_CONSTANTS.uploadDirButtonEl && 
+                                    event.target != STORAGE_CONSTANTS.uploadDirFieldEl) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                STORAGE_EVENT_HANDLERS.handlerFunctions[i]();
+                            }
+                            else if (i > 1) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                STORAGE_EVENT_HANDLERS.handlerFunctions[i]();
+                            }
+                                
+                            
                             return;
                         }
                     }
-                    
                 }
                 else if (event.keyCode === 27) {
                     if (STORAGE_CONSTANTS.menuEl.style.display == "block") {
