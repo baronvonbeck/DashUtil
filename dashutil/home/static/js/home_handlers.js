@@ -13,9 +13,9 @@ var HOME_EVENT_HANDLERS = new function() {
         NAVBAR_EVENT_HANDLERS.addNavbarEventListeners();
 
 	    // general keyboard event handlers
-	    document.addEventListener("keydown", 
-	    	function(e) { HOME_EVENT_HANDLERS.handleKeyboardEvents(e); 
-	    }); 
+	    document.addEventListener("keydown", function(e) { 
+            HOME_EVENT_HANDLERS.handleKeyboardEvents(e); 
+	    }, false); 
 	    
 	    // search box magnifying glass expand
 	    HOME_CONSTANTS.searchBoxEl.addEventListener(
@@ -28,29 +28,17 @@ var HOME_EVENT_HANDLERS = new function() {
 	    // input text search on enter
 	    HOME_CONSTANTS.inputTextEl.addEventListener(
 	    	"keydown", function(e) { 
-                if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
-                    HOME_CONSTANTS.errorModalEl.style.display = "none";
-                    return;
-                }
                 HOME_EVENT_HANDLERS.searchKeydownEnter(e); 
             }, false);
 
 	    // search button click
 	    HOME_CONSTANTS.searchButtonEl.addEventListener(
 	    	"click", function(e) { 
-                if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
-                    HOME_CONSTANTS.errorModalEl.style.display = "none";
-                    return;
-                }
                 e.stopPropagation();
                 HOME_EVENT_HANDLERS.findOrCreateRoomHandler(); 
             }, false); 
 	    HOME_CONSTANTS.searchButtonEl.addEventListener(
 	    	"keydown", function(e) { 
-                if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
-                    HOME_CONSTANTS.errorModalEl.style.display = "none";
-                    return;
-                }
                 HOME_EVENT_HANDLERS.searchKeydownEnter(e); 
             }, false);
             
@@ -58,19 +46,23 @@ var HOME_EVENT_HANDLERS = new function() {
         // click off of modals to close, or off to side to deselect
         window.addEventListener(
             "click", function(event) {
-                HOME_CONSTANTS.errorModalEl.style.display = "none";
+                if (HOME_CONSTANTS.errorModalEl.style.display == "block" && 
+                        event.target == HOME_CONSTANTS.errorModalEl) {
+                    HOME_CONSTANTS.errorModalEl.style.display = "none";
+                    return;
+                }
+                else if (HOME_CONSTANTS.progressModalEl.style.display == "block" && 
+                        event.target == HOME_CONSTANTS.progressModalEl) {
+                    HOME_CONSTANTS.progressModalEl.style.display = "none";
+                    return;
+                }
+                else if (HOME_CONSTANTS.uploadModalEl.style.display == "block" && 
+                        event.target == HOME_CONSTANTS.uploadModalEl) {
+                    HOME_CONSTANTS.uploadModalEl.style.display = "none";
+                    return;
+                }
             }, false);
 
-        // enter or escape on modals to close
-        window.addEventListener(
-            "keydown", function(event) {
-                if (event.keyCode === 13 || event.keyCode == 27) {
-                    if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
-                        HOME_CONSTANTS.errorModalEl.style.display = "none";
-                        return;
-                    }
-                }                    
-            }, false);
 
         HOME_CONSTANTS.errorOkButtonEl.addEventListener(
             "click", function(event) {
@@ -78,6 +70,31 @@ var HOME_EVENT_HANDLERS = new function() {
                 HOME_CONSTANTS.errorModalEl.style.display = "none";              
             }, false);
         
+        HOME_CONSTANTS.progressOkButtonEl.addEventListener(
+            "click", function(event) {
+                event.stopPropagation();
+                HOME_CONSTANTS.progressModalEl.style.display = "none";              
+            }, false);
+        
+
+        HOME_CONSTANTS.openUploadModalEl.addEventListener(
+            "click", function(event) {
+                event.stopPropagation();
+                HOME_CONSTANTS.uploadModalEl.style.display = "block";
+            }, false);
+        HOME_CONSTANTS.uploadCloseButtonEl.addEventListener(
+            "click", function(event) {
+                event.stopPropagation();
+                HOME_CONSTANTS.uploadModalEl.style.display = "none";
+            }, false);
+        HOME_CONSTANTS.uploadFileButtonEl.addEventListener(
+            "click", function(event) {
+                event.stopPropagation();
+
+                HOME_EVENT_HANDLERS.uploadFileToSingleHandler(
+                    HOME_CONSTANTS.uploadFileFieldEl.files);
+            }, false);
+
         window.addEventListener("dragenter", function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -89,7 +106,14 @@ var HOME_EVENT_HANDLERS = new function() {
         window.addEventListener("drop", function(e) {
             e.preventDefault();
             e.stopPropagation();
-            HOME_EVENT_HANDLERS.uploadFileToSingleHandler(e);
+            if (!e.dataTransfer.items[0].webkitGetAsEntry().isDirectory) {
+                HOME_EVENT_HANDLERS.uploadFileToSingleHandler(e.dataTransfer.files);
+            }
+            else {
+                HOME_EVENT_HANDLERS.displayError(
+                    HOME_CONSTANTS.errorUpload1File);
+            }
+            
         }, false);
         
 	};
@@ -97,12 +121,22 @@ var HOME_EVENT_HANDLERS = new function() {
 
 	// Handler for keyboard events
 	this.handleKeyboardEvents = function(e) {
-	    var keycode = e.key.toLowerCase();
-
-	    switch (keycode) {
-	        case "escape": 
-	        case "esc": 
-	            if (HOME_CONSTANTS.searchBoxEl.classList.contains(
+	    switch (e.keyCode) {
+	        case 27: {
+                if (HOME_CONSTANTS.progressModalEl.style.display == "block") {
+                    HOME_CONSTANTS.progressModalEl.style.display = "none";
+                    return;
+                }
+                else if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
+                    HOME_CONSTANTS.errorModalEl.style.display = "none";
+                    return;
+                }
+                else if (HOME_CONSTANTS.uploadModalEl.style.display == "block") {
+                    HOME_CONSTANTS.uploadModalEl.style.display = "none";
+                    return;
+                }
+                
+                if (HOME_CONSTANTS.searchBoxEl.classList.contains(
 	            	HOME_CONSTANTS.expandedClass)) { 
                     HOME_EVENT_HANDLERS.contractSearchBox(); 
 
@@ -110,16 +144,35 @@ var HOME_EVENT_HANDLERS = new function() {
 	                HOME_EVENT_HANDLERS.expandSearchBox(); 
 	            } 
 	            break; 
-
-	        case "tab":
+            }
+	        case 9: {
 	          	if (!HOME_CONSTANTS.searchBoxEl.classList.contains(
 	          		HOME_CONSTANTS.expandedClass)) {
 	                e.preventDefault();
 	                HOME_EVENT_HANDLERS.expandSearchBox(); 
 	            }
-	            break;
+                break;
+            }
+            case 13: {
+                e.stopPropagation();
+                if (HOME_CONSTANTS.progressModalEl.style.display == "block") {
+                    e.preventDefault();
+                    HOME_CONSTANTS.progressModalEl.style.display = "none";
+                    return;
+                }
+                else if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
+                    e.preventDefault();
+                    HOME_CONSTANTS.errorModalEl.style.display = "none";
+                    return;
+                }
+                else if (HOME_CONSTANTS.uploadModalEl.style.display == "block") {
+                    HOME_EVENT_HANDLERS.uploadFileToSingleHandler(
+                        HOME_CONSTANTS.uploadFileFieldEl.files);
+                    return;
+                }
+            }
 	    }
-	};
+    };
 
 
 	// Handler for expanding the search box
@@ -186,10 +239,13 @@ var HOME_EVENT_HANDLERS = new function() {
 
 	// handles keydown for searching from search button
 	this.searchKeydownEnter = function(e) {
-	    var keycode = e.key.toLowerCase();
 
-	    if (keycode == "enter") {
-            event.stopPropagation();
+	    if (e.keyCode === 13) {
+            if (HOME_CONSTANTS.errorModalEl.style.display == "block") {
+                HOME_CONSTANTS.errorModalEl.style.display = "none";
+                return;
+            }
+            e.stopPropagation();
             HOME_EVENT_HANDLERS.findOrCreateRoomHandler();
         }
 	};
@@ -203,7 +259,8 @@ var HOME_EVENT_HANDLERS = new function() {
             var roomToSearchFor = HOME_EVENT_HANDLERS.getStorageToSearchFor();
 
 			if (roomToSearchFor.length > 0) {
-				HOME_DB.findOrCreateRoom(roomToSearchFor);
+                HOME_DB.findOrCreateRoom(roomToSearchFor);
+                HOME_CONSTANTS.uploadModalEl.style.display = "none";
 		    }
 		    else 
 		        HOME_EVENT_HANDLERS.displayError(
@@ -212,16 +269,31 @@ var HOME_EVENT_HANDLERS = new function() {
     };
 
     
-    this.uploadFileToSingleHandler = function(e) {
-        if (e.dataTransfer.files.length == 1 && 
-            !e.dataTransfer.items[0].webkitGetAsEntry().isDirectory) {
-            HOME_DB.uploadFileToSingle(e.dataTransfer.files[0]);
+    this.uploadFileToSingleHandler = function(files) {
+        
+        if (files.length == 1) {
+            HOME_DB.uploadFileToSingle(files[0]);
+
+            HOME_CONSTANTS.uploadModalEl.style.display = "none";
+
+            HOME_CONSTANTS.openProgressModalHandler(
+                HOME_CONSTANTS.uploadInProgressMessage);
         }
         else {
             HOME_EVENT_HANDLERS.displayError(
                 HOME_CONSTANTS.errorUpload1File);
         }
     }
+
+
+    this.closeProgressModalHandler = function() {
+        HOME_CONSTANTS.progressModalEl.style.display = "none";
+    }
+
+    this.openProgressModalHandler = function(textToDisplay) {
+        HOME_CONSTANTS.progressModalTextEl.innerHTML = textToDisplay;
+        HOME_CONSTANTS.progressModalEl.style.display = "block";
+    };
 
 
     this.displayError = function(errorMessage) {

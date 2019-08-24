@@ -138,6 +138,11 @@ var STORAGE_EVENT_HANDLERS = new function() {
                     STORAGE_CONSTANTS.errorModalEl.style.display = "none";
                     return;
                 }
+                else if (STORAGE_CONSTANTS.progressModalEl.style.display == "block" && 
+                        event.target == STORAGE_CONSTANTS.progressModalEl) {
+                    STORAGE_CONSTANTS.progressModalEl.style.display = "none";
+                    return;
+                }
                 
                 STORAGE_EVENT_HANDLERS.windowClickHandler(event);
             }, false);
@@ -825,7 +830,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
         STORAGE_CONSTANTS.errorModalTextEl.innerHTML = errorMessage;
         STORAGE_CONSTANTS.errorModalEl.style.display = "block";
     };
-    
+
 
     // returns the storage page id, formatted to remove all single and 
     // double quotes ['"]
