@@ -1,0 +1,77 @@
+/* single page specific css stylings for dark theme goes here */
+
+body.dark-theme {
+    --container-background-color: #080808;
+    --container-border: 1px solid #1d1d1d;
+
+    --text-color: white;
+    --text-hover-color: #d6d6d6;
+
+    --fileobj-hover-color: #242424;
+    --fileobj-hover-dragto-color: var(--fileobj-hover-color);
+    
+    --menu-background-color: #161616;
+    --menu-background-hover-color: #848484;
+    --menu-shadow: 0px 5px 10px 0px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .container {
+    border: var(--container-border);
+    background-color: var(--container-background-color);
+    box-shadow: var(--menu-shadow);
+}
+body.dark-theme .container p.infotext {
+    color: var(--text-color);
+}
+
+body.dark-theme .fileobj {
+    background-color: var(--container-background-color);
+}
+
+body.dark-theme .headerobj {
+    background-color: var(--container-background-color);
+}
+body.dark-theme .headerobj h4 {
+    color: var(--text-color);
+}
+
+
+body.dark-theme .fileobj:hover {
+    background-color: var(--fileobj-hover-color);
+}
+body.dark-theme .fileobj .file-info-container .file-info-right .file-info-date,
+body.dark-theme .fileobj .file-info-container .file-info-left .file-info-name,
+body.dark-theme .fileobj .file-info-container .file-info-right .file-info-size {
+    color: var(--text-color);
+}
+body.dark-theme .headerobj .file-info-container .file-info-left .file-info-name:hover,
+body.dark-theme .headerobj .file-info-container .file-info-right .file-info-date:hover,
+body.dark-theme .headerobj .file-info-container .file-info-right .file-info-size:hover {
+    background-color: var(--fileobj-hover-color);
+}
+
+body.dark-theme #storage-page-info-id .file-info-container .file-info-right .file-info-date,
+body.dark-theme #storage-page-info-id .file-info-container .file-info-left .file-info-name,
+body.dark-theme #storage-page-info-id .file-info-container .file-info-right .file-info-size {
+    color: var(--text-color);
+}
+
+
+
+body.dark-theme .arrow {
+    border-color: var(--text-color);
+}
+
+
+
+body.dark-theme .menu {
+    background-color: var(--menu-background-color);
+    box-shadow: var(--menu-shadow);
+}
+
+body.dark-theme .menu-item:hover {
+    background-color: var(--menu-background-hover-color);
+}
+body.dark-theme .menu-item .menutext {
+    color: var(--text-color);
+}

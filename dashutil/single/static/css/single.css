@@ -1,38 +1,146 @@
-/* home page specific css stylings goes here */
-/* credit to https://codepen.io/AlbertFeynman/pen/BPvzWZ */
+/* single page specific css stylings goes here */
 
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
 
 body {
-  margin: 0;
-  background-color: #f1f1f1;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+    font-family: 'Fira Sans', sans-serif;
+} 
+
 
 .container {
-  width: 80%;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  padding: 20px;
-  margin: 40px auto;
+    width: 80%;
+    padding-top: 20px;
+    padding-left: 20px;
+    margin: 40px auto;
+    padding-bottom: 20px;
+}
+.fileobj {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    cursor: pointer;
 }
 
-form {
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ff9900;
-  width: 350px;
+.headerobj {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
-table {
-  border-collapse: collapse;
-  width: 100%;
+.headerobj h4 {
+    display: block;
+    font-size: 1em;
+    margin-top: 1.33em;
+    margin-bottom: 1.33em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
 }
-table td,
-table th {
-  border: 1px solid #eceeef;
-  padding: 5px 8px;
-  text-align: left;
+
+.fileobj img.fileico {
+    height: 25px;
+    width: auto;
 }
-table thead {
-  border-bottom: 2px solid #eceeef;
+
+.file-info-container {
+    display: flex;
+    vertical-align: middle;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.headerobj .file-info-container .file-info-left {
+    margin-left: 25px;
+}
+
+
+.file-info-container .file-info-left {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    flex: 1 1 auto;
+    justify-self: flex-start;
+    justify-content: flex-start;
+    word-break: break-word;
+}
+
+.file-info-left .file-info-name {
+    display: flex;
+    margin-left: 12px;
+    justify-self: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+    word-break: break-word;
+}
+
+.file-info-container .file-info-right {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    justify-self: flex-end;
+    flex: 1 1 auto;
+}
+
+.file-info-right .file-info-date {
+    display: flex;
+    margin-left: 25px;
+    justify-self: flex-end;
+    justify-content: flex-end;
+    align-items: center;
+    width: 12vw;
+    text-align: right;
+}
+
+.file-info-right .file-info-size {
+    display: flex;
+    margin-left: 25px;
+    justify-self: flex-end;
+    justify-content: flex-end;
+    align-items: center;
+    width: 8vw;
+    text-align: right;
+}
+
+
+.menu {
+    padding-top: 5px;
+    padding-bottom: 5px;    
+    display: none;
+    position: absolute;
+    z-index: 5;
+}
+
+.menu-item {
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.menu-item img.menuico {
+    display: flex;
+    justify-self: flex-start;
+    justify-content: flex-start;
+    height: 25px;
+    width: auto;
+    margin-left: 10px;
+}
+.menu-item .menutext {
+    display: flex;
+    margin-left: 30px;
+    justify-self: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    align-items: center;
+    margin-right: 10px;
 }

@@ -1,12 +1,18 @@
-// single.js -- handles single page functionality, API calls, page UI
+// single.js -- starts single page functionality
 "use strict";
 
 
 $(document).ready(function() {
 
+    SINGLE_EVENT_HANDLERS.addFileToSinglePage(
+        SINGLE_EVENT_HANDLERS.getJsonFromDataString(
+            singleFile.textContent)[0]);
+
+    document.getElementById("singleFile").remove();
+    document.getElementById("singlePageId").remove();
+
     // Set up event handlers
-    SINGLE_EVENT_HANDLERS.addAllEventListeners(
-        uploadNewFileToSingle);
+    SINGLE_EVENT_HANDLERS.addAllEventListeners();
 
 }); 
 
@@ -14,33 +20,6 @@ $(document).ready(function() {
 /*****************************************************************************
  * File Functions ----- START ------
  *****************************************************************************/
-
-// Uploads a new file
-// This method is called back from STORAGE_EVENT_HANDLERS
-function uploadNewFileToSingle(singlePageId, fileToUpload) {
-
-    uploadFileToSingle(addUploadedFileToSinglePage, fileUploadFailedError,
-        singlePageId, fileToUpload);
-}
-
-
-// Adds the newly uploaded file to the storage page
-// This method is called back after a file was successfully uploaded
-function addUploadedFileToSinglePage(fileUploaded) {
-    var newRow = SINGLE_CONSTANTS.tableBody.insertRow();
-    newRow.insertCell(0).innerHTML = "<a href=" + fileUploaded[i].fields.upload_path + 
-        " target=\"_blank\">" + fileUploaded.fields.filename + "</a>";
-    newRow.insertCell(1).innerHTML = fileUploaded.fields.create_timestamp;
-    newRow.insertCell(2).innerHTML = fileUploaded.fields.modify_timestamp;
-    newRow.insertCell(3).innerHTML = formatFileSizeToString(fileUploaded.fields.size, false);
-}
-
-
-// Displays error after a file failed to upload
-// This method is called back after a file failed to upload
-function fileUploadFailedError(errorMessage) {
-    // TODO: handle this
-}
 
 
 // converts file size to a human readable format, copying django filesizeformat

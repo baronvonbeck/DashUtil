@@ -125,7 +125,7 @@ const STORAGE_CONSTANTS = new function() {
     this.createSortEl =             document.getElementById(this.createSortId);
     this.sizeSortEl =               document.getElementById(this.sizeSortId);
 
-    this.fileClass =                "fileobj"
+    this.fileClass =                "fileobj";
     this.selectedClass =            "selected";
     this.draggingClass =            "dragging";
     this.dragToClass =              "dragto";
@@ -136,10 +136,6 @@ const STORAGE_CONSTANTS = new function() {
     this.ulIDAppend =               "__ul";
     this.infoIDAppend =             "__in";
     this.liIDAppend =               "__li";
-
-    this.createdText =              "Created: ";
-    this.modifiedText =             "Modified: ";
-    this.sizeText =                 "Size";
 
     this.fileIconPath =             "/static/img/fileico/";
     this.directoryCloseLightIcon =  this.fileIconPath + "directory-close-light.png";

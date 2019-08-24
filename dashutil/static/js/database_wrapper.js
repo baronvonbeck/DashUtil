@@ -263,7 +263,7 @@ function searchForAndGoToSingleFileDB(singlePageId) {
 }
 
 
-// uploads a file to the database for a single page
+// uploads a new file to the database for a single page
 function uploadFileToSingleDB(errorCallback, fileToUpload) {
 
     var fileData = new FormData();
