@@ -203,5 +203,22 @@
 }
 
 
+.home-button-holder {
+    display: flex;
+    position: relative;
+    z-index: 6;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10vh;
+    margin-bottom: 15vh;
+    align-items: center;
+    width: 180px;
+}
+
+.home-button-holder #upload-modal-button-id {
+    padding: 4px 5px 4px 5px;
+    margin: auto;
+}
+
 /* Empty class for button clicks */
 .prev { }

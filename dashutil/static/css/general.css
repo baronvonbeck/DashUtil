@@ -90,9 +90,6 @@ html, body {
 
 
 /* Navbar dropdown */ 
-.navbar-container .navbar-nav .dropdown-menu {
-    
-}
 .navbar-container .navbar-nav .dropdown-menu.show {
     width: 200px;
     z-index: 9;
