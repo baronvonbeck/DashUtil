@@ -1,32 +1,17 @@
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic.edit import CreateView
 from django.core import serializers
-from django.core.serializers.json import DjangoJSONEncoder
 
 from .models import Single_File_Data
 import json
 
 
 # /single
-def single_home(request):
-    return redirect('/')
-
-
-# /single/single_page_id
-# request data for POSTing new file will have 
-#       request.FILES           - FormData with the uploaded file
-#       parent_directory_id     - id of the new file's parent directory
 @ensure_csrf_cookie
-def single_page(request, single_page_id):
+def single_home(request):
     if request.method == 'GET':
-        context, found = _get_context_for_single(single_page_id)
-        
-        if found:
-            return render(request, 'single/single_file.html', context)
-        else:
-            return render(request, 'single/error.html', context)
+        return redirect('/')
     
     elif request.method == 'POST':
         file_to_post = request.FILES.getlist('file')[0]
@@ -35,12 +20,23 @@ def single_page(request, single_page_id):
             file_to_post)
 
         return JsonResponse({'new_file_id': str(new_file_id)})
+    
 
+
+# /single/single_page_id
+def single_page(request, single_page_id):
+    if request.method == 'GET':
+        context, found = _get_context_for_single(single_page_id)
+        
+        if found:
+            return render(request, 'single/single_file.html', context)
+        else:
+            return render(request, 'single/error.html', context)
+        
 
 # Returns the file found for the id, or if one was not found
 def _get_context_for_single(single_page_id):
     context = {}
-    child_files = []
     found = False
     context['single_file_id'] = single_page_id
 
@@ -62,5 +58,5 @@ def _serialize_files_as_json(files):
 
 
 def _convert_string(s):
-    return s.replace('\\','').replace('\/', '')
+    return s.replace('\\','').replace('/', '').replace('\'', '').replace('\"', '')
     

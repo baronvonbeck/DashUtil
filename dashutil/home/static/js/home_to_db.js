@@ -11,9 +11,14 @@ const HOME_DB = new function() {
         searchOrCreateAndGoToStorageDB(roomToSearchFor);
     }
 
+    // Uploads file and then goes to a single page corresponding to that file 
+    // This method is called back from HOME_EVENT_HANDLERS
+    this.uploadFileToSingle = function(fileToUpload) {
+        uploadFileToSingleDB(HOME_DB.errorMessageCaller, fileToUpload);
+    }
 
     // Calls error message if ajax call fails
     this.errorMessageCaller = function(errorMessage) {
-        HOME_EVENT_HANDLERS.displayError(STORAGE_CONSTANTS.errorDB + errorMesage);
+        HOME_EVENT_HANDLERS.displayError(errorMesage);
     };
 }

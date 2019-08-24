@@ -234,14 +234,6 @@ function moveFilesToDirectoryDB(successCallback, errorCallback, storageName,
     });
 } 
 
-
-function getJsonFromDataString(dataString) {
-    return JSON.parse(dataString.replace(/'upload_path': None/g, 
-                '\'upload_path\': null').replace(/[']+/g, '"')
-                // .replace(/\"\]\[\"/g, "\"],[\"")
-                .replace(/\"\, None\]/g, "\"\, null\]"));
-}
-
 /*****************************************************************************
  * Storage Functions ----- END ------
  *****************************************************************************/
@@ -253,7 +245,7 @@ function getJsonFromDataString(dataString) {
  *****************************************************************************/
 
  // goes to a single file page. if one does not exist, go back to home page
-function searchForAndGoToSingleFile(singlePageId) {
+function searchForAndGoToSingleFileDB(singlePageId) {
     window.location.href = ALL_CONSTANTS.singlePath + 
         encodeURIComponent(singlePageId);
     // $.ajax({
@@ -272,21 +264,21 @@ function searchForAndGoToSingleFile(singlePageId) {
 
 
 // uploads a file to the database for a single page
-function uploadFileToSingle(successCallback, errorCallback, singlePageId,
-    fileToUpload) {
+function uploadFileToSingleDB(errorCallback, fileToUpload) {
 
     var fileData = new FormData();
     fileData.append("file", fileToUpload);
 
     $.ajax({
-        url: ALL_CONSTANTS.singlePath + encodeURIComponent( singlePageId ),
+        url: ALL_CONSTANTS.singlePath,
         method: 'POST',
         data: fileData,
         cache: false,   
         processData: false,
         contentType: false,
         success: function(data) {
-            searchForAndGoToSingleFile(data.new_file_id)
+            console.log(data);
+            searchForAndGoToSingleFileDB(data.new_file_id);
         },
         error: function(data) {
             errorCallback(getJsonFromDataString(data));
@@ -297,3 +289,11 @@ function uploadFileToSingle(successCallback, errorCallback, singlePageId,
 /*****************************************************************************
  * Single Functions ----- END ------
  *****************************************************************************/
+
+
+function getJsonFromDataString(dataString) {
+    return JSON.parse(dataString.replace(/'upload_path': None/g, 
+                '\'upload_path\': null').replace(/[']+/g, '"')
+                // .replace(/\"\]\[\"/g, "\"],[\"")
+                .replace(/\"\, None\]/g, "\"\, null\]"));
+}

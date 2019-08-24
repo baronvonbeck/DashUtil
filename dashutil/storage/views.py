@@ -1,9 +1,7 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic.edit import CreateView
 from django.core import serializers
-from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
 
 from .models import Storage, File_Data

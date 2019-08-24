@@ -77,6 +77,21 @@ var HOME_EVENT_HANDLERS = new function() {
                 event.stopPropagation();
                 HOME_CONSTANTS.errorModalEl.style.display = "none";              
             }, false);
+        
+        window.addEventListener("dragenter", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }, false);
+        window.addEventListener("dragover", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }, false);
+        window.addEventListener("drop", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            HOME_EVENT_HANDLERS.uploadFileToSingleHandler(e);
+        }, false);
+        
 	};
 
 
@@ -195,6 +210,18 @@ var HOME_EVENT_HANDLERS = new function() {
                     HOME_CONSTANTS.errorRoomLength0);
 		}
     };
+
+    
+    this.uploadFileToSingleHandler = function(e) {
+        if (e.dataTransfer.files.length == 1 && 
+            !e.dataTransfer.items[0].webkitGetAsEntry().isDirectory) {
+            HOME_DB.uploadFileToSingle(e.dataTransfer.files[0]);
+        }
+        else {
+            HOME_EVENT_HANDLERS.displayError(
+                HOME_CONSTANTS.errorUpload1File);
+        }
+    }
 
 
     this.displayError = function(errorMessage) {

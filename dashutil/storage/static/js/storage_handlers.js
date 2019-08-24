@@ -424,6 +424,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
 
         STORAGE_CONSTANTS.mainEl.addEventListener("drop", async function(e) {
             e.preventDefault();
+            e.stopPropagation();
 
             var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
                 e.target, STORAGE_CONSTANTS.fileListEl);
@@ -446,6 +447,8 @@ var STORAGE_EVENT_HANDLERS = new function() {
                     STORAGE_CONSTANTS.dragToClass);
                 return;
             }
+            else if ((el == null || el == undefined) && e.dataTransfer.files.length > 0)
+                return;
             
             if (e.target.parentNode == STORAGE_CONSTANTS.buttonListEl) {
                 STORAGE_EVENT_HANDLERS.buttonDropHandler(e);
@@ -462,6 +465,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
                 STORAGE_EVENT_HANDLERS.moveFilesHandler(el.id);
             }
             
+        }, false);
+        window.addEventListener("drop", function(e) {
+            e.preventDefault();
+        }, false);
+        window.addEventListener("dragover", function(e) {
+            e.preventDefault();
         }, false);
     };
 
@@ -796,12 +805,6 @@ var STORAGE_EVENT_HANDLERS = new function() {
             console.log(err);
         }
     };
-
-
-    this.displayError = function(errorMessage) {
-        STORAGE_CONSTANTS.errorModalTextEl.innerHTML = errorMessage;
-        STORAGE_CONSTANTS.errorModalEl.style.display = "block";
-    };
       
 
     // Wrap readEntries in a promise to make working with readEntries easier
@@ -817,6 +820,12 @@ var STORAGE_EVENT_HANDLERS = new function() {
         }
     };
 
+
+    this.displayError = function(errorMessage) {
+        STORAGE_CONSTANTS.errorModalTextEl.innerHTML = errorMessage;
+        STORAGE_CONSTANTS.errorModalEl.style.display = "block";
+    };
+    
 
     // returns the storage page id, formatted to remove all single and 
     // double quotes ['"]
