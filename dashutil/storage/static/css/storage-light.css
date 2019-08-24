@@ -20,6 +20,9 @@ body.light-theme .container {
     background-color: var(--container-background-color);
     box-shadow: var(--menu-shadow);
 }
+body.dark-theme .container p.infotext {
+    color: var(--text-color);
+}
 
 body.light-theme .fileobj {
     background-color: var(--container-background-color);
