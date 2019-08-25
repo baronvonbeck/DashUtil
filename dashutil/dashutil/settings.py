@@ -22,14 +22,14 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if 'RDS_DB_NAME' in os.environ:
-    DEBUG = True
-else:
     DEBUG = False
+else:
+    DEBUG = True
 
 ALLOWED_HOSTS = ['dashutil-env.us-west-2.elasticbeanstalk.com', 
                  'dashutil-env-1.us-west-2.elasticbeanstalk.com', 
-                 'dashutil.com', '*.dashutil.com',
-                 'localhost']
+                 'dashutil.com', '*.dashutil.com', 'www.dashutil.com',
+                 '.dashutil.com', 'localhost']
 
 
 # Application definition
