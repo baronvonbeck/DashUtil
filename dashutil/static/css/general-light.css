@@ -104,7 +104,7 @@ body.light-theme .navbar-container .navbar-nav .nav-item .nav-link:focus {
 }
 body.light-theme .navbar-container .navbar-nav .dropdown-menu.show {
     background-color: var(--dropdown-menu-background-color);
-    border-color: var(--dropdown-menu-background-hover-color);
+    border: 0;
     box-shadow: var(--dropdown-menu-shadow);
 }
 body.light-theme .navbar-container .navbar-nav .nav-item.dropdown.show .dropdown-item {

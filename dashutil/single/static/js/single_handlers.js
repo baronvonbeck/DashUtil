@@ -220,23 +220,26 @@ var SINGLE_EVENT_HANDLERS = new function() {
             }
         }, false);
 
-        SINGLE_CONSTANTS.downloadModalButtonEl.addEventListener(
-            "click", function(event) {
-                event.stopPropagation();
-                SINGLE_CONSTANTS.menuEl.style.display = "none";
-                SINGLE_CONSTANTS.downloadModalEl.style.display = "block";
-            }, false);
-        SINGLE_CONSTANTS.downloadCloseButtonEl.addEventListener(
-            "click", function(event) {
-                event.stopPropagation();
-                SINGLE_CONSTANTS.downloadModalEl.style.display = "none";
-            }, false);
-        SINGLE_CONSTANTS.downloadButtonEl.addEventListener(
-            "click", function(event) {
-                event.stopPropagation();
+        if (SINGLE_EVENT_HANDLERS.numFunctions > 1) {
 
-                SINGLE_EVENT_HANDLERS.downloadFileHandler();
-            }, false);
+            SINGLE_CONSTANTS.downloadModalButtonEl.addEventListener(
+                "click", function(event) {
+                    event.stopPropagation();
+                    SINGLE_CONSTANTS.menuEl.style.display = "none";
+                    SINGLE_CONSTANTS.downloadModalEl.style.display = "block";
+                }, false);
+            SINGLE_CONSTANTS.downloadCloseButtonEl.addEventListener(
+                "click", function(event) {
+                    event.stopPropagation();
+                    SINGLE_CONSTANTS.downloadModalEl.style.display = "none";
+                }, false);
+            SINGLE_CONSTANTS.downloadButtonEl.addEventListener(
+                "click", function(event) {
+                    event.stopPropagation();
+
+                    SINGLE_EVENT_HANDLERS.downloadFileHandler();
+                }, false);
+        }
     };
 
 
