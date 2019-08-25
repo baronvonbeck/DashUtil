@@ -166,7 +166,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             }, false);
 
         STORAGE_CONSTANTS.fileListEl.addEventListener(
-                "click", function(event) {
+            "click", function(event) {
                 STORAGE_CONSTANTS.menuEl.style.display = "none";
                 var el = STORAGE_EVENT_HANDLERS.traverseUpDOMToFileElement(
                     event.target, this);

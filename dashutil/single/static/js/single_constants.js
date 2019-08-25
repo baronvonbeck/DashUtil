@@ -6,6 +6,7 @@
 const SINGLE_CONSTANTS = new function() {
 
     this.fileHolderEl =             document.getElementById("file-id");
+    this.fileListEl =               document.getElementById("file-list-id");
 
     this.openUploadModalEl =        document.getElementById("upload-modal-button-id");
     this.uploadModalEl =            document.getElementById("upload-modal-id");
@@ -35,6 +36,9 @@ const SINGLE_CONSTANTS = new function() {
     this.infoIDAppend =             "__in";
 
     this.numFunctions =             2;
+
+    this.modalEls =                 [this.uploadModalEl, this.downloadModalEl];
+
     this.menuEl =                   document.getElementById("menu-id");
     this.menuEls =                  [
                                         document.getElementById("menu-upload-id"),
@@ -62,4 +66,8 @@ const SINGLE_CONSTANTS = new function() {
 
     this.errorUpload1File =     "Only one file, no folders, can be uploaded at a time for a single file page. If \
         you want to upload multiple files or folders, go to a storage page using the orange search bar.";
+
+    this.uploadInProgressMessage =      "Uploading files. This may take a few minutes, depending on file sizes. \
+        You will be redirected to your new page when the upload has finished.";
+    this.downloadInProgressMessage =    "Downloading files. This may take a few minutes, depending on file sizes...";
 };

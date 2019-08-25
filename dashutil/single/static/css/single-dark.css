@@ -57,13 +57,6 @@ body.dark-theme #storage-page-info-id .file-info-container .file-info-right .fil
 }
 
 
-
-body.dark-theme .arrow {
-    border-color: var(--text-color);
-}
-
-
-
 body.dark-theme .menu {
     background-color: var(--menu-background-color);
     box-shadow: var(--menu-shadow);
