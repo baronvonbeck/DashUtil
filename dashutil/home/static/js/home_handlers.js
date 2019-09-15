@@ -285,7 +285,7 @@ var HOME_EVENT_HANDLERS = new function() {
 
             HOME_CONSTANTS.uploadModalEl.style.display = "none";
 
-            HOME_CONSTANTS.openProgressModalHandler(
+            HOME_EVENT_HANDLERS.openProgressModalHandler(
                 HOME_CONSTANTS.uploadInProgressMessage);
         }
         else {

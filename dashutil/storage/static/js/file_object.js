@@ -9,7 +9,7 @@ class FileObject {
         newModifyTimestamp, newSize, newParentDirectoryId, newLevel) {
 
         this.id = newId;
-        this.filename = newFilename;
+        this.filename = this.formatHTML(newFilename);
         this.uploadPath = newUploadPath;
         this.createTimestamp = new Date(newCreateTimestamp);
         this.modifyTimestamp = new Date(newModifyTimestamp);
@@ -83,7 +83,7 @@ class FileObject {
     // updates the filename and timestamps of an object
     updateFilenameAndTimestamps(newFilename, newCreateTimestamp, 
             newModifyTimestamp) {
-        this.filename = newFilename;
+        this.filename = this.formatHTML(newFilename);
         this.createTimestamp = new Date(newCreateTimestamp);
         this.modifyTimestamp = new Date(newModifyTimestamp);
         this.updateHTMLRepresentation();
@@ -258,6 +258,13 @@ class FileObject {
             
             // + " " + hours + ":" + mins + 
             // "." + date.getMilliseconds() + time;
+    }
+
+
+    // formats possible html (also done on server side)
+    formatHTML(text) {
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
 

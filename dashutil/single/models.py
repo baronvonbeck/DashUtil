@@ -20,12 +20,17 @@ class SingleManager(models.Manager):
         # upload file to s3
         new_file_name = file_to_post.name
         uploaded_file_url = s3_multi_part_upload(file_to_post, 'single')
-        new_file_data = self.create(filename=new_file_name, 
+        new_file_data = self.create(filename=Single_File_Data.single_manager._convert_string(new_file_name), 
             upload_path=uploaded_file_url, 
             size=file_to_post.size
         )
 
         return new_file_data.id
+    
+    def _convert_string(self, s):
+        return s.replace('\\','').replace('/', '').replace('\'', '').replace('\"', '') \
+            .replace(':', '').replace('<', '').replace('>', '') \
+            .replace('*', '').replace('?', '').replace('|', '')
 
 
 

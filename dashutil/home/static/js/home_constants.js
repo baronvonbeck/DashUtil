@@ -34,8 +34,10 @@ const HOME_CONSTANTS = new function() {
     this.collapsedClass =      	    "collapsed";
     
 
-    this.errorRoomLength0 =     "Room name must contain at least one or more valid characters. \
+    this.errorRoomLength0 =             "Room name must contain at least one or more valid characters. \
         None of the following characters are allowed: \' \" \\ \/ ";
-    this.errorUpload1File =     "Only one file, no folders, can be uploaded at a time for a single file page. If \
+    this.errorUpload1File =             "Only one file, no folders, can be uploaded at a time for a single file page. If \
         you want to upload multiple files or folders, go to a storage page using the orange search bar.";
+    this.uploadInProgressMessage =      "Uploading file. This may take a few minutes, depending on file size. \
+        You will be redirected to your new page when the upload has finished.";
 };

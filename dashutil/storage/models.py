@@ -14,7 +14,7 @@ class File_DataManager(models.Manager):
 
     # create the related file_data for a new storage page
     def create_storage_data(self, storage_page_name):
-        storage_file_data = self.create(filename=storage_page_name, 
+        storage_file_data = self.create(filename=File_Data.file_datamanager._convert_string(storage_page_name), 
                                     upload_path=None, 
                                     size=0.0, 
                                     parent_directory=None
@@ -299,7 +299,9 @@ class File_DataManager(models.Manager):
                 size_change, next_parent.parent_directory, bulk_size_update_list)
 
     def _convert_string(self, s):
-        return s.replace('\\','').replace('/', '').replace('\'', '').replace('\"', '')
+        return s.replace('\\','').replace('/', '').replace('\'', '').replace('\"', '') \
+            .replace(':', '').replace('<', '').replace('>', '') \
+            .replace('*', '').replace('?', '').replace('|', '')
 
     # merges sizes on 2 lists into 1 list
     # def _merge_file_size_update_lists(file_list, merge_list): 

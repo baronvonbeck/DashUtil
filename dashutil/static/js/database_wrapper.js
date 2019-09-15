@@ -277,7 +277,6 @@ function uploadFileToSingleDB(errorCallback, fileToUpload) {
         processData: false,
         contentType: false,
         success: function(data) {
-            console.log(data);
             searchForAndGoToSingleFileDB(data.new_file_id);
         },
         error: function(data) {

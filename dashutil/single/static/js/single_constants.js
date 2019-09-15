@@ -67,7 +67,7 @@ const SINGLE_CONSTANTS = new function() {
     this.errorUpload1File =     "Only one file, no folders, can be uploaded at a time for a single file page. If \
         you want to upload multiple files or folders, go to a storage page using the orange search bar.";
 
-    this.uploadInProgressMessage =      "Uploading files. This may take a few minutes, depending on file sizes. \
+    this.uploadInProgressMessage =      "Uploading file. This may take a few minutes, depending on file size. \
         You will be redirected to your new page when the upload has finished.";
-    this.downloadInProgressMessage =    "Downloading files. This may take a few minutes, depending on file sizes...";
+    this.downloadInProgressMessage =    "Downloading file. This may take a few minutes, depending on file size...";
 };

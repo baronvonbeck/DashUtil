@@ -29,11 +29,13 @@ var SINGLE_EVENT_HANDLERS = new function() {
         var fields = fileToAdd.fields;
         SINGLE_CONSTANTS.fileHolderEl.innerHTML = 
             SINGLE_EVENT_HANDLERS.getHTMLRepresentation(fileToAdd.pk, 
-                fields.filename, fields.create_timestamp, 
-                fields.modify_timestamp, fields.size, fields.upload_path);
+                SINGLE_EVENT_HANDLERS.formatHTML(fields.filename), 
+                fields.create_timestamp, fields.modify_timestamp, 
+                fields.size, fields.upload_path);
         
         SINGLE_EVENT_HANDLERS.singlePageId = fileToAdd.pk;
-        SINGLE_EVENT_HANDLERS.fullFilename = fields.filename;
+        SINGLE_EVENT_HANDLERS.fullFilename = 
+            SINGLE_EVENT_HANDLERS.formatHTML(fields.filename);
         SINGLE_EVENT_HANDLERS.uploadPath = fields.upload_path;
         SINGLE_EVENT_HANDLERS.fullSize = fields.size;
         SINGLE_EVENT_HANDLERS.fileExtension = 
@@ -538,6 +540,12 @@ var SINGLE_EVENT_HANDLERS = new function() {
             
             // + " " + hours + ":" + mins + 
             // "." + date.getMilliseconds() + time;
+    };
+
+    // formats possible html (also done on server side)
+    this.formatHTML = function(text) {
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     };
 
 
