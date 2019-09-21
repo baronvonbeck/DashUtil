@@ -124,8 +124,6 @@ var NAVBAR_THEME_CONTROLLER = new function() {
     this.readThemeFromCookieIfApplicable = function() {
         var cookieTheme = NAVBAR_THEME_CONTROLLER.getCookie(
             NAVBAR_CONSTANTS.THEME_COOKIE);
-
-        console.log(String(cookieTheme));
             
         if (cookieTheme == undefined || cookieTheme == null) {
             NAVBAR_THEME_CONTROLLER.setCookie(NAVBAR_CONSTANTS.THEME_COOKIE,

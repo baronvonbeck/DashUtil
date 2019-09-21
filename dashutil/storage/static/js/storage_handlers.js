@@ -825,7 +825,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             return f;
         } 
         catch (err) {
-            console.log(err);
+            // console.log(err);
         }
     };
       
@@ -839,7 +839,7 @@ var STORAGE_EVENT_HANDLERS = new function() {
             });
         } 
         catch (err) {
-            console.log(err);
+            // console.log(err);
         }
     };
 
