@@ -242,6 +242,8 @@ var SINGLE_EVENT_HANDLERS = new function() {
                     SINGLE_EVENT_HANDLERS.downloadFileHandler();
                 }, false);
         }
+
+        SINGLE_EVENT_HANDLERS.switchThemesForIcons();
     };
 
 
@@ -332,7 +334,7 @@ var SINGLE_EVENT_HANDLERS = new function() {
 
     this.closeProgressModalHandler = function() {
         SINGLE_CONSTANTS.progressModalEl.style.display = "none";
-    }
+    };
 
     this.openProgressModalHandler = function(textToDisplay) {
         SINGLE_CONSTANTS.progressModalTextEl.innerHTML = textToDisplay;
@@ -369,7 +371,7 @@ var SINGLE_EVENT_HANDLERS = new function() {
 
         if (fname.length != 2) return "";
         else return fname[1];
-    }
+    };
 
 
     // updates the HTML representations of the object
@@ -565,5 +567,5 @@ var SINGLE_EVENT_HANDLERS = new function() {
             ++ u;
         } while (Math.abs(bytes) >= thresh && u < units.length - 1);
         return bytes.toFixed(2) + ' ' + units[u];
-    }
+    };
 };
