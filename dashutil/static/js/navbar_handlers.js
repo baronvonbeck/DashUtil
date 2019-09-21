@@ -2,7 +2,13 @@
 
 var NAVBAR_EVENT_HANDLERS = new function() {
 
+    this.initializeTheme = function() {
+        NAVBAR_THEME_CONTROLLER.readThemeFromCookieIfApplicable();
+    };
+
     this.addNavbarEventListeners = function() {
+        NAVBAR_EVENT_HANDLERS.initializeTheme();
+
         // navbar logo image and text (dashutil) 
 	    NAVBAR_CONSTANTS.navbarLogoEl.addEventListener(
 	    	"mouseover", this.hoverLogo, false);
@@ -90,13 +96,19 @@ var NAVBAR_THEME_CONTROLLER = new function() {
 	        this.currentTheme = NAVBAR_CONSTANTS.NAVBAR_CONSTANTS_LIGHT;
 	        document.body.className = document.body.className.replace(
 	        	NAVBAR_CONSTANTS.darkThemeClass, 
-	        	NAVBAR_CONSTANTS.lightThemeClass);
+                NAVBAR_CONSTANTS.lightThemeClass);
+            
+            NAVBAR_THEME_CONTROLLER.setCookie(NAVBAR_CONSTANTS.THEME_COOKIE,
+                NAVBAR_CONSTANTS.lightThemeClass);
 	    }
 	    else {
 	        this.currentTheme = NAVBAR_CONSTANTS.NAVBAR_CONSTANTS_DARK;
 	        document.body.className = document.body.className.replace(
 	        	NAVBAR_CONSTANTS.lightThemeClass, 
-	        	NAVBAR_CONSTANTS.darkThemeClass);
+                NAVBAR_CONSTANTS.darkThemeClass);
+                
+            NAVBAR_THEME_CONTROLLER.setCookie(NAVBAR_CONSTANTS.THEME_COOKIE,
+                NAVBAR_CONSTANTS.darkThemeClass);
 	    }
 
 	    this.darkTheme = !this.darkTheme;
@@ -106,5 +118,49 @@ var NAVBAR_THEME_CONTROLLER = new function() {
 
         NAVBAR_EVENT_HANDLERS.unhoverLogo();
 	    NAVBAR_EVENT_HANDLERS.unhoverNavbarElement();
+    };
+
+
+    this.readThemeFromCookieIfApplicable = function() {
+        var cookieTheme = NAVBAR_THEME_CONTROLLER.getCookie(
+            NAVBAR_CONSTANTS.THEME_COOKIE);
+
+        console.log(String(cookieTheme));
+            
+        if (cookieTheme == undefined || cookieTheme == null) {
+            NAVBAR_THEME_CONTROLLER.setCookie(NAVBAR_CONSTANTS.THEME_COOKIE,
+                NAVBAR_CONSTANTS.darkThemeClass);
+        }
+        else if (cookieTheme != NAVBAR_CONSTANTS.darkThemeClass) {
+            this.switchThemes();
+        }
+    }
+
+
+    // sets a cookie. Taken from w3schools. Application uses cookies for:
+        // 1. current style
+    this.setCookie = function(cname, cvalue) {  // exdays) {
+        // var d = new Date();
+        // d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        // var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";path=/"; // + expires + ";path=/";
+    };
+
+
+    // gets a cookie by cookie name. Taken from w3schools
+    this.getCookie = function(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i < ca.length; i ++) {
+            var c = ca[i];
+
+            while (c.charAt(0) == ' ')
+                c = c.substring(1);
+
+            if (c.indexOf(name) == 0)
+                return c.substring(name.length, c.length);
+        }
+        return "";
     };
 };

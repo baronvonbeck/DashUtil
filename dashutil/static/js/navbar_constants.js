@@ -12,6 +12,7 @@ const NAVBAR_CONSTANTS = new function() {
     this.themeImgEl =         	document.getElementById("theme-img-id");
     this.darkThemeClass =      	"dark-theme";
     this.lightThemeClass =     	"light-theme";  
+    this.THEME_COOKIE =         "dashutil_cookie_current_theme";
     this.imgPath =             	"/static/img/"; 
 
 	this.NAVBAR_CONSTANTS_DARK = {
