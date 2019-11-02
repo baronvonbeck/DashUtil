@@ -291,7 +291,7 @@ function uploadFileToSingleDB(errorCallback, fileToUpload) {
 
 
 function getJsonFromDataString(dataString) {
-    console.log(dataString);
+    //console.log(dataString);
     return JSON.parse(dataString.replace(/'upload_path': None/g, 
                 '\'upload_path\': null').replace(/[']+/g, '"')
                 // .replace(/\"\]\[\"/g, "\"],[\"")
